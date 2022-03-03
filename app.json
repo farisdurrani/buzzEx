@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "buzzEx",
+    "slug": "buzzEx",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "buzzEx"
+}
