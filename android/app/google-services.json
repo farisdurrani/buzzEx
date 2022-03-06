@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "956781207179",
+    "project_id": "buzzex",
+    "storage_bucket": "buzzex.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956781207179:android:fc13e4fe99cd7285d2be8e",
+        "android_client_info": {
+          "package_name": "com.buzzex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956781207179-4gmsaadfvgnrr2ndjct6pu1s4viijsi5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9NFBuIfHzHJs_-NqBRGYURVYNUESRzDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956781207179-4gmsaadfvgnrr2ndjct6pu1s4viijsi5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
