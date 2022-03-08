@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import {
     KeyboardAvoidingView,
     StyleSheet,
-    Text,
     TextInput,
-    TouchableOpacity,
     View,
+    Image,
 } from "react-native";
-import { auth } from "../firebase";
-import { useNavigation } from "@react-navigation/core";
+import { Input, Button, Text, useTheme } from 'react-native-elements';
 
-const LoginScreen = () => {
+import { auth } from "../firebase";
+
+const LoginScreen = ({ navigation }) => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
-    const navigation = useNavigation();
 
     // from https://youtu.be/ql4J6SpLXZA
     const handleSignup = () => {
@@ -40,6 +39,11 @@ const LoginScreen = () => {
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.inputContainer}>
+                <Image 
+                    source={require('../assets/buzzExLogo.png')} 
+                    style={{width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
+                />
+                <Text style={styles.heading}  h1 >Login</Text>
                 <TextInput
                     placeholder="Email"
                     value={email}
@@ -57,19 +61,35 @@ const LoginScreen = () => {
             </View>
 
             <View style={styles.buttonContainer}>
-                <TouchableOpacity
+                <Button
                     onPress={handleLogin}
                     style={[styles.button, styles.buttonOutline]}
+                    title="Login"
+                    buttonStyle={{
+                        borderRadius: 20,
+                    }}
+                    containerStyle={{
+                        width: 200,
+                        marginHorizontal: 50,
+                        marginVertical: 5,
+                    }}
                 >
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
+                </Button>
+                <Button
+                    title="Register"
+                    onPress={() => navigation.navigate('Registration')}
+                    buttonStyle={{
+                    borderColor: 'rgba(78, 116, 289, 1)',
+                    }}
+                    type="outline"
+                    titleStyle={{ color: 'rgba(78, 116, 289, 1)' }}
+                    containerStyle={{
+                        width: 200,
+                        marginHorizontal: 50,
+                        marginVertical: 5,
+                    }}
+                />
 
-                <TouchableOpacity
-                    style={[styles.button, styles.buttonOutline]}
-                    onPress={handleSignup}
-                >
-                    <Text style={styles.buttonText}>Register</Text>
-                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
@@ -84,7 +104,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     button: {
-        padding: 15,
+        padding: 5,
     },
     buttonContainer: {},
     buttonOutline: {},
@@ -94,6 +114,12 @@ const styles = StyleSheet.create({
     },
     input: {
         padding: 15,
+        borderBottomWidth: 1,
+        borderColor: "rgba(0, 0, 0, .2)"
     },
     inputContainer: {},
+    heading: {
+        textAlign: 'center',
+        padding: 5,
+    }
 });
