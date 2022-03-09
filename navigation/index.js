@@ -14,7 +14,12 @@ const Navigation = () => {
       <Stack.Navigator>
         <Stack.Screen
           options={{ headerShown: false }}
-          name="TakePictureScreen"
+          name="ItemPrice"
+          component={ItemPriceScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="TakePicture"
           component={TakePictureScreen}
         />
         <Stack.Screen
@@ -31,11 +36,6 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Home"
           component={HomeScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="ItemPrice"
-          component={ItemPriceScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

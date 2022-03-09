@@ -10,28 +10,9 @@ import React, { useState, useEffect } from "react";
 import BButton from "../components/BButton";
 import { Camera } from "expo-camera";
 
-const ItemPriceScreen = () => {
+const ItemPriceScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-
-  const showCamera = () => {
-    <Camera style={styles.camera} type={type}>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            setType(
-              type === Camera.Constants.Type.back
-                ? Camera.Constants.Type.front
-                : Camera.Constants.Type.back
-            );
-          }}
-        >
-          <Text style={styles.text}> Flip </Text>
-        </TouchableOpacity>
-      </View>
-    </Camera>;
-  };
 
   useEffect(() => {
     (async () => {
@@ -63,7 +44,11 @@ const ItemPriceScreen = () => {
       <Text style={styles.text}>Item Price</Text>
       <TextInput style={styles.input} placeholder="$12.00" />
       <Text style={styles.text}>Item Picture</Text>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("TakePicture");
+        }}
+      >
         <Image
           style={styles.tinyLogo}
           source={{
@@ -71,7 +56,6 @@ const ItemPriceScreen = () => {
           }}
         />
       </TouchableOpacity>
-      <View style={{}}></View>
       <BButton text="Continue" />
     </View>
   );

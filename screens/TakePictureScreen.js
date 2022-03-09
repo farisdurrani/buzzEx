@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import { Camera } from "expo-camera";
 import { Button } from "react-native-elements";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import BButton from "../components/BButton";
+import { MaterialIcons } from "@expo/vector-icons";
+import Navigation from "../navigation";
 
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
 
-export function TakePictureScreen() {
+const TakePictureScreen = ({ navigation }) => {
   const cameraRef = useRef();
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
@@ -83,46 +83,20 @@ export function TakePictureScreen() {
       <View style={styles.container}>
         {isPreview && (
           <View>
-            <TouchableOpacity
-              onPress={cancelPreview}
-              style={styles.closeButton}
-            >
-              <AntDesign name="close" size={32} color="#fff" />
-            </TouchableOpacity>
-            <Button
-              title="Retake"
-              loading={false}
-              loadingProps={{ size: "small", color: "white" }}
-              buttonStyle={{
-                backgroundColor: "rgba(111, 202, 186, 1)",
-                borderRadius: 5,
-              }}
-              titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-              containerStyle={{
-                marginTop: 800,
-                marginLeft: 50,
-                height: 50,
-                width: 200,
-              }}
-              onPress={() => console.log("aye")}
-            />
-            <Button
-              title="Continue"
-              loading={false}
-              loadingProps={{ size: "small", color: "white" }}
-              buttonStyle={{
-                backgroundColor: "rgba(255, 202, 186, 1)",
-                borderRadius: 5,
-              }}
-              titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-              containerStyle={{
-                marginTop: 100,
-                marginLeft: 100,
-                height: 50,
-                width: 200,
-              }}
-              onPress={() => console.log("aye2")}
-            />
+            <View style={styles.retakeButtonsContainer}>
+              <_RetakeConfirmButton
+                title="Retake"
+                bgColor="#ff000060"
+                onPress={cancelPreview}
+              />
+              <_RetakeConfirmButton
+                title="Confirm"
+                bgColor="#00ff0060"
+                onPress={() => {
+                  navigation.navigate("ItemPrice");
+                }}
+              />
+            </View>
           </View>
         )}
         {!isPreview && (
@@ -141,9 +115,27 @@ export function TakePictureScreen() {
       </View>
     </View>
   );
-}
+};
 
 export default TakePictureScreen;
+
+const _RetakeConfirmButton = (props) => {
+  const { title, bgColor, onPress } = props;
+  return (
+    <Button
+      title={title}
+      buttonStyle={{
+        backgroundColor: bgColor,
+        borderRadius: 20,
+      }}
+      titleStyle={{ fontWeight: "bold", fontSize: 18 }}
+      containerStyle={{
+        width: 100,
+      }}
+      onPress={onPress}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -183,15 +175,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#fff",
   },
-  retake: {
-    // position: "absolute",
-    padding: 100,
-    top: 100,
-    // right: 0,
-    // borderRadius: 25,
-    // justifyContent: "center",
-    // alignItems: "center",
-    // backgroundColor: "#5A45FF",
-    // opacity: 0.7,
+  retakeButtonsContainer: {
+    width: "100%",
+    paddingHorizontal: 80,
+    marginTop: 750,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
