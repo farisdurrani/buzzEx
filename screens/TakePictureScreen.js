@@ -11,7 +11,6 @@ import {
 import { Camera } from "expo-camera";
 import { Button } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
-import Navigation from "../navigation";
 
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
