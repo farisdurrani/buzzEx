@@ -7,11 +7,13 @@ import {
     Image
 } from "react-native";
 import { Input, Button, Text, useTheme } from 'react-native-elements';
+import { auth } from "../firebase";
 
 const RegistrationScreen = ({ navigation }) => {
   const [fullName, onChangeFullName] = useState("");
   const [email, onChangeEmail] = useState("");
-  const [username, onChangeUsername] = useState("");
+  // not sure if we need username 
+  // const [username, onChangeUsername] = useState("");
   const [password, onChangePassword] = useState("");
   const [confirmPassword, onChangeConfirmPassword] = useState("");
   const [addr1, onChangeAddr1] = useState("");
@@ -20,11 +22,20 @@ const RegistrationScreen = ({ navigation }) => {
   const [city, onChangeCity] = useState("");
   const [state, onChangeState] = useState("");
 
+
+
   const handleSignup = () => {
-    console.log("Sign Up")
-      // Handle signup backend logic with firebase
-    return
-  };
+    auth
+     .createUserWithEmailAndPassword(email, password)
+     .then(userCredentials => {
+        const user = userCredentials.user;
+    })
+    .catch(error => {
+       alert(error.message) 
+    })
+}
+
+  
 
   return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -42,8 +53,8 @@ const RegistrationScreen = ({ navigation }) => {
                   style={styles.input}
               ></TextInput>
               <TextInput
-                  placeholder="Username"
-                  value={username}
+                  placeholder="Email"
+                  value={email}
                   onChangeText={onChangeEmail}
                   style={styles.input}
               ></TextInput>

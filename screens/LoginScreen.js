@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     KeyboardAvoidingView,
     StyleSheet,
@@ -7,34 +7,47 @@ import {
     Image,
 } from "react-native";
 import { Input, Button, Text, useTheme } from 'react-native-elements';
-
 import { auth } from "../firebase";
+
 
 const LoginScreen = ({ navigation }) => {
     const [email, onChangeEmail] = useState("");
     const [password, onChangePassword] = useState("");
 
-    // from https://youtu.be/ql4J6SpLXZA
+    useEffect(() => {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                navigation.navigate("Home")
+            }
+        })
+    } , [])
+// unused
     const handleSignup = () => {
-        auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredentials) => {
-                const user = userCredentials.user;
-                console.log("Registered with", user.email);
-            })
-            .catch((error) => alert(error.message));
-    };
+        auth
+         .createUserWithEmailAndPassword(email, password)
+         .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log("Registered with: ", user.email)
+        })
+        .catch(error => {
+           alert(error.message) 
+        })
+    }
 
     const handleLogin = () => {
-        auth.signInWithEmailAndPassword(email, password)
-            .then((userCredentials) => {
-                const user = userCredentials.user;
-                console.log("Logged in with", user.email);
-                navigation.replace("Home");
-            })
-            .catch((error) => {
-                alert(error.message);
-            });
-    };
+        auth
+         .signInEmailAndPassword(email, password)
+         .then(userCredentials => {
+            const user = userCredentials.user;
+            console.log("Logged in with: ", user.email)
+        })
+        .catch(error => {
+           alert(error.message) 
+        })
+    }
+
+
+
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">

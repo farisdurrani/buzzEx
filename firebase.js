@@ -5,22 +5,23 @@ import * as firebase from "firebase";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDCENhv95HhwfHGIJ8b8LqdLvQ9fmoWcj4",
-  authDomain: "buzzex-36e3e.firebaseapp.com",
-  projectId: "buzzex-36e3e",
-  storageBucket: "buzzex-36e3e.appspot.com",
-  messagingSenderId: "929417952930",
-  appId: "1:929417952930:web:6b2c5690687836ede461fb"
+  apiKey: "AIzaSyAAk-14ElpptbF60KWv4tToNYoFUMMEOTw",
+  authDomain: "buzzex-auth.firebaseapp.com",
+  projectId: "buzzex-auth",
+  storageBucket: "buzzex-auth.appspot.com",
+  messagingSenderId: "209806511215",
+  appId: "1:209806511215:web:148bcf55bfb2f5f556d19a"
 };
 
-// Initialize Firebase
+// Initialize Firebase with the boilder plate config object
+// if not already initialized 
+// else use the already inititalized firebase app 
 let app;
 if (firebase.apps.length === 0) {
-    app = firebase.initializeApp(firebaseConfig);
+    app = firebase.initializeApp(firebaseConfig)
 } else {
     app = firebase.app()
 }
-
 const auth = firebase.auth()
 
-export { auth };
+export {auth};
