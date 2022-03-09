@@ -7,6 +7,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { Button } from "react-native-elements";
@@ -23,12 +24,25 @@ const TakePictureScreen = ({ navigation }) => {
   const [isCameraReady, setIsCameraReady] = useState(false);
 
   useEffect(() => {
-    onHandlePermission();
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
   }, []);
 
-  const onHandlePermission = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === "granted");
+  const _noCamPermissionsAlert = () => {
+    Alert.alert(
+      "Camera Permissions Not Granted",
+      "Please enable camera permissions in Settings",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.navigate("ItemPrice");
+          },
+        },
+      ]
+    );
   };
 
   const onCameraReady = () => {
@@ -68,7 +82,7 @@ const TakePictureScreen = ({ navigation }) => {
     return <View />;
   }
   if (hasPermission === false) {
-    return <Text style={styles.text}>No access to camera</Text>;
+    return <View>{_noCamPermissionsAlert()}</View>;
   }
 
   return (
@@ -115,15 +129,6 @@ const TakePictureScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const _noLocationAlert = () => {
-  Alert.alert(
-    "Camera Permissions Not Granted",
-    "Please enable camera permissions in Settings",
-    [{ text: "OK", onPress: () => {} }]
-  );
-};
-
 
 export default TakePictureScreen;
 
