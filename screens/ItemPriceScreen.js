@@ -6,13 +6,32 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState, useEffect }  from "react";
+import React, { useState, useEffect } from "react";
 import BButton from "../components/BButton";
 import { Camera } from "expo-camera";
 
 const ItemPriceScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
+  const showCamera = () => {
+    <Camera style={styles.camera} type={type}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setType(
+              type === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+            );
+          }}
+        >
+          <Text style={styles.text}> Flip </Text>
+        </TouchableOpacity>
+      </View>
+    </Camera>;
+  };
 
   useEffect(() => {
     (async () => {
@@ -31,10 +50,10 @@ const ItemPriceScreen = () => {
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
         <TouchableOpacity>
-          <Text>Back</Text>
+          <Text>⭠</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text>Cancel</Text>
+          <Text>✕</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.name}>Bob Builder</Text>
@@ -44,32 +63,15 @@ const ItemPriceScreen = () => {
       <Text style={styles.text}>Item Price</Text>
       <TextInput style={styles.input} placeholder="$12.00" />
       <Text style={styles.text}>Item Picture</Text>
-      <View>
+      <TouchableOpacity onPress={() => {}}>
         <Image
           style={styles.tinyLogo}
           source={{
             uri: "https://reactnative.dev/img/tiny_logo.png",
           }}
         />
-      </View>
-      <View style={styles.container}>
-        <Camera style={styles.camera} type={type}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                setType(
-                  type === Camera.Constants.Type.back
-                    ? Camera.Constants.Type.front
-                    : Camera.Constants.Type.back
-                );
-              }}
-            >
-              <Text style={styles.text}> Flip </Text>
-            </TouchableOpacity>
-          </View>
-        </Camera>
-      </View>
+      </TouchableOpacity>
+      <View style={{}}></View>
       <BButton text="Continue" />
     </View>
   );
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   tinyLogo: {
-    width: 50,
-    height: 50,
+    width: 100,
+    height: 100,
   },
 });
