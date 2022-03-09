@@ -117,6 +117,15 @@ const TakePictureScreen = ({ navigation }) => {
   );
 };
 
+const _noLocationAlert = () => {
+  Alert.alert(
+    "Camera Permissions Not Granted",
+    "Please enable camera permissions in Settings",
+    [{ text: "OK", onPress: () => {} }]
+  );
+};
+
+
 export default TakePictureScreen;
 
 const _RetakeConfirmButton = (props) => {
