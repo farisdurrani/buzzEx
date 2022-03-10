@@ -22,6 +22,7 @@ const TakePictureScreen = ({ navigation }) => {
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isPreview, setIsPreview] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
+  const [currentSnapURI, setCurrentSnapURI] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -65,6 +66,7 @@ const TakePictureScreen = ({ navigation }) => {
       const options = { quality: 0.7, base64: true };
       const data = await cameraRef.current.takePictureAsync(options);
       const source = data.base64;
+      setCurrentSnapURI(data.uri);
 
       if (source) {
         await cameraRef.current.pausePreview();
@@ -106,7 +108,7 @@ const TakePictureScreen = ({ navigation }) => {
                 title="Confirm"
                 bgColor="#00ff0060"
                 onPress={() => {
-                  navigation.navigate("ItemPrice");
+                  navigation.navigate("ItemPrice", { snapURI: currentSnapURI });
                 }}
               />
             </View>
@@ -114,6 +116,14 @@ const TakePictureScreen = ({ navigation }) => {
         )}
         {!isPreview && (
           <View style={styles.bottomButtonsContainer}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <MaterialIcons name="cancel" size={24} color="white" />
+            </TouchableOpacity>
             <TouchableOpacity disabled={!isCameraReady} onPress={switchCamera}>
               <MaterialIcons name="flip-camera-ios" size={28} color="white" />
             </TouchableOpacity>
@@ -167,14 +177,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: 35,
-    right: 20,
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#5A45FF",
+    top: -700,
+    right: 40,
     opacity: 0.7,
   },
   capture: {

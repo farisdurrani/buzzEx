@@ -12,41 +12,78 @@ import BButton from "../components/BButton";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
 
-const ItemPriceScreen = ({ navigation }) => {
+const ItemPriceScreen = ({ navigation, route }) => {
+  const [itemName, setItemName] = useState("");
+  const [itemPrice, setItemPrice] = useState("");
+
+  const ItemDetailGroup = (props) => {
+    const { title, placeholder, state, setState } = props;
+    return (
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.detailTitle}>{title}</Text>
+        <View style={[styles.inputContainer, LAYOUT.centerMiddle]}>
+          <TextInput
+            style={styles.inputText}
+            placeholder={placeholder}
+            onEndEditing={(e) => {
+              setState(e);
+            }}
+            defaultValue={state}
+          />
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => {}}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity>
           <MaterialIcons name="cancel" size={24} color="black" />
         </TouchableOpacity>
       </View>
+
       <View style={LAYOUT.centerMiddle}>
         <Text style={styles.name}>Bob Builder</Text>
         <Text style={styles.username}>@bobTheBuilder</Text>
       </View>
+      <ItemDetailGroup
+        title="Item Name"
+        placeholder="Bike"
+        state={itemName}
+        setState={setItemName}
+      />
+      <ItemDetailGroup
+        title="Item Price"
+        placeholder="$12.00"
+        state={itemPrice}
+        setState={setItemPrice}
+      />
       <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.text}>Item Name</Text>
-        <TextInput style={styles.input} placeholder="Bike" />
-      </View>
-      <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.text}>Item Price</Text>
-        <TextInput style={styles.input} placeholder="$12.00" />
-      </View>
-      <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.text}>Item Picture</Text>
+        <Text style={styles.detailTitle}>Item Picture</Text>
         <TouchableOpacity
           style={[styles.cameraButton, LAYOUT.centerMiddle]}
           onPress={() => {
             navigation.navigate("TakePicture");
           }}
         >
-          <AntDesign name="camera" size={50} color={COLORS.primary_red} />
+          {route.params ? (
+            <Image
+              style={styles.picture}
+              source={{
+                uri: route.params.snapURI,
+              }}
+            />
+          ) : (
+            <AntDesign name="camera" size={50} color={COLORS.primary_red} />
+          )}
         </TouchableOpacity>
       </View>
       <BButton text="Continue" />
+      <Text>{route.params?.id}</Text>
     </View>
   );
 };
@@ -76,16 +113,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: COLORS.primary_red,
   },
-  text: {
+  detailTitle: {
     paddingTop: 20,
     fontSize: 20,
   },
-  input: {
+  inputContainer: {
+    marginTop: 10,
+    width: 150,
+    paddingVertical: 8,
+    backgroundColor: COLORS.transparent_gray,
+  },
+  inputText: {
     fontSize: 20,
   },
-  tinyLogo: {
-    width: 100,
-    height: 100,
+  picture: {
+    width: "90%",
+    height: "90%",
   },
   cameraButton: {
     marginTop: 10,
