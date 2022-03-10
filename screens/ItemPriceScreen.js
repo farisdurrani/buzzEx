@@ -10,6 +10,7 @@ import {
 import React, { useState, useEffect } from "react";
 import BButton from "../components/BButton";
 import { AntDesign } from "@expo/vector-icons";
+import { COLORS, LAYOUT } from "../constants";
 
 const ItemPriceScreen = ({ navigation }) => {
   return (
@@ -22,20 +23,29 @@ const ItemPriceScreen = ({ navigation }) => {
           <Text>✕</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.name}>Bob Builder</Text>
-      <Text style={styles.username}>@bobTheBuilder</Text>
-      <Text style={styles.text}>Item Name</Text>
-      <TextInput style={styles.input} placeholder="Location" />
-      <Text style={styles.text}>Item Price</Text>
-      <TextInput style={styles.input} placeholder="$12.00" />
-      <Text style={styles.text}>Item Picture</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("TakePicture");
-        }}
-      >
-        <AntDesign name="camera" size={24} color="black" />
-      </TouchableOpacity>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.name}>Bob Builder</Text>
+        <Text style={styles.username}>@bobTheBuilder</Text>
+      </View>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.text}>Item Name</Text>
+        <TextInput style={styles.input} placeholder="Bike" />
+      </View>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.text}>Item Price</Text>
+        <TextInput style={styles.input} placeholder="$12.00" />
+      </View>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.text}>Item Picture</Text>
+        <TouchableOpacity
+          style={[styles.cameraButton, LAYOUT.centerMiddle]}
+          onPress={() => {
+            navigation.navigate("TakePicture");
+          }}
+        >
+          <AntDesign name="camera" size={50} color={COLORS.primary_red} />
+        </TouchableOpacity>
+      </View>
       <BButton text="Continue" />
     </View>
   );
@@ -45,11 +55,11 @@ export default ItemPriceScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    display: "flex",
-    flexDirection: "column",
+    height: "90%",
     paddingVertical: 60,
     paddingHorizontal: 20,
     alignItems: "center",
+    justifyContent: "space-between",
   },
   upperButtons: {
     display: "flex",
@@ -59,16 +69,26 @@ const styles = StyleSheet.create({
   },
   name: {
     paddingTop: 50,
-    fontSize: 20,
+    fontSize: 30,
   },
   username: {
-    fontSize: 16,
+    fontSize: 20,
   },
   text: {
     paddingTop: 20,
+    fontSize: 20,
+  },
+  input: {
+    fontSize: 20,
   },
   tinyLogo: {
     width: 100,
     height: 100,
+  },
+  cameraButton: {
+    marginTop: 10,
+    height: 150,
+    width: 150,
+    backgroundColor: COLORS.transparent_gray,
   },
 });
