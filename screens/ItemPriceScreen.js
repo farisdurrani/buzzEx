@@ -38,7 +38,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={navigation.goBack}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity>

@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
+import { COLORS } from "../constants";
 import { auth } from "../firebase";
 
 const LoginScreen = ({ navigation }) => {
@@ -49,7 +50,11 @@ const LoginScreen = ({ navigation }) => {
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
         <Button
-          title={"X"}
+          title={"Skip"}
+          buttonStyle={{
+            backgroundColor: COLORS.black,
+            borderRadius: 3,
+          }}
           onPress={() => {
             navigation.navigate("ItemPrice");
           }}
