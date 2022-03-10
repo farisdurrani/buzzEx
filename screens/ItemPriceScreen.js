@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import BButton from "../components/BButton";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
 
 const ItemPriceScreen = ({ navigation }) => {
@@ -17,10 +17,10 @@ const ItemPriceScreen = ({ navigation }) => {
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
         <TouchableOpacity>
-          <Text>⭠</Text>
+          <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text>✕</Text>
+          <MaterialIcons name="cancel" size={24} color="black" />
         </TouchableOpacity>
       </View>
       <View style={LAYOUT.centerMiddle}>
@@ -70,9 +70,11 @@ const styles = StyleSheet.create({
   name: {
     paddingTop: 50,
     fontSize: 30,
+    fontWeight: "bold",
   },
   username: {
     fontSize: 20,
+    color: COLORS.primary_red,
   },
   text: {
     paddingTop: 20,
