@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { Input, Button, Text, useTheme } from 'react-native-elements';
 import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import {addUser, getUser, setUser} from "../firebase";
 
 const RegistrationScreen = ({ navigation }) => {
   const [fullName, onChangeFullName] = useState("");
@@ -24,15 +26,30 @@ const RegistrationScreen = ({ navigation }) => {
 
 
 
-  const handleSignup = () => {
-    auth
-     .createUserWithEmailAndPassword(email, password)
+  const handleSignup =  () => {
+    createUserWithEmailAndPassword(auth, email, password)
      .then(userCredentials => {
         const user = userCredentials.user;
     })
     .catch(error => {
        alert(error.message) 
     })
+
+    addUser({id: `${Date.now()}`,
+        user_name: fullName, 
+        user_email: email,
+        user_addr1: addr1,
+        user_addr2: addr2,
+        user_zip: zip,
+        user_city: city,
+        user_state: state 
+    }).then(() => {
+        console.log("added new user")
+    })
+    .catch(error => {
+        alert(error.message)
+    })
+  
 }
 
   

@@ -1,5 +1,8 @@
 // Import the functions you need from the SDKs you need
-import * as firebase from "firebase";
+import { initializeApp } from 'firebase/app'
+import { getAuth} from 'firebase/auth'
+import {getFirestore, collection, getDocs, setDoc, deleteDoc, doc} from 'firebase/firestore/lite';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -13,15 +16,25 @@ const firebaseConfig = {
   appId: "1:209806511215:web:148bcf55bfb2f5f556d19a"
 };
 
-// Initialize Firebase with the boilder plate config object
-// if not already initialized 
-// else use the already inititalized firebase app 
-let app;
-if (firebase.apps.length === 0) {
-    app = firebase.initializeApp(firebaseConfig)
-} else {
-    app = firebase.app()
-}
-const auth = firebase.auth()
 
-export {auth};
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+export async function getUser() {
+  const usersCol = collection(db, 'users');
+  const userSnapshot = await getDocs(usersCol);
+  const userList = userSnapshot.docs.map(doc => doc.data());
+  return userList;
+}
+
+export async function addUser(data) {
+  await setDoc(doc(db, "users", data.id), data);
+  return;
+}
+
+export async function removeUser(data) {
+  await deleteDoc(doc(db, "users", data.id));
+  return;
+}
+
