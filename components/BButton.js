@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { COLORS } from "../constants";
 
 const BButton = (props) => {
   const { text, onPress } = props;
@@ -24,13 +25,13 @@ export default BButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#2C2C54",
+    backgroundColor: COLORS.primary_blue,
     padding: 15,
-    borderRadius:50,
+    borderRadius: 50,
   },
   buttonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
   },
 });

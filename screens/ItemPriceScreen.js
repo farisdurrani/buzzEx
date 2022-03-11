@@ -5,37 +5,85 @@ import {
   View,
   Image,
   TextInput,
+  Alert,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BButton from "../components/BButton";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { COLORS, LAYOUT } from "../constants";
 
-const ItemPriceScreen = () => {
+const ItemPriceScreen = ({ navigation, route }) => {
+  const [itemName, setItemName] = useState("");
+  const [itemPrice, setItemPrice] = useState("");
+
+  const ItemDetailGroup = (props) => {
+    const { title, placeholder, state, setState } = props;
+    return (
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.detailTitle}>{title}</Text>
+        <View style={[styles.inputContainer, LAYOUT.centerMiddle]}>
+          <TextInput
+            style={styles.inputText}
+            placeholder={placeholder}
+            onEndEditing={(e) => {
+              setState(e);
+            }}
+            defaultValue={state}
+          />
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
-        <TouchableOpacity>
-          <Text>Back</Text>
+        <TouchableOpacity onPress={navigation.goBack}>
+          <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text>Cancel</Text>
+          <MaterialIcons name="cancel" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <Text style={styles.name}>Bob Builder</Text>
-      <Text style={styles.username}>@bobTheBuilder</Text>
-      <Text style={styles.text}>Item Name</Text>
-      <TextInput style={styles.input} placeholder="Location" />
-      <Text style={styles.text}>Item Price</Text>
-      <TextInput style={styles.input} placeholder="$12.00" />
-      <Text style={styles.text}>Item Picture</Text>
-      <View>
-        <Image
-          style={styles.tinyLogo}
-          source={{
-            uri: "https://reactnative.dev/img/tiny_logo.png",
+
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.name}>Bob Builder</Text>
+        <Text style={styles.username}>@bobTheBuilder</Text>
+      </View>
+      <ItemDetailGroup
+        title="Item Name"
+        placeholder="Bike"
+        state={itemName}
+        setState={setItemName}
+      />
+      <ItemDetailGroup
+        title="Item Price"
+        placeholder="$12.00"
+        state={itemPrice}
+        setState={setItemPrice}
+      />
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.detailTitle}>Item Picture</Text>
+        <TouchableOpacity
+          style={[styles.cameraButton, LAYOUT.centerMiddle]}
+          onPress={() => {
+            navigation.navigate("TakePicture");
           }}
-        />
+        >
+          {route.params ? (
+            <Image
+              style={styles.picture}
+              source={{
+                uri: route.params.snapURI,
+              }}
+            />
+          ) : (
+            <AntDesign name="camera" size={50} color={COLORS.primary_red} />
+          )}
+        </TouchableOpacity>
       </View>
       <BButton text="Continue" />
+      <Text>{route.params?.id}</Text>
     </View>
   );
 };
@@ -44,11 +92,11 @@ export default ItemPriceScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    display: "flex",
-    flexDirection: "column",
+    height: "90%",
     paddingVertical: 60,
     paddingHorizontal: 20,
     alignItems: "center",
+    justifyContent: "space-between",
   },
   upperButtons: {
     display: "flex",
@@ -58,16 +106,34 @@ const styles = StyleSheet.create({
   },
   name: {
     paddingTop: 50,
-    fontSize: 20,
+    fontSize: 30,
+    fontWeight: "bold",
   },
   username: {
-    fontSize: 16,
+    fontSize: 20,
+    color: COLORS.primary_red,
   },
-  text: {
+  detailTitle: {
     paddingTop: 20,
+    fontSize: 20,
   },
-  tinyLogo: {
-    width: 50,
-    height: 50,
+  inputContainer: {
+    marginTop: 10,
+    width: 150,
+    paddingVertical: 8,
+    backgroundColor: COLORS.transparent_gray,
+  },
+  inputText: {
+    fontSize: 20,
+  },
+  picture: {
+    width: "90%",
+    height: "90%",
+  },
+  cameraButton: {
+    marginTop: 10,
+    height: 150,
+    width: 150,
+    backgroundColor: COLORS.transparent_gray,
   },
 });
