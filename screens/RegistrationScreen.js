@@ -62,7 +62,6 @@ const RegistrationScreen = ({ navigation }) => {
                     source={require('../assets/buzzExLogo.png')} 
                     style={{width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
                 /> */}
-              <Text style={styles.heading} h1 >Register</Text>
               <TextInput
                   placeholder="Full Name"
                   value={fullName}
