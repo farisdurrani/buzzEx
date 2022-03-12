@@ -10,6 +10,7 @@ import { Input, Button, Text, useTheme } from 'react-native-elements';
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import {addUser, getUser, setUser} from "../firebase";
+import RadioForm from 'react-native-simple-radio-button';
 
 const RegistrationScreen = ({ navigation }) => {
   const [fullName, onChangeFullName] = useState("");
@@ -23,7 +24,11 @@ const RegistrationScreen = ({ navigation }) => {
   const [zip, onChangeZip] = useState("");
   const [city, onChangeCity] = useState("");
   const [state, onChangeState] = useState("");
-
+  const [userType, onChangeUserType] = useState("Buyer/Seller");
+  const radio_props = [
+    {label: 'Buyer/Seller', value: 'Buyer/Seller' },
+    {label: 'Deliverer', value: 'Deliverer' }
+  ];
 
 
   const handleSignup =  () => {
@@ -118,6 +123,13 @@ const RegistrationScreen = ({ navigation }) => {
                   onChangeText={onChangeZip}
                   style={[styles.input]}
               ></TextInput>
+              <Text style={[styles.label]}> User Type:</Text>
+              <RadioForm
+                radio_props={radio_props}
+                formHorizontal={false}
+                initial={'Buyer/Seller'}
+                onPress={(value) => {onChangeUserType(value)}}
+                />
           </View>
 
           <View style={styles.buttonContainer}>
@@ -186,6 +198,9 @@ const styles = StyleSheet.create({
   heading: {
     textAlign: 'center',
     padding: 5,
+  },
+  label: {
+    padding: 15,
   },
   input: {
       padding: 15,
