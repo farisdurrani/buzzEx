@@ -63,7 +63,8 @@ const LoginScreen = ({ navigation }) => {
 
             <View style={styles.buttonContainer}>
                 <Button
-                    onPress={handleLogin}
+                    // onPress={handleLogin} TODO: Login takes to home screen for interview purpose. Change back later
+                    onPress={() => navigation.navigate('Home')}
                     style={[styles.button, styles.buttonOutline]}
                     title="Login"
                     buttonStyle={{
