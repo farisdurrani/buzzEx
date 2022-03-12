@@ -85,7 +85,6 @@ const ItemPriceScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <BButton text="Continue" />
-      <Text>{route.params?.id}</Text>
     </View>
   );
 };
