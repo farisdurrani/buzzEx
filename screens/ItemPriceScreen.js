@@ -3,6 +3,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  KeyboardAvoidingView,
   Image,
   TextInput,
 } from "react-native";
@@ -20,7 +21,9 @@ const ItemPriceScreen = ({ navigation, route }) => {
     return (
       <View style={LAYOUT.centerMiddle}>
         <Text style={styles.detailTitle}>{title}</Text>
-        <View style={[styles.inputContainer, LAYOUT.centerMiddle]}>
+        <KeyboardAvoidingView
+          style={[styles.inputContainer, LAYOUT.centerMiddle]}
+        >
           <TextInput
             style={styles.inputText}
             placeholder={placeholder}
@@ -29,7 +32,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
             }}
             defaultValue={state}
           />
-        </View>
+        </KeyboardAvoidingView>
       </View>
     );
   };
