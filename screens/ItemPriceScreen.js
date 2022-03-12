@@ -5,10 +5,9 @@ import {
   View,
   Image,
   TextInput,
-  Alert,
 } from "react-native";
-import React, { useState, useEffect } from "react";
-import BButton from "../components/BButton";
+import React, { useState } from "react";
+import { BButton } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
 
@@ -26,7 +25,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
             style={styles.inputText}
             placeholder={placeholder}
             onEndEditing={(e) => {
-              setState(e);
+              setState(e.nativeEvent.text);
             }}
             defaultValue={state}
           />

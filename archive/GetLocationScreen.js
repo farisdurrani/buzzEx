@@ -15,7 +15,7 @@ const kToF = (kel) => {
     return ((kel - 273.15) * 9) / 5 + 32;
 };
 
-const HomeScreen = () => {
+const GetLocationScreen = () => {
     const navigation = useNavigation();
     const [currentLocation, setCurrentLocation] = React.useState("");
     const [location, setLocation] = React.useState("");
@@ -161,7 +161,7 @@ const HomeScreen = () => {
     );
 };
 
-export default HomeScreen;
+export default GetLocationScreen;
 
 const styles = StyleSheet.create({
     container: {
