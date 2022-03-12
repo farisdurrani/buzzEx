@@ -46,7 +46,6 @@ const LoginScreen = ({ navigation }) => {
                     source={require('../assets/buzzExLogo.png')} 
                     style={{width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
                 />
-                <Text style={styles.heading}  h1 >Login</Text>
                 <TextInput
                     placeholder="Email"
                     value={email}
