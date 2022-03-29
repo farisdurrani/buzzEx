@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
                     style={{width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
                 />
                 <Button
-                    onPress={() => navigation.navigate('Contacts')}
+                    onPress={() => navigation.navigate('Contactstemp')}
                     style={[styles.button, styles.buttonOutline]}
                     title="Send Item"
                     buttonStyle={{
