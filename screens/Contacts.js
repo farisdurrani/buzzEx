@@ -14,59 +14,69 @@ class Contacts extends Component {
         name: 'Anderson',
         firstname: 'Bill',
         lastname: 'Anderson',
+        fullname: 'Bill Anderson',
       },
       {
         name: 'Aaron',
         firstname: 'Milton',
         lastname: 'Aaron',
+        fullname: 'Milton Aaron',
       },
       {
         name: 'Alex',
         firstname: 'Michale',
         lastname: 'Alex',
+        fullname: 'Michale Alex',
       },
       {
         name: 'Baarda',
         firstname: 'Will',
         lastname: 'Baarda',
+        fullname: 'Will Baarda',
       },
       {
         name: 'Ballard',
         firstname: 'Bruce',
         lastname: 'Ballard',
+        fullname: 'Bruce Ballard',
       },
       {
         name: 'Barlow',
         firstname: 'Michael',
         lastname: 'Barlow',
+        fullname: 'Michael Barlow',
       },
       {
         name: 'Haro',
         firstname: 'Anna',
         lastname: 'Haro',
+        fullname: 'Anna Haro',
       },
       {
         name: 'Calvin',
         firstname: 'David',
         lastname: 'Calvin',
+        fullname: 'David Calvin',
       },
       {
         name: 'David',
         firstname: 'Carl',
         lastname: 'David',
+        fullname: 'Carl David',
       },
       {
         name: 'Elaine',
         firstname: 'Mary',
         lastname: 'Elaine',
+        fullname: 'Mary Elaine',
       },
       {
         name: 'Felix',
         firstname: 'David',
         lastname: 'Felix',
+        fullname: 'David Felix',
       },
-      { name: '**&&&&', firstname: '**', lastname: '&&&&' },
-      { name: '1122', firstname: '11', lastname: '22' },
+      
     ];
     this.state = {
       dataArray: nameData,
@@ -88,13 +98,12 @@ class Contacts extends Component {
         <View style={styles.itemTextView}>
         <Button
 
-          title = "Send to"
+          title={item.fullname}
           onPress={() => this.props.navigation.navigate('ItemPrice')}
 
 
         />
-        <Text style={styles.itemFirstName}>{item.firstname}</Text>
-        <Text style={styles.itemLastName}>{item.lastname}</Text>
+
         </View>
       </View>
     );
@@ -114,7 +123,7 @@ class Contacts extends Component {
   };
   searchFunction = (text) => {
     const updatedData = this.arrayholder.filter((item) => {
-      const item_data = `${item.lastname.toUpperCase()})`;
+      const item_data = `${item.fullname.toUpperCase()})`;
       const text_data = text.toUpperCase();
       return item_data.indexOf(text_data) > -1;
     });
