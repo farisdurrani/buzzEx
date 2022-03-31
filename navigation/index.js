@@ -8,6 +8,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ContactScreen  from "../screens/ContactScreen";
 import SellerConfirmScreen from "../screens/SellerConfirmScreen";
 import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
+import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +55,11 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="SellerAwaiting"
           component={SellerAwaitingScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SellerAccepted"
+          component={SellerAcceptedScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

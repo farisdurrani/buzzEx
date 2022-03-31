@@ -12,7 +12,7 @@ import { BButton } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
 
-const SellerAwaitingScreen = ({ navigation, route }) => {
+const SellerAcceptedScreen = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
@@ -31,13 +31,30 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
+      <Text style={styles.mainText}>Dan will be delivering your package!</Text>
+
+      <Image
+        source={require("../assets/earth_face.png")}
+        style={styles.profilePic}
+      />
+      <View style={[LAYOUT.centerMiddle]}>
+        <Text style={styles.name}>Bleh Blej</Text>
+        <Text style={styles.username}>@bobTheBuilder</Text>
+      </View>
+
+      <View style={[LAYOUT.row, {marginTop: 10}]}>
+        <AntDesign name="star" size={20} color={COLORS.primary_red} />
+        <Text> 4.41</Text>
+      </View>
+
+      <View style={{marginTop: 60}}>
+      <BButton
+        text="Continue"
         onPress={() => {
-          navigation.navigate("SellerAccepted");
+          // navigation.navigate("SellerAwaiting");
         }}
-      >
-        <Text style={styles.awaitingText}>Awaiting for Bob to Accept...</Text>
-      </TouchableOpacity>
+      />
+      </View>
     </View>
   );
 };
@@ -55,11 +72,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
-  awaitingText: {
-    marginTop: 300,
-    fontSize: 18,
+  mainText: {
+    marginTop: 50,
+    fontSize: 40,
+    textAlign: "center",
+  },
+  profilePic: {
+    marginTop: 50,
+    width: 130,
+    height: 130,
+    borderRadius: 130 / 2,
+  },
+  name: {
+    marginTop: 30,
+    fontSize: 30,
     fontWeight: "bold",
+  },
+  username: {
+    fontSize: 20,
+    color: COLORS.primary_red,
   },
 });
 
-export default SellerAwaitingScreen;
+export default SellerAcceptedScreen;
