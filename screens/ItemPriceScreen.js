@@ -15,6 +15,7 @@ import { COLORS, LAYOUT } from "../constants";
 const ItemPriceScreen = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
   const [itemPrice, setItemPrice] = useState("");
+  let snapURI = null;
 
   const ItemDetailGroup = (props) => {
     const { title, placeholder, state, setState } = props;
@@ -36,6 +37,10 @@ const ItemPriceScreen = ({ navigation, route }) => {
       </View>
     );
   };
+
+  if (route.params && route.params.snapURI) {
+    snapURI = route.params.snapURI;
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -72,7 +77,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
             navigation.navigate("TakePicture");
           }}
         >
-          {route.params ? (
+          {snapURI ? (
             <Image
               style={styles.picture}
               source={{
@@ -84,7 +89,14 @@ const ItemPriceScreen = ({ navigation, route }) => {
           )}
         </TouchableOpacity>
       </View>
-      <BButton text="Continue" />
+      <BButton
+        text="Continue"
+        onPress={() => {
+          navigation.navigate("SellerConfirm", {
+            snapURI: snapURI,
+          });
+        }}
+      />
     </View>
   );
 };

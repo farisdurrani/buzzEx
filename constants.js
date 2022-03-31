@@ -11,7 +11,7 @@ export const LAYOUT = {
     display: "flex",
     flexDirection: "row",
   },
-  row: {
+  column: {
     display: "flex",
     flexDirection: "column",
   },
