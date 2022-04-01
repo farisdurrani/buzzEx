@@ -12,32 +12,33 @@ import { BButton } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
 
-const SellerAwaitingScreen = ({ navigation, route }) => {
+const CancellationScreen = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.upperButtons}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialIcons name="cancel" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("SellerAccepted");
         }}
       >
-        <Text style={styles.awaitingText}>Awaiting for Bob to Accept...</Text>
+        <Text style={styles.mainText}>Are you sure you want to cancel?</Text>
       </TouchableOpacity>
+
+      <View style={{ width: "50%", marginBottom: 20 }}>
+        <BButton
+          text="Yes"
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        />
+      </View>
+      <View style={{ width: "50%" }}>
+        <BButton
+          text="No"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -55,11 +56,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
-  awaitingText: {
-    marginTop: 300,
-    fontSize: 18,
+  mainText: {
+    marginTop: 200,
+    marginBottom: 100,
+    fontSize: 30,
+    textAlign: "center",
     fontWeight: "bold",
   },
 });
 
-export default SellerAwaitingScreen;
+export default CancellationScreen;
