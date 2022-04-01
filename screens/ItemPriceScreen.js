@@ -15,6 +15,7 @@ import { COLORS, LAYOUT } from "../constants";
 const ItemPriceScreen = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
   const [itemPrice, setItemPrice] = useState("");
+  let snapURI = null;
 
   const ItemDetailGroup = (props) => {
     const { title, placeholder, state, setState } = props;
@@ -37,11 +38,22 @@ const ItemPriceScreen = ({ navigation, route }) => {
     );
   };
 
+  if (route.params && route.params.snapURI) {
+    snapURI = route.params.snapURI;
+  }
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.upperButtons}>
         <TouchableOpacity onPress={navigation.goBack}>
-          <Ionicons name="arrow-back" size={24} color="black" />
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
         </TouchableOpacity>
         <TouchableOpacity>
           <MaterialIcons name="cancel" size={24} color="black" />
@@ -72,7 +84,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
             navigation.navigate("TakePicture");
           }}
         >
-          {route.params ? (
+          {snapURI ? (
             <Image
               style={styles.picture}
               source={{

@@ -6,8 +6,11 @@ import RegistrationScreen from "../screens/RegistrationScreen";
 import TakePictureScreen from "../screens/TakePictureScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ContactScreen  from "../screens/ContactScreen";
-import Contacts  from "../screens/Contacts";
+import Contacts from "../screens/Contacts";
 import MapScreen from "../screens/MapScreen";
+import SellerConfirmScreen from "../screens/SellerConfirmScreen";
+import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
+import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,11 +46,6 @@ const Navigation = () => {
         <Stack.Screen
           options={{ headerShown: false }}
           name="Contacts"
-          component={ContactScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Contactstemp"
           component={Contacts}
         />
         {/* Temporary Screen for Map Demo */}
@@ -56,6 +54,21 @@ const Navigation = () => {
           name="Map"
           component={MapScreen}
         /> 
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SellerConfirm"
+          component={SellerConfirmScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SellerAwaiting"
+          component={SellerAwaitingScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SellerAccepted"
+          component={SellerAcceptedScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
