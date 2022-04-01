@@ -7,6 +7,7 @@ import TakePictureScreen from "../screens/TakePictureScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ContactScreen  from "../screens/ContactScreen";
 import Contacts  from "../screens/Contacts";
+import MapScreen from "../screens/MapScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,12 @@ const Navigation = () => {
           name="Contactstemp"
           component={Contacts}
         />
+        {/* Temporary Screen for Map Demo */}
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Map"
+          component={MapScreen}
+        /> 
       </Stack.Navigator>
     </NavigationContainer>
   );
