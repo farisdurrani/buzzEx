@@ -15,6 +15,7 @@ import { COLORS, LAYOUT } from "../../constants";
 const SellerConfirmScreen = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
   const [itemPrice, setItemPrice] = useState("");
+  const deliveryFee = 2.31;
 
   const ItemDetailGroup = (props) => {
     const { title, text } = props;
@@ -77,8 +78,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
           }}
         />
         <View style={[{ marginLeft: 20 }]}>
-          <Text style={styles.name}>Bleh Blej</Text>
-          <Text style={styles.username}>@bobTheBuilder</Text>
+          <Text style={styles.name}>Bob The Buyer</Text>
+          <Text style={styles.username}>@bobTheBuyer</Text>
         </View>
       </View>
 
@@ -91,7 +92,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
               navigation.navigate("TakePicture");
             }}
           >
-            {route.params && route.params.snapURI ? (
+            {route.params.snapURI ? (
               <Image
                 style={styles.picture}
                 source={{
@@ -107,7 +108,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         <View style={styles.nameEta}>
           <ItemDetailGroup
             title="Item Name"
-            text="Bike"
+            text={route.params.itemName}
             state={itemName}
             setState={setItemName}
           />
@@ -122,9 +123,16 @@ const SellerConfirmScreen = ({ navigation, route }) => {
       </View>
 
       <View>
-        <PriceItem itemName="Item price" price="$12.00" />
-        <PriceItem itemName="Delivery" price="$2.31" />
-        <PriceItem itemName="Subtotal" price="$14.31" bold="bold" />
+        <PriceItem
+          itemName="Item price"
+          price={`\$${route.params.itemPrice}`}
+        />
+        <PriceItem itemName="Delivery" price={`\$${deliveryFee}`} />
+        <PriceItem
+          itemName="Subtotal"
+          price={`\$${route.params.itemPrice + deliveryFee}`}
+          bold="bold"
+        />
       </View>
 
       <View style={LAYOUT.centerMiddle}></View>

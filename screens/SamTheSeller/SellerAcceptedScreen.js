@@ -37,6 +37,7 @@ const SellerAcceptedScreen = ({ navigation }) => {
         <BButton
           text="Continue"
           onPress={() => {
+            navigation.navigate("DelivererToPickup");
           }}
         />
       </View>
