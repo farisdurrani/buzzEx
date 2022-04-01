@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Button} from 'react-native';
 import SectionListContacts from 'react-native-sectionlist-contacts';
 import { registerRootComponent } from 'expo';
-import { COLORS, LAYOUT } from "../constants";
+import { COLORS, LAYOUT } from "../../constants";
 import SearchBar from "react-native-dynamic-search-bar";
 
 
@@ -162,7 +162,7 @@ class Contacts extends Component {
           }}
         >
           <Image
-            source={require('../assets/images/defaultUser.jpeg')}
+            source={require('../../assets/images/defaultUser.jpeg')}
             style={styles.avatar}
           />
           <View

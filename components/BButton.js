@@ -10,14 +10,16 @@ import {
 import { COLORS } from "../constants";
 
 const BButton = (props) => {
-  const { text, onPress } = props;
+  const { text, onPress, containerStyle, buttonStyle } = props;
   return (
-    <TouchableOpacity
-      onPress={onPress ? onPress : () => {}}
-      style={styles.button}
-    >
-      <Text style={styles.buttonText}>{text}</Text>
-    </TouchableOpacity>
+    <View style={containerStyle}>
+      <TouchableOpacity
+        onPress={onPress ? onPress : () => {}}
+        style={buttonStyle ? buttonStyle : styles.button}
+      >
+        <Text style={styles.buttonText}>{text}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -33,5 +35,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
   },
 });

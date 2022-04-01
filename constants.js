@@ -4,6 +4,7 @@ export const COLORS = {
   primary_blue: "#2C2C54",
   primary_red: "#A40E4C",
   transparent_gray: "#A40E4C0D",
+  orange: "#F49D6E",
 };
 
 export const LAYOUT = {

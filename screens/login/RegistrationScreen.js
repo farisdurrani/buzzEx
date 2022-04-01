@@ -7,9 +7,9 @@ import {
     Image
 } from "react-native";
 import { Input, Button, Text, useTheme } from 'react-native-elements';
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth"
-import {addUser, getUser, setUser} from "../firebase";
+import {addUser, getUser, setUser} from "../../firebase";
 import RadioForm from 'react-native-simple-radio-button';
 
 const RegistrationScreen = ({ navigation }) => {

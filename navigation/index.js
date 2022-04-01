@@ -1,17 +1,23 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "../screens/LoginScreen";
-import ItemPriceScreen from "../screens/ItemPriceScreen";
-import RegistrationScreen from "../screens/RegistrationScreen";
-import TakePictureScreen from "../screens/TakePictureScreen";
-import HomeScreen from "../screens/HomeScreen";
-import ContactScreen  from "../screens/ContactScreen";
-import MapScreen from "../screens/MapScreen";
-import SellerConfirmScreen from "../screens/SellerConfirmScreen";
-import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
-import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
-import Contacts  from "../screens/Contacts";
-import DeliveriesAvailable from "../screens/DeliveriesAvailable";
+import {
+  LoginScreen,
+  ItemPriceScreen,
+  RegistrationScreen,
+  TakePictureScreen,
+  HomeScreen,
+  ContactScreen,
+  MapScreen,
+  SellerConfirmScreen,
+  SellerAwaitingScreen,
+  SellerAcceptedScreen,
+  Contacts,
+  DeliveriesAvailable,
+  CancellationScreen,
+  BuyerAcceptScreen,
+  MatchedScreen,
+  PaymentScreen,
+} from "../screens/index";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,7 +60,7 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Map"
           component={MapScreen}
-        /> 
+        />
         <Stack.Screen
           options={{ headerShown: false }}
           name="SellerConfirm"
@@ -74,6 +80,26 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Deliverer"
           component={DeliveriesAvailable}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Cancellation"
+          component={CancellationScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="BuyerAccept"
+          component={BuyerAcceptScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Matched"
+          component={MatchedScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Payment"
+          component={PaymentScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

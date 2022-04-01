@@ -8,9 +8,9 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BButton } from "../components/index";
+import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../constants";
+import { COLORS, LAYOUT } from "../../constants";
 
 const ItemPriceScreen = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
@@ -44,21 +44,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.upperButtons}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialIcons name="cancel" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+      <BackCancelButtons navigation={navigation} />
 
       <View style={LAYOUT.centerMiddle}>
         <Text style={styles.name}>Bob Builder</Text>
@@ -96,9 +82,12 @@ const ItemPriceScreen = ({ navigation, route }) => {
           )}
         </TouchableOpacity>
       </View>
-      <BButton text="Continue" onPress={()=>navigation.navigate("Map")}/> 
-      {/* TODO: Temporarily navigates to Map. Change when new screens are added */}
-      
+      <BButton
+        text="Continue"
+        onPress={() => navigation.navigate("SellerConfirm")}
+      />
+
+      <BButton text="Temp" onPress={() => navigation.navigate("Payment")} />
     </View>
   );
 };
@@ -112,12 +101,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: "center",
     justifyContent: "space-between",
-  },
-  upperButtons: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
   },
   name: {
     paddingTop: 50,
