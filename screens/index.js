@@ -2,6 +2,7 @@
 
 // DanTheDeliverer
 export { default as DeliveriesAvailable } from "./DanTheDeliverer/DeliveriesAvailable";
+export { default as PickupScreen } from "./DanTheDeliverer/PickupScreen";
 
 // SamTheSeller
 export { default as Contacts } from "./SamTheSeller/Contacts";
@@ -16,6 +17,5 @@ export { default as CancellationScreen } from "./CancellationScreen";
 export { default as HomeScreen } from "./HomeScreen";
 export { default as LoginScreen } from "./login/LoginScreen";
 export { default as MapScreen } from "./MapScreen";
-export { default as PickupScreen } from "./PickupScreen";
 export { default as RegistrationScreen } from "./login/RegistrationScreen";
 export { default as TakePictureScreen } from "./TakePictureScreen";
