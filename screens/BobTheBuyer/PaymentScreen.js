@@ -11,6 +11,8 @@ import { BButton, BackCancelButtons } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
 
 const PaymentScreen = ({ navigation }) => {
+  const itemPrice = 12.0;
+  const deliveryFee = 2.31;
   const [tip, setTip] = useState("");
 
   const ItemDetailGroup = (props) => {
@@ -18,9 +20,7 @@ const PaymentScreen = ({ navigation }) => {
     return (
       <View style={styles.tipContainer}>
         <Text style={styles.detailTitle}>{title}</Text>
-        <KeyboardAvoidingView
-          style={[styles.inputContainer, LAYOUT.centerMiddle]}
-        >
+        <KeyboardAvoidingView style={[styles.inputContainer]}>
           <TextInput
             style={styles.inputText}
             placeholder={placeholder}
@@ -63,11 +63,15 @@ const PaymentScreen = ({ navigation }) => {
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
+      <View style={{ marginTop: 70 }} />
+
+      <Text style={styles.title}>Payment</Text>
+
       <PriceItem itemName="ETA" price="14:55" />
 
-      <View>
-        <PriceItem itemName="Item Price" price="$10.00" />
-        <PriceItem itemName="Delivery" price="$2.31" />
+      <View style={{ marginVertical: 20 }}>
+        <PriceItem itemName="Item Price" price={`\$${itemPrice}`} />
+        <PriceItem itemName="Delivery" price={`\$${deliveryFee}`} />
       </View>
 
       <ItemDetailGroup
@@ -77,7 +81,17 @@ const PaymentScreen = ({ navigation }) => {
         setState={setTip}
       />
 
-      <PriceItem itemName="Subtotal" price="$14.31" bold="bold" />
+      <PriceItem
+        itemName="Subtotal"
+        price={
+          !isNaN(tip)
+            ? `${(itemPrice + deliveryFee + Number(tip)).toFixed(2)}`
+            : `${itemPrice + deliveryFee}`
+        }
+        bold="bold"
+      />
+
+      <BButton text="Pay" containerStyle={{ width: 150, marginTop: 60 }} />
     </View>
   );
 };
@@ -90,21 +104,28 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
     paddingHorizontal: 20,
     alignItems: "center",
-},
-tipContainer: {
+  },
+  tipContainer: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingLeft: 10,
     width: 300,
+    alignItems: "center",
+    marginBottom: 20,
   },
   inputContainer: {
-    marginTop: 10,
+    paddingHorizontal: 10,
     width: 150,
     paddingVertical: 8,
     backgroundColor: COLORS.transparent_gray,
   },
+  title: {
+    fontWeight: "bold",
+    fontSize: 30,
+    marginBottom: 60,
+  },
   detailTitle: {
-    paddingTop: 20,
     fontSize: 20,
   },
   inputText: {
