@@ -96,14 +96,9 @@ const ItemPriceScreen = ({ navigation, route }) => {
           )}
         </TouchableOpacity>
       </View>
-      <BButton
-        text="Continue"
-        onPress={() => {
-          navigation.navigate("SellerConfirm", {
-            snapURI: snapURI,
-          });
-        }}
-      />
+      <BButton text="Continue" onPress={()=>navigation.navigate("SellerConfirm")}/> 
+      {/* TODO: Temporarily navigates to Map. Change when new screens are added */}
+      
     </View>
   );
 };

@@ -6,6 +6,8 @@ import RegistrationScreen from "../screens/RegistrationScreen";
 import TakePictureScreen from "../screens/TakePictureScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ContactScreen  from "../screens/ContactScreen";
+import Contacts from "../screens/Contacts";
+import MapScreen from "../screens/MapScreen";
 import SellerConfirmScreen from "../screens/SellerConfirmScreen";
 import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
 import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
@@ -44,8 +46,14 @@ const Navigation = () => {
         <Stack.Screen
           options={{ headerShown: false }}
           name="Contacts"
-          component={ContactScreen}
+          component={Contacts}
         />
+        {/* Temporary Screen for Map Demo */}
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Map"
+          component={MapScreen}
+        /> 
         <Stack.Screen
           options={{ headerShown: false }}
           name="SellerConfirm"
