@@ -2,6 +2,7 @@ import React, {useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import { KeyboardAvoidingView } from "react-native";
+import { BButton } from "../components";
 
 const DeliveriesAvailable = ({navigation}) => {
     const deliverer = "Dan"
@@ -20,11 +21,12 @@ const DeliveriesAvailable = ({navigation}) => {
     <Text style={[styles.label]}> {zipcode}</Text>
     <View style={styles.inputContainer}>
     <RadioForm
-                radio_props={radio_props}
-                formHorizontal={false}
-                initial={'Buyer/Seller'}
-                onPress={(value) => {onChangeUserType(value)}}
+        radio_props={radio_props}
+        formHorizontal={false}
+        initial={'Buyer/Seller'}
+        onPress={(value) => {onChangeUserType(value)}}
     />
+    <BButton text="Accept" onPress={()=>navigation.navigate("Map")}/> 
     </View>
     </KeyboardAvoidingView>
   )
@@ -41,5 +43,6 @@ const styles = StyleSheet.create({
   label: {
     padding: 15,
   },
+ 
   inputContainer: {},
 });
