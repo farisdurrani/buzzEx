@@ -16,6 +16,7 @@ import {
   CancellationScreen,
   BuyerAcceptScreen,
   MatchedScreen,
+  PaymentScreen,
 } from "../screens/index";
 
 const Stack = createNativeStackNavigator();
@@ -94,6 +95,11 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Matched"
           component={MatchedScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Payment"
+          component={PaymentScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
