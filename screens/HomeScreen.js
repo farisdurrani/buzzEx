@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
               borderRadius: 50,
             }}
             onPress={() => {
-              navigation.navigate("Contacts");
+              navigation.navigate("BuyerAccept");
             }}
           />
         ) : (

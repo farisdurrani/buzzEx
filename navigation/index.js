@@ -14,6 +14,8 @@ import {
   Contacts,
   DeliveriesAvailable,
   CancellationScreen,
+  BuyerAcceptScreen,
+  MatchedScreen,
 } from "../screens/index";
 
 const Stack = createNativeStackNavigator();
@@ -82,6 +84,16 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Cancellation"
           component={CancellationScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="BuyerAccept"
+          component={BuyerAcceptScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Matched"
+          component={MatchedScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

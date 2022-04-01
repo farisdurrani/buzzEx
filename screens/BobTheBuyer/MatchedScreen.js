@@ -12,12 +12,12 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
-const SellerAcceptedScreen = ({ navigation }) => {
+const MatchedScreen = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
-      <Text style={styles.mainText}>Dan will be delivering your package!</Text>
+      <Text style={styles.mainText}>Dan will be delivering you the package!</Text>
 
       <Image
         source={require("../../assets/earth_face.png")}
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SellerAcceptedScreen;
+export default MatchedScreen;

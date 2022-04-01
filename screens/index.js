@@ -1,4 +1,6 @@
 // BobTheBuyer
+export { default as BuyerAcceptScreen } from "./BobTheBuyer/BuyerAcceptScreen";
+export { default as MatchedScreen } from "./BobTheBuyer/MatchedScreen";
 
 // DanTheDeliverer
 export { default as DeliveriesAvailable } from "./DanTheDeliverer/DeliveriesAvailable";
