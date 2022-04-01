@@ -8,28 +8,14 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BButton } from "../components/index";
+import { BButton, BackCancelButtons } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
 
 const SellerAwaitingScreen = ({ navigation, route }) => {
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.upperButtons}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Ionicons
-            name="arrow-back"
-            size={24}
-            color="black"
-            onPress={() => {
-              navigation.goBack();
-            }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialIcons name="cancel" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+      <BackCancelButtons navigation={navigation} />
 
       <TouchableOpacity
         onPress={() => {
