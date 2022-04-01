@@ -2,9 +2,9 @@ import React, {useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import { KeyboardAvoidingView } from "react-native";
-import { BButton } from "../components";
+import { BButton } from "../../components";
 import { initialWindowMetrics } from "react-native-safe-area-context";
-import { COLORS, LAYOUT } from "../constants";
+import { COLORS, LAYOUT } from "../../constants";
 import { TextInput } from "react-native";
 
 const DeliveriesAvailable = ({navigation}) => {
