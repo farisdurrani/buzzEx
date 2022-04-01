@@ -8,9 +8,9 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BButton, BackCancelButtons } from "../components/index";
+import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../constants";
+import { COLORS, LAYOUT } from "../../constants";
 
 const SellerAwaitingScreen = ({ navigation, route }) => {
   return (

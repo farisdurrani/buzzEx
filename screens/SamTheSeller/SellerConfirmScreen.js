@@ -8,9 +8,9 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BButton, BackCancelButtons } from "../components/index";
+import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../constants";
+import { COLORS, LAYOUT } from "../../constants";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
@@ -69,7 +69,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         ]}
       >
         <Image
-          source={require("../assets/earth_face.png")}
+          source={require("../../assets/earth_face.png")}
           style={{
             width: 130,
             height: 130,

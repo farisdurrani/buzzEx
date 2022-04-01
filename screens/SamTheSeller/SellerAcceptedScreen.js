@@ -8,9 +8,9 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import { BButton, BackCancelButtons } from "../components/index";
+import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../constants";
+import { COLORS, LAYOUT } from "../../constants";
 
 const SellerAcceptedScreen = ({ navigation }) => {
   return (
@@ -20,7 +20,7 @@ const SellerAcceptedScreen = ({ navigation }) => {
       <Text style={styles.mainText}>Dan will be delivering your package!</Text>
 
       <Image
-        source={require("../assets/earth_face.png")}
+        source={require("../../assets/earth_face.png")}
         style={styles.profilePic}
       />
       <View style={[LAYOUT.centerMiddle]}>

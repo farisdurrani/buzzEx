@@ -7,7 +7,7 @@ import {
     Image,
 } from "react-native";
 import { Input, Button, Text, useTheme } from 'react-native-elements';
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 
@@ -42,7 +42,7 @@ const LoginScreen = ({ navigation }) => {
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.inputContainer}>
                 <Image 
-                    source={require('../assets/buzzExLogo.png')} 
+                    source={require('../../assets/buzzExLogo.png')} 
                     style={{width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
                 />
                 <TextInput

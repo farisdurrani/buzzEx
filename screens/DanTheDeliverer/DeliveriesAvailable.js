@@ -2,7 +2,7 @@ import React, {useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import { KeyboardAvoidingView } from "react-native";
-import { BButton } from "../components";
+import { BButton } from "../../components";
 
 const DeliveriesAvailable = ({navigation}) => {
     const deliverer = "Dan"

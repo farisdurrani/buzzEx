@@ -1,18 +1,20 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "../screens/LoginScreen";
-import ItemPriceScreen from "../screens/ItemPriceScreen";
-import RegistrationScreen from "../screens/RegistrationScreen";
-import TakePictureScreen from "../screens/TakePictureScreen";
-import HomeScreen from "../screens/HomeScreen";
-import ContactScreen  from "../screens/ContactScreen";
-import MapScreen from "../screens/MapScreen";
-import SellerConfirmScreen from "../screens/SellerConfirmScreen";
-import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
-import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
-import Contacts  from "../screens/Contacts";
-import DeliveriesAvailable from "../screens/DeliveriesAvailable";
-import CancellationScreen from "../screens/CancellationScreen";
+import {
+  LoginScreen,
+  ItemPriceScreen,
+  RegistrationScreen,
+  TakePictureScreen,
+  HomeScreen,
+  ContactScreen,
+  MapScreen,
+  SellerConfirmScreen,
+  SellerAwaitingScreen,
+  SellerAcceptedScreen,
+  Contacts,
+  DeliveriesAvailable,
+  CancellationScreen,
+} from "../screens/index";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,7 +57,7 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Map"
           component={MapScreen}
-        /> 
+        />
         <Stack.Screen
           options={{ headerShown: false }}
           name="SellerConfirm"
