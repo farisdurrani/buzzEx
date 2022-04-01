@@ -91,7 +91,13 @@ const PaymentScreen = ({ navigation }) => {
         bold="bold"
       />
 
-      <BButton text="Pay" containerStyle={{ width: 150, marginTop: 60 }} />
+      <BButton
+        text="Pay"
+        containerStyle={{ width: 150, marginTop: 60 }}
+        onPress={() => {
+          navigation.navigate("MatchingDeliverer");
+        }}
+      />
     </View>
   );
 };

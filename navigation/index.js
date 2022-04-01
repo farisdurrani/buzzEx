@@ -6,7 +6,6 @@ import {
   RegistrationScreen,
   TakePictureScreen,
   HomeScreen,
-  ContactScreen,
   MapScreen,
   SellerConfirmScreen,
   SellerAwaitingScreen,
@@ -17,6 +16,10 @@ import {
   BuyerAcceptScreen,
   MatchedScreen,
   PaymentScreen,
+  DelivererToDropoff,
+  DelivererToPickup,
+  DeliveryComplete,
+  MatchingDeliverer,
 } from "../screens/index";
 
 const Stack = createNativeStackNavigator();
@@ -100,6 +103,26 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Payment"
           component={PaymentScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="DelivererToDropoff"
+          component={DelivererToDropoff}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="DelivererToPickup"
+          component={DelivererToPickup}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="DeliveryComplete"
+          component={DeliveryComplete}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="MatchingDeliverer"
+          component={MatchingDeliverer}
         />
       </Stack.Navigator>
     </NavigationContainer>
