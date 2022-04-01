@@ -23,7 +23,7 @@ const BuyerAcceptScreen = ({ navigation }) => {
           containerStyle={styles.buttonContainer}
           text="Accept"
           onPress={() => {
-            // navigation.navigate();
+            navigation.navigate("Payment");
           }}
         />
         <BButton

@@ -86,6 +86,8 @@ const ItemPriceScreen = ({ navigation, route }) => {
         text="Continue"
         onPress={() => navigation.navigate("SellerConfirm")}
       />
+
+      <BButton text="Temp" onPress={() => navigation.navigate("Payment")} />
     </View>
   );
 };
