@@ -12,6 +12,7 @@ import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
 import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
 import Contacts  from "../screens/Contacts";
 import DeliveriesAvailable from "../screens/DeliveriesAvailable";
+import CancellationScreen from "../screens/CancellationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,11 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Deliverer"
           component={DeliveriesAvailable}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Cancellation"
+          component={CancellationScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

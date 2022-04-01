@@ -56,7 +56,14 @@ const ItemPriceScreen = ({ navigation, route }) => {
           />
         </TouchableOpacity>
         <TouchableOpacity>
-          <MaterialIcons name="cancel" size={24} color="black" />
+          <MaterialIcons
+            name="cancel"
+            size={24}
+            color="black"
+            onPress={() => {
+              navigation.navigate("Cancellation");
+            }}
+          />
         </TouchableOpacity>
       </View>
 
