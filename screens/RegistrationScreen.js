@@ -62,7 +62,6 @@ const RegistrationScreen = ({ navigation }) => {
 
   return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        
           <View style={styles.inputContainer}>
               {/* <Image 
                     source={require('../assets/buzzExLogo.png')} 
@@ -167,9 +166,7 @@ const RegistrationScreen = ({ navigation }) => {
                   style={[styles.button, styles.buttonOutline]}
                   title="Login"
               >
-              </Button> */}
-
-              
+              </Button> */}    
           </View>
       </KeyboardAvoidingView>
   );
