@@ -6,11 +6,12 @@ import RegistrationScreen from "../screens/RegistrationScreen";
 import TakePictureScreen from "../screens/TakePictureScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ContactScreen  from "../screens/ContactScreen";
-import Contacts from "../screens/Contacts";
 import MapScreen from "../screens/MapScreen";
 import SellerConfirmScreen from "../screens/SellerConfirmScreen";
 import SellerAwaitingScreen from "../screens/SellerAwaitingScreen";
 import SellerAcceptedScreen from "../screens/SellerAcceptedScreen";
+import Contacts  from "../screens/Contacts";
+import DeliveriesAvailable from "../screens/DeliveriesAvailable";
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +69,11 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="SellerAccepted"
           component={SellerAcceptedScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Deliverer"
+          component={DeliveriesAvailable}
         />
       </Stack.Navigator>
     </NavigationContainer>
