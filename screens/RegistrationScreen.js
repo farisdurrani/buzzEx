@@ -47,7 +47,8 @@ const RegistrationScreen = ({ navigation }) => {
         user_addr2: addr2,
         user_zip: zip,
         user_city: city,
-        user_state: state 
+        user_state: state,
+        user_type: userType
     }).then(() => {
         console.log("added new user")
     })

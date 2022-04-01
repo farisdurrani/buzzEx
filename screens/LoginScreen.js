@@ -66,7 +66,22 @@ const LoginScreen = ({ navigation }) => {
                     // onPress={handleLogin} TODO: Login takes to home screen for interview purpose. Change back later
                     onPress={() => navigation.navigate('Home')}
                     style={[styles.button, styles.buttonOutline]}
-                    title="Login"
+                    title="Buyer/Seller Login"
+                    buttonStyle={{
+                        borderRadius: 20,
+                    }}
+                    containerStyle={{
+                        width: 200,
+                        marginHorizontal: 50,
+                        marginVertical: 5,
+                    }}
+                >
+                </Button>
+                <Button
+                    // onPress={handleLogin} TODO: Login takes to home screen for interview purpose. Change back later
+                    onPress={() => navigation.navigate('Deliverer')}
+                    style={[styles.button, styles.buttonOutline]}
+                    title="Deliverer Login"
                     buttonStyle={{
                         borderRadius: 20,
                     }}
