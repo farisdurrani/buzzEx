@@ -17,7 +17,9 @@ const MatchedScreen = ({ navigation }) => {
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
-      <Text style={styles.mainText}>Dan will be delivering you the package!</Text>
+      <Text style={styles.mainText}>
+        Dan will be delivering you the package!
+      </Text>
 
       <Image
         source={require("../../assets/earth_face.png")}
@@ -37,6 +39,7 @@ const MatchedScreen = ({ navigation }) => {
         <BButton
           text="Continue"
           onPress={() => {
+            navigation.navigate("DelivererToPickup");
           }}
         />
       </View>

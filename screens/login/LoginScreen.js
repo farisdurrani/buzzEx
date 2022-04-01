@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { auth } from "../../firebase";
+import { BButton } from "../../components";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
@@ -62,34 +63,16 @@ const LoginScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button
-          // onPress={handleLogin} TODO: Login takes to home screen for interview purpose. Change back later
+        <BButton
+          containerStyle={{ width: "100%", marginTop: 20 }}
+          text="Buyer/Seller Login"
           onPress={() => navigation.navigate("Home")}
-          style={[styles.button, styles.buttonOutline]}
-          title="Buyer/Seller Login"
-          buttonStyle={{
-            borderRadius: 20,
-          }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
-        ></Button>
-        <Button
-          // onPress={handleLogin} TODO: Login takes to home screen for interview purpose. Change back later
+        />
+        <BButton
+          containerStyle={{ width: "100%", marginTop: 20 }}
+          text="Deliverer Login"
           onPress={() => navigation.navigate("Deliverer")}
-          style={[styles.button, styles.buttonOutline]}
-          title="Deliverer Login"
-          buttonStyle={{
-            borderRadius: 20,
-          }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
-        ></Button>
+        />
         <Button
           title="Register"
           onPress={() => navigation.navigate("Registration")}
@@ -98,11 +81,7 @@ const LoginScreen = ({ navigation }) => {
           }}
           type="outline"
           titleStyle={{ color: "rgba(78, 116, 289, 1)" }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
+          containerStyle={{ width: "100%", marginTop: 20 }}
         />
       </View>
     </KeyboardAvoidingView>
@@ -120,7 +99,9 @@ const styles = StyleSheet.create({
   button: {
     padding: 5,
   },
-  buttonContainer: {},
+  buttonContainer: {
+    width: 250,
+  },
   buttonOutline: {},
   buttonOutlineText: {},
   buttonText: {

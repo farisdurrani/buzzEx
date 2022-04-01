@@ -84,10 +84,14 @@ const ItemPriceScreen = ({ navigation, route }) => {
       </View>
       <BButton
         text="Continue"
-        onPress={() => navigation.navigate("SellerConfirm")}
+        onPress={() =>
+          navigation.navigate("SellerConfirm", {
+            itemName: itemName,
+            itemPrice: itemPrice,
+            snapURI: snapURI,
+          })
+        }
       />
-
-      <BButton text="Temp" onPress={() => navigation.navigate("Payment")} />
     </View>
   );
 };
