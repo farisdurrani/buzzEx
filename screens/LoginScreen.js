@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
             borderRadius: 3,
           }}
           onPress={() => {
-            navigation.navigate("ItemPrice");
+            navigation.navigate("ContactScreen");
           }}
         />
         <Image
