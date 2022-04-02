@@ -12,6 +12,7 @@ import {
   SellerAcceptedScreen,
   Contacts,
   DeliveriesAvailable,
+  PickupScreen,
   CancellationScreen,
   BuyerAcceptScreen,
   MatchedScreen,
@@ -83,6 +84,11 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="Deliverer"
           component={DeliveriesAvailable}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="Pickup"
+          component={PickupScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}

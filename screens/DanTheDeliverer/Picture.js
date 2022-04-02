@@ -1,8 +1,14 @@
-import React from "react";
-import {BackCancelButtons } from "../../components/index";
-
-import React from 'react'
-import { View } from "react-native";
+import {
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Image,
+  } from "react-native";
+  import React from "react";
+  import {BackCancelButtons } from "../../components/index";
+  import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+  import { COLORS, LAYOUT } from "../../constants";
 
 const Picture = () => {
   return (
