@@ -5,14 +5,23 @@ import {
     TextInput,
     View,
     Image,
+    Dimensions
 } from "react-native";
 import { Input, Button, Text, useTheme } from 'react-native-elements';
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from 'react-native-vector-icons/Feather';
+import MapComponent from "../../components/MapComponent";
 
-const DelivererToPickup = ({ navigation }) => {
+let {width, height} = Dimensions.get('window') //Screen dimensions
+const ASPECT_RATIO = width/height
+const LATITUDE_DELTA = 0.04  // Controls the zoom level of the map. Smaller means more zoomed in
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO // Dependent on LATITUDE_DELTA
+
+const DelivererToPickup = ({ route, navigation }) => {
     const [deliveryNotes, onAddDeliveryNotes] = useState("");
+    const { mapProps } = route.params;
+    const hasLocationData = mapProps.latitude !== null && mapProps.longitude !== null;
     return (
             <View style={styles.container}>
                 
@@ -24,35 +33,28 @@ const DelivererToPickup = ({ navigation }) => {
                 
               </View>
 
-              
-              <Text style={styles.lineone}>ETA - 2:55</Text>
-                <Image 
-                    source={require('../../assets/buzzExLogo.png')} 
-                    style={{width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
-                />
-                
+            <View style={styles.headingContainer}>
+                <Text style={styles.lineone}>ETA - 2:55</Text>
+            </View>
+            {hasLocationData ? 
+                <MapComponent mapProps={{...mapProps, style: styles.map}}/>
+                : <Text style={styles.paragraph}>Loading Map...</Text>}
+            <View style={styles.bottomContainer}>
                 <Text style={styles.linetwo}>Dan is on the way to pickup the delivery!</Text>
-                <View style={{marginTop: 16, marginBottom: 16}}>
-            {/* Icon.Button Component */}
-            <Icon.Button
-              name="phone"
-              backgroundColor="#000000"
-              onPress={() => navigation.navigate('DelivererToDropoff')}>
-             
-            </Icon.Button>
-            
-
-            <TextInput
+                <TextInput
                     placeholder="Any delivery notes?"
                     value={deliveryNotes}
                     onChangeText={onAddDeliveryNotes}
-                    
                 ></TextInput>
-
-          </View>
-
-          <Button
-                    onPress={() => navigation.navigate('DelivererToDropoff')}
+                 <Icon.Button
+                    name="phone"
+                    backgroundColor="#000000"
+                    onPress={() => navigation.navigate('DelivererToDropoff')}>
+                </Icon.Button>
+                <Button
+                    onPress={() => navigation.navigate('DelivererToDropoff', {
+                        mapProps: mapProps
+                    })}
                     style={[styles.button, styles.buttonOutline]}
                     title="Go to Deliverer to dropoff screen"
                     buttonStyle={{
@@ -65,10 +67,8 @@ const DelivererToPickup = ({ navigation }) => {
                     }}
                 >
                 </Button>
-
             </View>
-            
-        
+          </View>
     );
 };
 
@@ -81,8 +81,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     lineone: {
-        paddingBottom: 50,
-        fontSize: 45,
+        fontSize: 30,
         fontWeight: "bold",
         textAlign: "center",
       },
@@ -101,6 +100,10 @@ const styles = StyleSheet.create({
     button: {
         padding: 20
     },
+    buttonView: {
+        position: "absolute",
+        top: 5/6 * height
+    },
     buttonContainer: {},
     buttonOutline: {},
     buttonOutlineText: {},
@@ -113,9 +116,13 @@ const styles = StyleSheet.create({
         borderColor: "rgba(0, 0, 0, .2)"
     },
     inputContainer: {},
-    heading: {
-        textAlign: 'center',
-        padding: 5,
+    headingContainer: {
+        position: "absolute",
+        top:50
+    },
+    bottomContainer: {
+        position: "absolute",
+        bottom:25
     },
     font: {
       textAlign: "center",
@@ -132,4 +139,9 @@ const styles = StyleSheet.create({
         right: 25,
         top: 50,
     },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+        top: 1/7 * height,
+        bottom: 1/3 * height
+      }
 });
