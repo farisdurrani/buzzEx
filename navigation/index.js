@@ -94,7 +94,7 @@ const Navigation = () => {
         />
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Deliverer"
+          name="DeliveriesAvailable"
           component={DeliveriesAvailable}
         />
         <Stack.Screen

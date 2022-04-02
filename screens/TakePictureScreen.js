@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const WINDOW_HEIGHT = Dimensions.get("window").height;
 const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
 
-const TakePictureScreen = ({ navigation }) => {
+const TakePictureScreen = ({ navigation, route }) => {
   const cameraRef = useRef();
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
@@ -23,6 +23,7 @@ const TakePictureScreen = ({ navigation }) => {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [currentSnapURI, setCurrentSnapURI] = useState(null);
 
+  const returnScreen = route.params.returnScreen;
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -38,7 +39,7 @@ const TakePictureScreen = ({ navigation }) => {
         {
           text: "OK",
           onPress: () => {
-            navigation.navigate("ItemPrice");
+            navigation.navigate(returnScreen);
           },
         },
       ]
@@ -107,7 +108,7 @@ const TakePictureScreen = ({ navigation }) => {
                 title="Confirm"
                 bgColor="#00ff0060"
                 onPress={() => {
-                  navigation.navigate("ItemPrice", { snapURI: currentSnapURI });
+                  navigation.navigate(returnScreen, { snapURI: currentSnapURI });
                 }}
               />
             </View>

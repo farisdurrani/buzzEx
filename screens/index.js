@@ -15,7 +15,7 @@ export { default as DropoffAt } from "./DanTheDeliverer/DropoffAt";
 export { default as DropoffPackage } from "./DanTheDeliverer/DropoffPackage";
 export { default as PickupPackage } from "./DanTheDeliverer/PickupPackage";
 export { default as PickupScreen } from "./DanTheDeliverer/PickupScreen";
-export { default as PictureDropoff } from "./DanTheDeliverer/PickupPackage";
+export { default as PictureDropoff } from "./DanTheDeliverer/PictureDropoff";
 
 // SamTheSeller
 export { default as Contacts } from "./SamTheSeller/Contacts";

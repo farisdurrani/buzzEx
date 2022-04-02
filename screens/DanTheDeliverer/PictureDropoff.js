@@ -1,79 +1,58 @@
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    Image,
-  } from "react-native";
-  import React from "react";
-  import {BackCancelButtons } from "../../components/index";
-  import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-  import { COLORS, LAYOUT } from "../../constants";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import React from "react";
+import { BackCancelButtons } from "../../components/index";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { COLORS, LAYOUT } from "../../constants";
 
-const Picture = () => {
+const PictureDropoff = ({ navigation }) => {
   return (
-    <View style={StyleSheet.mainContainer}>
-    <BackCancelButtons navigation={navigation} />
-    <View style={LAYOUT.centerMiddle}>
-        <Text>Take a picture of</Text>
-        <Text>Bike in dropoff</Text>
-        <Text>location</Text>
-    </View>
-    <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.detailTitle}>Take Picture</Text>
+    <View style={styles.mainContainer}>
+      <BackCancelButtons navigation={navigation} />
+      <View>
+        <Text style={styles.titleText}>
+          Take a picture of Bike in dropoff location
+        </Text>
+      </View>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={{ fontSize: 20 }}>Take Picture</Text>
         <TouchableOpacity
           style={[styles.cameraButton, LAYOUT.centerMiddle]}
           onPress={() => {
-            navigation.navigate("TakePicture");
+            navigation.navigate("TakePicture", {
+              returnScreen: "ConfirmDelivery",
+            });
           }}
         >
-          {snapURI ? (
-            <Image
-              style={styles.picture}
-              source={{
-                uri: route.params.snapURI,
-              }}
-            />
-          ) : (
-            <AntDesign name="camera" size={50} color={COLORS.primary_red} />
-          )}
+          <AntDesign name="camera" size={50} color={COLORS.primary_red} />
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default Picture
+export default PictureDropoff;
 
 const styles = StyleSheet.create({
-    mainContainer: {
-      height: "90%",
-      paddingVertical: 60,
-      paddingHorizontal: 20,
-      alignItems: "center",
-      justifyContent: "space-between",
-    },
-    detailTitle: {
-      paddingTop: 20,
-      fontSize: 20,
-    },
-    inputContainer: {
-      marginTop: 10,
-      width: 150,
-      paddingVertical: 8,
-      backgroundColor: COLORS.transparent_gray,
-    },
-    inputText: {
-      fontSize: 20,
-    },
-    picture: {
-      width: "90%",
-      height: "90%",
-    },
-    cameraButton: {
-      marginTop: 10,
-      height: 150,
-      width: 150,
-      backgroundColor: COLORS.transparent_gray,
-    },
-  });
+  mainContainer: {
+    height: "90%",
+    marginVertical: 60,
+    marginHorizontal: 20,
+    alignItems: "center",
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginVertical: 70,
+    textAlign: "center",
+  },
+  picture: {
+    width: "90%",
+    height: "90%",
+  },
+  cameraButton: {
+    marginTop: 10,
+    height: 150,
+    width: 150,
+    backgroundColor: COLORS.transparent_gray,
+  },
+});
