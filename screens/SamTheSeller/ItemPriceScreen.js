@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
+import { InputTextField } from "../../components";
 
 const ItemPriceScreen = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
@@ -22,18 +23,11 @@ const ItemPriceScreen = ({ navigation, route }) => {
     return (
       <View style={LAYOUT.centerMiddle}>
         <Text style={styles.detailTitle}>{title}</Text>
-        <KeyboardAvoidingView
-          style={[styles.inputContainer, LAYOUT.centerMiddle]}
-        >
-          <TextInput
-            style={styles.inputText}
-            placeholder={placeholder}
-            onEndEditing={(e) => {
-              setState(e.nativeEvent.text);
-            }}
-            defaultValue={state}
-          />
-        </KeyboardAvoidingView>
+        <InputTextField
+          placeholder={placeholder}
+          textState={state}
+          setTextState={setState}
+        />
       </View>
     );
   };
@@ -117,15 +111,7 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     paddingTop: 20,
-    fontSize: 20,
-  },
-  inputContainer: {
-    marginTop: 10,
-    width: 150,
-    paddingVertical: 8,
-    backgroundColor: COLORS.transparent_gray,
-  },
-  inputText: {
+    marginBottom: 8,
     fontSize: 20,
   },
   picture: {
