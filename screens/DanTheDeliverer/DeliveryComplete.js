@@ -60,7 +60,7 @@ const DeliveryComplete = ({ navigation, route }) => {
         ></Icon.Button>
         <BButton
           text="Return to Home"
-          onPress={() => navigation.navigate("DeliveriesAvailable")}
+          onPress={() => navigation.navigate(route.params.homeScreen)}
           containerStyle={{
             width: 200,
             marginHorizontal: 50,
