@@ -11,7 +11,48 @@ import { InputTextField } from "../../components";
 const DeliveriesAvailable = ({ navigation }) => {
   const deliverer = "Dan";
   const item_list = ["Bike", "Robot", "Laptop", "PS5", "Atari"];
-  const [zipcode, setZipcode] = useState("");
+  const [zipcode, setZipcode] = useState("30332");
+
+  const DeliveryRow = (props) => {
+    const { item, distance } = props;
+
+    const stylesRow = StyleSheet.create({
+      container: {
+        backgroundColor: COLORS.transparent_gray,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        width: 350,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+      },
+      itemDetailGroup: {
+        display: "flex",
+        flexDirection: "row",
+        width: "60%",
+        justifyContent: "space-between"
+      },
+      text: {
+        fontSize: 20,
+      },
+    });
+
+    return (
+      <View style={stylesRow.container}>
+        <View style={stylesRow.itemDetailGroup}>
+          <Text style={stylesRow.text}>{item}</Text>
+          <Text style={stylesRow.text}>{distance}</Text>
+        </View>
+        <BButton
+          text="Accept"
+          onPress={() => {
+            navigation.navigate("PickupScreen");
+          }}
+        />
+      </View>
+    );
+  };
 
   const radio_props = [
     { label: item_list[0], value: item_list[0] },
@@ -32,19 +73,9 @@ const DeliveriesAvailable = ({ navigation }) => {
         setTextState={setZipcode}
       />
       <View style={styles.inputContainer}>
-        <RadioForm
-          radio_props={radio_props}
-          formHorizontal={false}
-          initial={"Buyer/Seller"}
-          onPress={(value) => {
-            onChangeUserType(value);
-          }}
-        />
-        <BButton
-          style={styles.accept}
-          text="Accept"
-          onPress={() => navigation.navigate("Pickup")}
-        />
+        <DeliveryRow item="Guitar" distance="5 miles" />
+        <DeliveryRow item="Drill" distance="8 miles" />
+        <DeliveryRow item="Bike" distance="3 miles" />
       </View>
     </KeyboardAvoidingView>
   );
@@ -76,12 +107,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 15,
   },
-
-  zipcode: {
-    paddingTop: 10,
-    fontSize: 18,
-    padding: 0,
-  },
-
   inputContainer: {},
 });

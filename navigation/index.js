@@ -87,7 +87,7 @@ const Navigation = () => {
         />
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Pickup"
+          name="PickupScreen"
           component={PickupScreen}
         />
         <Stack.Screen
