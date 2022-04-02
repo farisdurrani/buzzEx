@@ -2,15 +2,14 @@ import React, {useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import { KeyboardAvoidingView } from "react-native";
-import { BButton } from "../../components";
 import { initialWindowMetrics } from "react-native-safe-area-context";
 import { COLORS, LAYOUT } from "../../constants";
 import { TextInput } from "react-native";
+import { BButton, BackCancelButtons } from "../../components/index";
 
 const DeliveriesAvailable = ({navigation}) => {
     const deliverer = "Dan"
     const item_list = ["Bike", "Robot", "Laptop", "PS5", "Atari"];
-    // const zipcode = "30318"
     const [zipcode, setZipcode] = useState("");
 
     const ItemDetailGroup = (props) => {
@@ -42,6 +41,7 @@ const DeliveriesAvailable = ({navigation}) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <BackCancelButtons navigation={navigation} />
     <Text><Text style={[styles.welcome]}> Welcome</Text> <Text style={[styles.name]}>{deliverer}!</Text></Text>
     <Text style={[styles.label]}> Showing available deliveries for...</Text>
     <Text style={[styles.zipcode]}> {zipcode}</Text>
@@ -69,7 +69,7 @@ export default DeliveriesAvailable
 const styles = StyleSheet.create({
   container: {
     height: "90%",
-      paddingVertical: 280,
+      paddingVertical: 50,
       paddingHorizontal: 20,
       alignItems: "center",
       justifyContent: "space-between",
