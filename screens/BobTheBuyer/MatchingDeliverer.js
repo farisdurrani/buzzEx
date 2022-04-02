@@ -29,7 +29,7 @@ const MatchingDeliverer = ({ navigation }) => {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getLastKnownPositionAsync({});
       setLocation(location);
     })();
   }, []);
