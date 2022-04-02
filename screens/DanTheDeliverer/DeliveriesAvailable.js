@@ -58,7 +58,7 @@ const DeliveriesAvailable = ({navigation}) => {
         initial={'Buyer/Seller'}
         onPress={(value) => {onChangeUserType(value)}}
     />
-    <BButton style={styles.accept} text="Accept" onPress={()=>navigation.navigate("Map")}/> 
+    <BButton style={styles.accept} text="Accept" onPress={()=>navigation.navigate("Pickup")}/> 
     </View>
     </KeyboardAvoidingView>
   )
