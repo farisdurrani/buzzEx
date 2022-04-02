@@ -8,8 +8,15 @@ export { default as DeliveryComplete } from "./BobTheBuyer/DeliveryComplete";
 export { default as MatchingDeliverer } from "./BobTheBuyer/MatchingDeliverer";
 
 // DanTheDeliverer
+export { default as ConfirmDelivery } from "./DanTheDeliverer/ConfirmDelivery";
+export { default as ConfirmPickup } from "./DanTheDeliverer/ConfirmPickup";
 export { default as DeliveriesAvailable } from "./DanTheDeliverer/DeliveriesAvailable";
+export { default as DeliveryComplete } from "./DanTheDeliverer/DeliveryComplete";
+export { default as DropoffAt } from "./DanTheDeliverer/DropoffAt";
+export { default as DropoffPackage } from "./DanTheDeliverer/DropoffPackage";
+export { default as PickupPackage } from "./DanTheDeliverer/PickupPackage";
 export { default as PickupScreen } from "./DanTheDeliverer/PickupScreen";
+export { default as PictureDropoff } from "./DanTheDeliverer/PickupPackage";
 
 // SamTheSeller
 export { default as Contacts } from "./SamTheSeller/Contacts";

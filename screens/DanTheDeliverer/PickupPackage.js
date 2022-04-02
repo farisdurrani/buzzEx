@@ -18,7 +18,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const DelivererToPickup = ({ route, navigation }) => {
+const PickupPackage = ({ route, navigation }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const { mapProps } = route.params;
   const hasLocationData =
@@ -60,7 +60,7 @@ const DelivererToPickup = ({ route, navigation }) => {
             })
           }
           style={[styles.button, styles.buttonOutline]}
-          title="Go to Deliverer to dropoff screen"
+          title="Pickup Package"
           buttonStyle={{
             borderRadius: 20,
           }}
@@ -75,7 +75,7 @@ const DelivererToPickup = ({ route, navigation }) => {
   );
 };
 
-export default DelivererToPickup;
+export default PickupPackage;
 
 const styles = StyleSheet.create({
   container: {

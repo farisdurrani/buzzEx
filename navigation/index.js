@@ -1,26 +1,39 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
-  LoginScreen,
-  ItemPriceScreen,
-  RegistrationScreen,
-  TakePictureScreen,
-  HomeScreen,
-  MapScreen,
-  SellerConfirmScreen,
-  SellerAwaitingScreen,
-  SellerAcceptedScreen,
-  Contacts,
-  DeliveriesAvailable,
-  PickupScreen,
-  CancellationScreen,
+  // BobBuyer
   BuyerAcceptScreen,
-  MatchedScreen,
-  PaymentScreen,
   DelivererToDropoff,
   DelivererToPickup,
   DeliveryComplete,
+  MatchedScreen,
   MatchingDeliverer,
+  PaymentScreen,
+  // DanTheDeliverer
+  ConfirmDelivery,
+  ConfirmPickup,
+  DeliveriesAvailable,
+  DeliveryComplete,
+  DropoffAt,
+  DropoffPackage,
+  PickupPackage,
+  PickupScreen,
+  PictureDropoff,
+  // SamTheSeller
+  Contacts,
+  ContactScreen,
+  ItemPriceScreen,
+  SellerAcceptedScreen,
+  SellerAwaitingScreen,
+  SellerConfirmScreen,
+  // login
+  LoginScreen,
+  RegistrationScreen,
+  // common
+  CancellationScreen,
+  HomeScreen,
+  MapScreen,
+  TakePictureScreen,
 } from "../screens/index";
 
 const Stack = createNativeStackNavigator();
@@ -129,6 +142,36 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="MatchingDeliverer"
           component={MatchingDeliverer}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ConfirmDelivery"
+          component={ConfirmDelivery}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="ConfirmPickup"
+          component={ConfirmPickup}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="DropoffAt"
+          component={DropoffAt}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="DropoffPackage"
+          component={DropoffPackage}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="PictureDropoff"
+          component={PictureDropoff}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="PickupPackage"
+          component={PickupPackage}
         />
       </Stack.Navigator>
     </NavigationContainer>
