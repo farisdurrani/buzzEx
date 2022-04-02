@@ -5,7 +5,6 @@ import {
   BuyerAcceptScreen,
   DelivererToDropoff,
   DelivererToPickup,
-  DeliveryComplete,
   MatchedScreen,
   MatchingDeliverer,
   PaymentScreen,

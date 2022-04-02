@@ -51,11 +51,11 @@ const PickupPackage = ({ route, navigation }) => {
         <Icon.Button
           name="phone"
           backgroundColor="#000000"
-          onPress={() => navigation.navigate("DelivererToDropoff")}
+          onPress={() => {}}
         ></Icon.Button>
         <Button
           onPress={() =>
-            navigation.navigate("DelivererToDropoff", {
+            navigation.navigate("ConfirmPickup", {
               mapProps: mapProps,
             })
           }

@@ -46,7 +46,7 @@ const PickupScreen = ({ navigation }) => {
         <BButton
           text="Go"
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.navigate("PickupPackage");
           }}
         />
 
