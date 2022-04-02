@@ -19,10 +19,7 @@ const ConfirmDelivery = ({ navigation, route }) => {
       </View>
       <View style={[LAYOUT.centerMiddle, { marginBottom: 50 }]}>
         <TouchableOpacity
-          style={[
-            snapURI ? styles.pictureContainer : styles.cameraButton,
-            LAYOUT.centerMiddle,
-          ]}
+          style={[styles.pictureContainer, LAYOUT.centerMiddle]}
           onPress={() => {
             navigation.navigate("TakePicture", {
               returnScreen: "ConfirmDelivery",
@@ -39,9 +36,11 @@ const ConfirmDelivery = ({ navigation, route }) => {
       </View>
       <BButton
         text="Confirm"
-        onPress={navigation.navigate("DeliveryComplete", {
-          homeScreen: "DeliveriesAvailable",
-        })}
+        onPress={() =>
+          navigation.navigate("DeliveryComplete", {
+            homeScreen: "DeliveriesAvailable",
+          })
+        }
       />
     </View>
   );

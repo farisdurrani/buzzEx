@@ -1,10 +1,10 @@
 // BobTheBuyer
 export { default as BuyerAcceptScreen } from "./BobTheBuyer/BuyerAcceptScreen";
-export { default as MatchedScreen } from "./BobTheBuyer/MatchedScreen";
-export { default as PaymentScreen } from "./BobTheBuyer/PaymentScreen";
-export { default as DelivererToPickup } from "./BobTheBuyer/DelivererToPickup";
 export { default as DelivererToDropoff } from "./BobTheBuyer/DelivererToDropoff";
+export { default as DelivererToPickup } from "./BobTheBuyer/DelivererToPickup";
+export { default as MatchedScreen } from "./BobTheBuyer/MatchedScreen";
 export { default as MatchingDeliverer } from "./BobTheBuyer/MatchingDeliverer";
+export { default as PaymentScreen } from "./BobTheBuyer/PaymentScreen";
 
 // DanTheDeliverer
 export { default as ConfirmDelivery } from "./DanTheDeliverer/ConfirmDelivery";
