@@ -26,10 +26,8 @@ const PickupPackage = ({ navigation, route }) => {
   }
 
   const hasLocationData =
-    mapProps &&
-    mapProps.latitude !== null &&
-    mapProps.longitude !== null;
-    
+    mapProps && mapProps.latitude !== null && mapProps.longitude !== null;
+
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>
@@ -48,7 +46,7 @@ const PickupPackage = ({ navigation, route }) => {
       )}
       <View style={styles.bottomContainer}>
         <Text style={styles.linetwo}>
-          Dan is on the way to pickup the delivery!
+          Picking up at 123 Peachtree Dr NW, Atlanta, GA 30318{" "}
         </Text>
         <TextInput
           placeholder="Any delivery notes?"
@@ -60,23 +58,19 @@ const PickupPackage = ({ navigation, route }) => {
           backgroundColor="#000000"
           onPress={() => {}}
         ></Icon.Button>
-        <Button
+        <BButton
+          text="Pickup Package"
           onPress={() =>
             navigation.navigate("ConfirmPickup", {
               mapProps: mapProps,
             })
           }
-          style={[styles.button, styles.buttonOutline]}
-          title="Pickup Package"
-          buttonStyle={{
-            borderRadius: 20,
-          }}
           containerStyle={{
             width: 200,
             marginHorizontal: 50,
             marginVertical: 5,
           }}
-        ></Button>
+        />
       </View>
     </View>
   );

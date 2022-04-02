@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation }) => {
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}
           text="Deliverer Login"
-          onPress={() => navigation.navigate("Deliverer")}
+          onPress={() => navigation.navigate("DeliveriesAvailable")}
         />
         <Button
           title="Register"
@@ -102,8 +102,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: 250,
   },
-  buttonOutline: {},
-  buttonOutlineText: {},
   buttonText: {
     color: "blue",
   },
@@ -112,7 +110,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "rgba(0, 0, 0, .2)",
   },
-  inputContainer: {},
   heading: {
     textAlign: "center",
     padding: 5,

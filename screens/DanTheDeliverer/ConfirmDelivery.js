@@ -1,52 +1,73 @@
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    KeyboardAvoidingView,
-    Image,
-    TextInput,
-  } from "react-native";
-  import React, { useState } from "react";
-  import { BButton, BackCancelButtons } from "../../components/index";
-  import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-  import { COLORS, LAYOUT } from "../../constants";
-  
-  const ConfirmDelivery = ({ navigation, route }) => {
-    return (
-      <View style={styles.mainContainer}>
-        <BackCancelButtons navigation={navigation} />
-  
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import React from "react";
+import { BackCancelButtons, BButton } from "../../components";
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { COLORS, LAYOUT } from "../../constants";
+
+const ConfirmDelivery = ({ navigation, route }) => {
+  let snapURI = null;
+
+  if (route.params && route.params.snapURI) {
+    snapURI = route.params.snapURI;
+  }
+
+  return (
+    <View style={styles.mainContainer}>
+      <BackCancelButtons navigation={navigation} />
+      <View>
+        <Text style={styles.titleText}>Now to complete your delivery!</Text>
+      </View>
+      <View style={[LAYOUT.centerMiddle, {marginBottom: 50}]}>
         <TouchableOpacity
+          style={[
+            snapURI ? styles.pictureContainer : styles.cameraButton,
+            LAYOUT.centerMiddle,
+          ]}
           onPress={() => {
-            navigation.navigate("SellerAccepted");
+            navigation.navigate("TakePicture", {
+              returnScreen: "ConfirmDelivery",
+            });
           }}
         >
-          <Text style={styles.awaitingText}>Awaiting for Bob to Accept...</Text>
+          <Image
+            style={styles.picture}
+            source={{
+              uri: route.params.snapURI,
+            }}
+          />
         </TouchableOpacity>
       </View>
-    );
-  };
-  
-  const styles = StyleSheet.create({
-    mainContainer: {
-      height: "95%",
-      paddingVertical: 60,
-      paddingHorizontal: 20,
-      alignItems: "center",
-    },
-    upperButtons: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      width: "100%",
-    },
-    awaitingText: {
-      marginTop: 300,
-      fontSize: 18,
-      fontWeight: "bold",
-    },
-  });
-  
-  export default ConfirmDelivery;
-  
+      <BButton
+        text="Confirm"
+        onPress={navigation.navigate("DeliveryComplete")}
+      />
+    </View>
+  );
+};
+
+export default ConfirmDelivery;
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    height: "90%",
+    marginVertical: 60,
+    marginHorizontal: 20,
+    alignItems: "center",
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    marginVertical: 40,
+    textAlign: "center",
+  },
+  pictureContainer: {
+    marginTop: 10,
+    height: 450,
+    width: 300,
+    backgroundColor: COLORS.transparent_gray,
+  },
+  picture: {
+    width: "90%",
+    height: "90%",
+  },
+});

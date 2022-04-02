@@ -12,7 +12,6 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
-
 const DropoffAt = ({ navigation }) => {
   const ChoiceRow = (props) => {
     const { choice } = props;
@@ -32,7 +31,7 @@ const DropoffAt = ({ navigation }) => {
         display: "flex",
         flexDirection: "row",
         width: "60%",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
       },
       text: {
         fontSize: 23,
@@ -47,32 +46,25 @@ const DropoffAt = ({ navigation }) => {
         <BButton
           text="Go"
           onPress={() => {
-            navigation.navigate("PickupPackage");
+            navigation.navigate("DropoffPackage");
           }}
         />
-
       </View>
     );
   };
 
-
-
   return (
     <View style={styles.container}>
       <BackCancelButtons navigation={navigation} />
-      <Text style={{ fontSize: 40, marginTop: 70 }}>
-        Dropoff Bike at Bob's
-      </Text>
+      <Text style={{ fontSize: 40, marginTop: 70 }}>Dropoff Bike at Bob's</Text>
 
       <View style={styles.addressContainer}>
         <Text style={styles.address}>555 Braves Win Dr</Text>
-        <Text style={styles.address}>Apt</Text>
         <Text style={styles.address}>Atlanta, GA 30318</Text>
       </View>
 
       <ChoiceRow choice="Google Maps" />
       <ChoiceRow choice="Waze" />
-
     </View>
   );
 };
@@ -128,5 +120,3 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.transparent_gray,
   },
 });
-
-  
