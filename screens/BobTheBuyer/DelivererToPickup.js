@@ -53,23 +53,19 @@ const DelivererToPickup = ({ route, navigation }) => {
           backgroundColor="#000000"
           onPress={() => navigation.navigate("DelivererToDropoff")}
         ></Icon.Button>
-        <Button
+        <BButton
+          text="Go to deliverer pickup screen"
           onPress={() =>
             navigation.navigate("DelivererToDropoff", {
               mapProps: mapProps,
             })
           }
-          style={[styles.button, styles.buttonOutline]}
-          title="Go to Deliverer to dropoff screen"
-          buttonStyle={{
-            borderRadius: 20,
-          }}
           containerStyle={{
             width: 200,
             marginHorizontal: 50,
-            marginVertical: 5,
+            marginVertical: 20,
           }}
-        ></Button>
+        />
       </View>
     </View>
   );

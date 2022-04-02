@@ -85,8 +85,8 @@ const PaymentScreen = ({ navigation }) => {
         itemName="Subtotal"
         price={
           !isNaN(tip)
-            ? `${(itemPrice + deliveryFee + Number(tip)).toFixed(2)}`
-            : `${itemPrice + deliveryFee}`
+            ? `\$${(itemPrice + deliveryFee + Number(tip)).toFixed(2)}`
+            : `\$${itemPrice + deliveryFee}`
         }
         bold="bold"
       />

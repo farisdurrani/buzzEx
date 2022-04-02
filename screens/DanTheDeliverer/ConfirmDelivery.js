@@ -17,7 +17,7 @@ const ConfirmDelivery = ({ navigation, route }) => {
       <View>
         <Text style={styles.titleText}>Now to complete your delivery!</Text>
       </View>
-      <View style={[LAYOUT.centerMiddle, {marginBottom: 50}]}>
+      <View style={[LAYOUT.centerMiddle, { marginBottom: 50 }]}>
         <TouchableOpacity
           style={[
             snapURI ? styles.pictureContainer : styles.cameraButton,
@@ -39,7 +39,9 @@ const ConfirmDelivery = ({ navigation, route }) => {
       </View>
       <BButton
         text="Confirm"
-        onPress={navigation.navigate("DeliveryComplete")}
+        onPress={navigation.navigate("DeliveryComplete", {
+          homeScreen: "DeliveriesAvailable",
+        })}
       />
     </View>
   );
