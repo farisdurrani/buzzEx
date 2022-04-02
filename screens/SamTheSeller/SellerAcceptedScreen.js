@@ -6,13 +6,49 @@ import {
   KeyboardAvoidingView,
   Image,
   TextInput,
+  Dimensions
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
+import * as Location from 'expo-location';
+
+let {width, height} = Dimensions.get('window') //Screen dimensions
+const ASPECT_RATIO = width/height
+const LATITUDE_DELTA = 0.04  // Controls the zoom level of the map. Smaller means more zoomed in
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO // Dependent on LATITUDE_DELTA
 
 const SellerAcceptedScreen = ({ navigation }) => {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let location = await Location.getLastKnownPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+  
+  let text = 'Getting Current Location..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
+  const mapProps = location ? {
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude,
+    LATITUDE_DELTA: LATITUDE_DELTA, 
+    LONGITUDE_DELTA: LONGITUDE_DELTA,
+    style: styles.map
+  } : null
+
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
@@ -34,12 +70,18 @@ const SellerAcceptedScreen = ({ navigation }) => {
       </View>
 
       <View style={{ marginTop: 60 }}>
-        <BButton
-          text="Continue"
-          onPress={() => {
-            navigation.navigate("DelivererToPickup");
-          }}
-        />
+        {
+          location ? <BButton
+            text="Continue"
+            onPress={() => {
+              navigation.navigate("DelivererToPickup", {
+                mapProps: mapProps
+              });
+            }}
+           />
+          : <Text> Loading location data...</Text>
+        }
+        
       </View>
     </View>
   );
