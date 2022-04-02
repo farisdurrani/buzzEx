@@ -18,11 +18,18 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const PickupPackage = ({ route, navigation }) => {
+const PickupPackage = ({ navigation, route }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  const { mapProps } = route.params;
+  let mapProps = null;
+  if (route.params && route.params.mapProps) {
+    mapProps = route.params.mapProps;
+  }
+
   const hasLocationData =
-    mapProps.latitude !== null && mapProps.longitude !== null;
+    mapProps &&
+    mapProps.latitude !== null &&
+    mapProps.longitude !== null;
+    
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>

@@ -37,12 +37,14 @@ export default ConfirmPickup;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    height: "95%",
+    paddingVertical: 60,
+    paddingHorizontal: 20,
     alignItems: "center",
   },
   query: {
     width: 300,
+    marginTop: 150,
     marginBottom: 40,
     fontSize: 25,
     textAlign: "center",
