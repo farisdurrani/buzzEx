@@ -48,11 +48,7 @@ const DeliveryComplete = ({ navigation, route }) => {
         <Text style={styles.linetwo}>
           Arrived at 555 Braves Win Dr, Atlanta, GA 30318
         </Text>
-        <TextInput
-          placeholder="Any delivery notes?"
-          value={deliveryNotes}
-          onChangeText={onAddDeliveryNotes}
-        ></TextInput>
+        
         <Icon.Button
           name="phone"
           backgroundColor="#000000"
@@ -87,7 +83,7 @@ const styles = StyleSheet.create({
   },
   linetwo: {
     paddingBottom: 25,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },

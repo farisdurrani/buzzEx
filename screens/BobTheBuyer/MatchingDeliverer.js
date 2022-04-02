@@ -10,6 +10,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { COLORS, LAYOUT } from "../../constants";
 import MapComponent from "../../components/MapComponent";
 import * as Location from "expo-location";
 
@@ -59,12 +60,12 @@ const MatchingDeliverer = ({ navigation }) => {
       </View>
 
       <View style={styles.toprightbutton}>
-        <TouchableOpacity onPress={() => navigation.navigate("CancelScreen")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Cancellation")}>
           <MaterialIcons name="cancel" size={24} color="black" />
         </TouchableOpacity>
       </View>
       <View style={styles.heading}>
-        <Text h3> Matching Deliverer...</Text>
+        <Text style={styles.lineone}> Matching Deliverer...</Text>
       </View>
 
       {location ? (
@@ -99,6 +100,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  lineone: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   button: {
     padding: 20,
   },
@@ -121,9 +127,11 @@ const styles = StyleSheet.create({
   heading: {
     position: "absolute",
     top: 100,
+    
   },
   headingText: {
     textAlign: "center",
+    fontWeight: "bold",
   },
   font: {
     textAlign: "center",
@@ -140,9 +148,20 @@ const styles = StyleSheet.create({
     right: 25,
     top: 50,
   },
+  buttonText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  name: {
+    marginTop: 30,
+    fontSize: 30,
+    fontWeight: "bold",
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
     top: (1 / 5) * height,
     bottom: (1 / 6) * height,
-  },
+  }
 });

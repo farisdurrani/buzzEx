@@ -7,7 +7,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-import { Input, Button, Text, useTheme } from "react-native-elements";
+import { Input, Button, Text, useTheme } from 'react-native-elements';
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
@@ -29,8 +29,28 @@ const DelivererToDropoff = ({ route, navigation }) => {
         <TouchableOpacity onPress={navigation.goBack}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-      </View>
+            </View>
 
+              
+              <Text style={styles.lineone}>ETA - 2:55</Text>
+              <Text style={styles.linetwo}>Dan is on the way to dropoff the delivery!</Text>
+                <Image 
+                    source={require('../../assets/buzzExLogo.png')} 
+                    style={{marginTop: 16,width: 150, height: 167, marginLeft: "auto", marginRight: "auto"}}
+                />
+                
+                
+                <View style={{marginTop: 16, marginBottom: 30}}>
+            {/* Icon.Button Component */}
+            <Icon.Button
+              name="phone"
+              backgroundColor="#000000"
+              onPress={() => navigation.navigate('DeliveryComplete')}>
+              
+            </Icon.Button>
+            </View>
+
+       
       <View style={styles.headingContainer}>
         <Text style={styles.lineone}>ETA - 2:55</Text>
       </View>
@@ -44,11 +64,17 @@ const DelivererToDropoff = ({ route, navigation }) => {
           Dan is on the way to deliver the package!
         </Text>
         <TextInput
+        style={styles.linetwo}
           placeholder="Any delivery notes?"
           value={deliveryNotes}
           onChangeText={onAddDeliveryNotes}
         ></TextInput>
-
+         <Icon.Button
+        
+        name="phone"
+        backgroundColor="#000000"
+        onPress={() => navigation.navigate("DelivererToDropoff")}
+      ></Icon.Button>
         <BButton
           text="Go to Delivery Complete Screen"
           onPress={() =>
@@ -82,7 +108,7 @@ const styles = StyleSheet.create({
   },
   linetwo: {
     paddingBottom: 25,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },

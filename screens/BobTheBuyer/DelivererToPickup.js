@@ -44,17 +44,19 @@ const DelivererToPickup = ({ route, navigation }) => {
           Dan is on the way to pickup the delivery!
         </Text>
         <TextInput
+            style={styles.linetwo}
           placeholder="Any delivery notes?"
           value={deliveryNotes}
           onChangeText={onAddDeliveryNotes}
         ></TextInput>
         <Icon.Button
+        
           name="phone"
           backgroundColor="#000000"
           onPress={() => navigation.navigate("DelivererToDropoff")}
         ></Icon.Button>
         <BButton
-          text="Go to deliverer pickup screen"
+          text="Go to deliverer dropoff screen"
           onPress={() =>
             navigation.navigate("DelivererToDropoff", {
               mapProps: mapProps,
@@ -62,7 +64,7 @@ const DelivererToPickup = ({ route, navigation }) => {
           }
           containerStyle={{
             width: 200,
-            marginHorizontal: 50,
+            marginHorizontal: 100,
             marginVertical: 20,
           }}
         />
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
   },
   linetwo: {
     paddingBottom: 25,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },
