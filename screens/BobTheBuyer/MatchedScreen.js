@@ -12,7 +12,8 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
-const MatchedScreen = ({ navigation }) => {
+const MatchedScreen = ({ route, navigation }) => {
+  const { mapProps } = route.params;
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
@@ -39,7 +40,9 @@ const MatchedScreen = ({ navigation }) => {
         <BButton
           text="Continue"
           onPress={() => {
-            navigation.navigate("DelivererToPickup");
+            navigation.navigate("DelivererToPickup", {
+              mapProps: mapProps
+            });
           }}
         />
       </View>

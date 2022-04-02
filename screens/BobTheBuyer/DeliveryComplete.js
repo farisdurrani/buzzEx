@@ -5,12 +5,22 @@ import {
   TextInput,
   View,
   Image,
+  Dimensions,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import MapComponent from "../../components/MapComponent";
+import * as Location from 'expo-location';
 
-const DeliveryComplete = ({ navigation }) => {
+let {width, height} = Dimensions.get('window') //Screen dimensions
+const ASPECT_RATIO = width/height
+const LATITUDE_DELTA = 0.04  // Controls the zoom level of the map. Smaller means more zoomed in
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO // Dependent on LATITUDE_DELTA
+
+const DeliveryComplete = ({ route, navigation }) => {
+  const { mapProps } = route.params;
+  const hasLocationData = mapProps.latitude !== null && mapProps.longitude !== null;
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>
@@ -24,32 +34,31 @@ const DeliveryComplete = ({ navigation }) => {
           <MaterialIcons name="cancel" size={24} color="black" />
         </TouchableOpacity>
       </View>
+      <View style={styles.heading}>
+        <Text h3> Delivery Complete!</Text>
+      </View>
+      
 
-      <Text style={styles.linetwo}>Delivery Complete!</Text>
-
-      <Image
-        source={require("../../assets/buzzExLogo.png")}
-        style={{
-          width: 150,
-          height: 167,
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-      />
-
-      <Button
-        onPress={() => navigation.navigate("Home")}
-        style={[styles.button, styles.buttonOutline]}
-        title="Go Home"
-        buttonStyle={{
-          borderRadius: 20,
-        }}
-        containerStyle={{
-          width: 200,
-          marginHorizontal: 50,
-          marginVertical: 5,
-        }}
-      ></Button>
+      {hasLocationData ? 
+      <MapComponent mapProps={mapProps}/>
+      : <Text style={styles.paragraph}>Loading Map...</Text>}
+      <View style={styles.buttonView}>
+        <Button
+          onPress={() => navigation.navigate("Home", {
+            mapProps: mapProps
+          })}
+          style={[styles.button, styles.buttonOutline]}
+          title="Go Home"
+          buttonStyle={{
+            borderRadius: 20,
+          }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 50,
+            marginVertical: 5,
+          }}
+        ></Button>
+      </View>
     </View>
   );
 };
@@ -57,24 +66,6 @@ const DeliveryComplete = ({ navigation }) => {
 export default DeliveryComplete;
 
 const styles = StyleSheet.create({
-  lineone: {
-    paddingBottom: 50,
-    fontSize: 45,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  linetwo: {
-    paddingBottom: 25,
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  linethree: {
-    paddingBottom: 25,
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -89,6 +80,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "blue",
   },
+  buttonView: {
+    position: "absolute",
+    top: 5/6 * height
+  },
   input: {
     padding: 15,
     borderBottomWidth: 1,
@@ -96,8 +91,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {},
   heading: {
-    textAlign: "center",
-    padding: 5,
+    position: "absolute",
+    top:100
+  },
+  headingText: {
+    textAlign: "center",    
   },
   font: {
     textAlign: "center",
@@ -114,4 +112,9 @@ const styles = StyleSheet.create({
     right: 25,
     top: 50,
   },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    top: 1/5 * height,
+    bottom: 1/6 * height
+  }
 });
