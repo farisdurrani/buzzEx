@@ -18,7 +18,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const DropoffPackage = ({ navigation, route }) => {
+const DeliveryComplete = ({ navigation, route }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   let mapProps = null;
   if (route.params && route.params.mapProps) {
@@ -72,7 +72,7 @@ const DropoffPackage = ({ navigation, route }) => {
   );
 };
 
-export default DropoffPackage;
+export default DeliveryComplete;
 
 const styles = StyleSheet.create({
   container: {
