@@ -9,6 +9,8 @@ import {
   deleteDoc,
   doc,
   addDoc,
+  serverTimestamp,
+  GeoPoint,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -37,8 +39,16 @@ export async function getUser() {
   return userList;
 }
 
+export function generateGeolocation(lat, long) {
+  return new GeoPoint(lat, long);
+}
+
 export function getCurrentUser() {
   return getAuth().currentUser;
+}
+
+export function getServerTimestamp() {
+  return serverTimestamp();
 }
 
 export async function addUser(data) {
@@ -46,17 +56,8 @@ export async function addUser(data) {
   return;
 }
 
-export async function addData() {
-  try {
-    const docRef = await addDoc(collection(db, delivery_jobs), {
-      first: "Ada",
-      last: "Lovelace",
-      born: 1815
-    });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
+export async function addFirestoreData(data) {
+  return await addDoc(collection(db, delivery_jobs), data);
 }
 
 export async function getAllDBData() {

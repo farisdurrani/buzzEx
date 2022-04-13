@@ -11,11 +11,17 @@ import React, { useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
+import {
+  addFirestoreData,
+  getServerTimestamp,
+  generateGeolocation,
+  getCurrentUser,
+} from "../../firebase";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
-  const [itemName, setItemName] = useState("");
-  const [itemPrice, setItemPrice] = useState("");
-  const deliveryFee = 2.31;
+  const { itemName, itemPrice } = route.params;
+
+  const DELIVERY_FEE = 2.31;
 
   const ItemDetailGroup = (props) => {
     const { title, text } = props;
@@ -27,6 +33,28 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         </View>
       </View>
     );
+  };
+
+  const _saveDeliveryJob = () => {
+    addFirestoreData({
+      completed: false,
+      timestamp: getServerTimestamp(),
+      deliverer_location: null,
+      createdAt: getServerTimestamp(),
+      deliverer_uid: null,
+      destinaton: generateGeolocation(79, 79),
+      package: {
+        name: itemName,
+        base_price: itemPrice,
+        delivery_fee: DELIVERY_FEE,
+        sender_photoURL: null,
+        tax: 2.3,
+        tip: 0,
+      },
+      receiver_uid: null,
+      sender_uid: getCurrentUser().uid,
+      source: generateGeolocation(89, 89),
+    });
   };
 
   const PriceItem = (props) => {
@@ -106,19 +134,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         </View>
 
         <View style={styles.nameEta}>
-          <ItemDetailGroup
-            title="Item Name"
-            text={route.params.itemName}
-            state={itemName}
-            setState={setItemName}
-          />
-
-          <ItemDetailGroup
-            title="ETA"
-            text="12:43 pm"
-            state={itemPrice}
-            setState={setItemPrice}
-          />
+          <ItemDetailGroup title="Item Name" text={route.params.itemName} />
+          <ItemDetailGroup title="ETA" text="12:43 pm" />
         </View>
       </View>
 
@@ -127,10 +144,10 @@ const SellerConfirmScreen = ({ navigation, route }) => {
           itemName="Item price"
           price={`\$${route.params.itemPrice}`}
         />
-        <PriceItem itemName="Delivery" price={`\$${deliveryFee}`} />
+        <PriceItem itemName="Delivery" price={`\$${DELIVERY_FEE}`} />
         <PriceItem
           itemName="Subtotal"
-          price={`\$${route.params.itemPrice + deliveryFee}`}
+          price={`\$${route.params.itemPrice + DELIVERY_FEE}`}
           bold="bold"
         />
       </View>
@@ -141,6 +158,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         text="Confirm"
         onPress={() => {
           navigation.navigate("SellerAwaiting");
+          _saveDeliveryJob();
         }}
       />
     </View>
