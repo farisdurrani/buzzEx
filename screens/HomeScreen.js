@@ -9,8 +9,13 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../components";
 import { COLORS } from "../constants";
+import { getAllDBData, getCurrentUser } from "../firebase";
+
+// import { useAuthState } from "react-firebase-hooks/auth";
+// import { useCollectionData } from "react-firebase-hooks/firestore";
 
 const HomeScreen = ({ navigation }) => {
+
   const numberOfRequests = 1;
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">

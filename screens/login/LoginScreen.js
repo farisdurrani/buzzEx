@@ -18,7 +18,7 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate("ItemPrice");
+        navigation.navigate("Home");
       }
     });
   }, []);
