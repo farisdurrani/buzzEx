@@ -8,6 +8,7 @@ import {
   setDoc,
   deleteDoc,
   doc,
+  addDoc,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -27,6 +28,8 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+const delivery_jobs = "delivery_jobs";
+
 export async function getUser() {
   const usersCol = collection(db, "users");
   const userSnapshot = await getDocs(usersCol);
@@ -43,8 +46,21 @@ export async function addUser(data) {
   return;
 }
 
+export async function addData() {
+  try {
+    const docRef = await addDoc(collection(db, delivery_jobs), {
+      first: "Ada",
+      last: "Lovelace",
+      born: 1815
+    });
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+}
+
 export async function getAllDBData() {
-  return (querySnapshot = await getDocs(collection(db, "delivery_jobs")));
+  return (querySnapshot = await getDocs(collection(db, delivery_jobs)));
 }
 
 export async function removeUser(data) {
