@@ -79,8 +79,13 @@ export async function completeDeliveryJob(job) {
   }
 }
 
+export async function getJob(job) {
+  // TODO fix
+  return await addDoc(collection(db, incomplete_jobs), job);
+}
+
 export async function addNewDeliveryJob(job) {
-  return await addDoc(collection(db, complete_jobs), job);
+  return await addDoc(collection(db, incomplete_jobs), job);
 }
 
 export async function getAllCompleteJobs() {
@@ -109,7 +114,12 @@ export async function getIncompleteJobs() {
   const querySnapshot = await getDocs(collection(db, incomplete_jobs));
   const a = [];
   querySnapshot.forEach((doc) => {
-    a.push(doc.data());
+    a.push({ id: doc.id, data: doc.data() });
   });
   return a;
+}
+
+export async function updateIncompleteDeliveryJob(jobID, updates) {
+  const job = doc(db, incomplete_jobs, jobID);
+  await updateDoc(job, updates);
 }

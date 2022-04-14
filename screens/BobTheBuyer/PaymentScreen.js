@@ -10,9 +10,11 @@ import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
 
-const PaymentScreen = ({ navigation }) => {
-  const itemPrice = 12.0;
-  const deliveryFee = 2.31;
+const PaymentScreen = ({ navigation, route }) => {
+  const { deliveryRequests } = route.params;
+
+  const itemPrice = deliveryRequests[0].data.package.base_price;
+  const deliveryFee = deliveryRequests[0].data.package.delivery_fee;
   const [tip, setTip] = useState("");
 
   const ItemDetailGroup = (props) => {
@@ -64,14 +66,18 @@ const PaymentScreen = ({ navigation }) => {
       <BackCancelButtons navigation={navigation} />
 
       <View style={{ marginTop: 70 }} />
-
       <Text style={styles.title}>Payment</Text>
-
       <PriceItem itemName="ETA" price="14:55" />
 
       <View style={{ marginVertical: 20 }}>
-        <PriceItem itemName="Item Price" price={`\$${itemPrice}`} />
-        <PriceItem itemName="Delivery" price={`\$${deliveryFee}`} />
+        <PriceItem
+          itemName="Item Price"
+          price={`\$${itemPrice}`}
+        />
+        <PriceItem
+          itemName="Delivery"
+          price={`\$${deliveryFee}`}
+        />
       </View>
 
       <ItemDetailGroup

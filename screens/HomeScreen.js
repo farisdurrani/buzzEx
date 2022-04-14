@@ -15,15 +15,17 @@ import { getIncompleteJobs } from "../firebase";
 // import { useCollectionData } from "react-firebase-hooks/firestore";
 
 const HomeScreen = ({ navigation }) => {
-
   const [numberOfRequests, setNumberOfRequests] = useState(0);
+  const [deliveryRequests, setDeliveryRequests] = useState([]);
 
-  let response = undefined;
-  async function fetchIncompleteJobs() {
-    response = await getIncompleteJobs();
-    setNumberOfRequests(response.length);
-  }
-  fetchIncompleteJobs();
+  useEffect(() => {
+    async function fetchIncompleteJobs() {
+      const jobs = await getIncompleteJobs();
+      setDeliveryRequests(jobs);
+      setNumberOfRequests(jobs.length);
+    }
+    fetchIncompleteJobs();
+  }, []);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -64,7 +66,9 @@ const HomeScreen = ({ navigation }) => {
               borderRadius: 50,
             }}
             onPress={() => {
-              navigation.navigate("BuyerAccept");
+              navigation.navigate("BuyerAccept", {
+                deliveryRequests: deliveryRequests,
+              });
             }}
           />
         ) : (
