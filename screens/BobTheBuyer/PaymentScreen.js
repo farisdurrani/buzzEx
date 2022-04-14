@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
-import { COLORS, LAYOUT } from "../../constants";
+import { COLORS, LAYOUT, roundTo2 } from "../../constants";
+import { addTip } from "../../firebase";
 
 const PaymentScreen = ({ navigation, route }) => {
   const { deliveryRequests } = route.params;
@@ -17,7 +18,7 @@ const PaymentScreen = ({ navigation, route }) => {
   const deliveryFee = deliveryRequests[0].data.package.delivery_fee;
   const [tip, setTip] = useState("");
 
-  const ItemDetailGroup = (props) => {
+  const _ItemDetailGroup = (props) => {
     const { title, placeholder, state, setState } = props;
     return (
       <View style={styles.tipContainer}>
@@ -36,7 +37,7 @@ const PaymentScreen = ({ navigation, route }) => {
     );
   };
 
-  const PriceItem = (props) => {
+  const _PriceItem = (props) => {
     const { itemName, price, bold } = props;
     const stylesPI = StyleSheet.create({
       mainContainer: {
@@ -67,32 +68,26 @@ const PaymentScreen = ({ navigation, route }) => {
 
       <View style={{ marginTop: 70 }} />
       <Text style={styles.title}>Payment</Text>
-      <PriceItem itemName="ETA" price="14:55" />
+      <_PriceItem itemName="ETA" price="14:55" />
 
       <View style={{ marginVertical: 20 }}>
-        <PriceItem
-          itemName="Item Price"
-          price={`\$${itemPrice}`}
-        />
-        <PriceItem
-          itemName="Delivery"
-          price={`\$${deliveryFee}`}
-        />
+        <_PriceItem itemName="Item Price" price={`\$${roundTo2(itemPrice)}`} />
+        <_PriceItem itemName="Delivery" price={`\$${roundTo2(deliveryFee)}`} />
       </View>
 
-      <ItemDetailGroup
+      <_ItemDetailGroup
         title="Add tip:"
         placeholder="$2.00"
         state={tip}
         setState={setTip}
       />
 
-      <PriceItem
+      <_PriceItem
         itemName="Subtotal"
         price={
           !isNaN(tip)
-            ? `\$${(itemPrice + deliveryFee + Number(tip)).toFixed(2)}`
-            : `\$${itemPrice + deliveryFee}`
+            ? `\$${roundTo2(itemPrice + deliveryFee + Number(tip))}`
+            : `\$${roundTo2(itemPrice + deliveryFee)}`
         }
         bold="bold"
       />
@@ -101,6 +96,7 @@ const PaymentScreen = ({ navigation, route }) => {
         text="Pay"
         containerStyle={{ width: 150, marginTop: 60 }}
         onPress={() => {
+          addTip(deliveryRequests[0].id, tip);
           navigation.navigate("MatchingDeliverer");
         }}
       />

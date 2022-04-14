@@ -19,9 +19,9 @@ import {
 } from "../../firebase";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
-  let { itemName, itemPrice, snapURI } = route.params;
-  itemPrice = roundTo2(itemPrice);
-  const DELIVERY_FEE = roundTo2(2.31);
+  const { itemName, itemPrice, snapURI } = route.params;
+  const DELIVERY_FEE = 2.31;
+  const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
 
   const _ItemDetailGroup = (props) => {
     const { title, text } = props;
@@ -131,11 +131,11 @@ const SellerConfirmScreen = ({ navigation, route }) => {
       </View>
 
       <View>
-        <_PriceItem itemName="Item price" price={`\$${itemPrice}`} />
-        <_PriceItem itemName="Delivery" price={`\$${DELIVERY_FEE}`} />
+        <_PriceItem itemName="Item price" price={`\$${roundTo2(itemPrice)}`} />
+        <_PriceItem itemName="Delivery" price={`\$${roundTo2(DELIVERY_FEE)}`} />
         <_PriceItem
           itemName="Subtotal"
-          price={`\$${Number(itemPrice) + Number(DELIVERY_FEE)}`}
+          price={`\$${roundTo2(TOTAL_PRICE)}`}
           bold="bold"
         />
       </View>

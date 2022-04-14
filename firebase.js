@@ -120,7 +120,14 @@ export async function getUnstartedJobs() {
   return need_to_pick_up;
 }
 
+export async function addTip(jobID, tip) {
+  const docRef = doc(db, delivery_jobs, jobID);
+  const package_info = (await getJob(jobID)).data.package;
+  package_info.tip = Number(tip);
+  await updateDoc(docRef, { package: package_info });
+}
+
 export async function updateDeliveryJob(jobID, updates) {
-  const job = doc(db, delivery_jobs, jobID);
-  await updateDoc(job, updates);
+  const docRef = doc(db, delivery_jobs, jobID);
+  await updateDoc(docRef, updates);
 }

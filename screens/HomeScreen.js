@@ -11,9 +11,6 @@ import { BButton } from "../components";
 import { COLORS } from "../constants";
 import { getUnstartedJobs } from "../firebase";
 
-// import { useAuthState } from "react-firebase-hooks/auth";
-// import { useCollectionData } from "react-firebase-hooks/firestore";
-
 const HomeScreen = ({ navigation }) => {
   const [numberOfRequests, setNumberOfRequests] = useState(0);
   const [deliveryRequests, setDeliveryRequests] = useState([]);
