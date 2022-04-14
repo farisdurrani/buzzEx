@@ -9,7 +9,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
 import { COLORS, LAYOUT, roundTo2 } from "../../constants";
-import { addTip } from "../../firebase";
+import { setReadyToPickup } from "../../firebase";
 
 const PaymentScreen = ({ navigation, route }) => {
   const { deliveryRequests } = route.params;
@@ -96,7 +96,7 @@ const PaymentScreen = ({ navigation, route }) => {
         text="Pay"
         containerStyle={{ width: 150, marginTop: 60 }}
         onPress={() => {
-          addTip(deliveryRequests[0].id, tip);
+          setReadyToPickup(deliveryRequests[0].id, tip);
           navigation.navigate("MatchingDeliverer");
         }}
       />

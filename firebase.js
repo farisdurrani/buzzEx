@@ -11,11 +11,12 @@ import {
   getDocs,
   getFirestore,
   onSnapshot,
-  where,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
-  orderBy,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -64,7 +65,7 @@ export async function removeUser(data) {
 
 // deliveries
 
-export function getServerTimestamp() {
+export function getCurrentTimestamp() {
   return serverTimestamp();
 }
 
@@ -108,7 +109,8 @@ export async function getUnstartedJobs() {
 
   const q = query(
     collection(db, delivery_jobs),
-    where("picked_up", "==", false)
+    where("picked_up", "==", false),
+    where("ready_to_pickup", "==", false)
   );
 
   const querySnapshot = await getDocs(q);
@@ -120,14 +122,19 @@ export async function getUnstartedJobs() {
   return need_to_pick_up;
 }
 
-export async function addTip(jobID, tip) {
+export async function setReadyToPickup(jobID, tip) {
   const docRef = doc(db, delivery_jobs, jobID);
   const package_info = (await getJob(jobID)).data.package;
   package_info.tip = Number(tip);
-  await updateDoc(docRef, { package: package_info });
+
+  await updateDeliveryJob(jobID, {
+    package: package_info,
+    ready_to_pickup: true,
+  });
 }
 
 export async function updateDeliveryJob(jobID, updates) {
   const docRef = doc(db, delivery_jobs, jobID);
+  updates[timestamp] = getCurrentTimestamp();
   await updateDoc(docRef, updates);
 }

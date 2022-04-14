@@ -29,20 +29,11 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.container}>
         <Image
           source={require("../assets/buzzExLogo.png")}
-          style={{
-            width: 150,
-            height: 167,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
+          style={styles.logo}
         />
         <BButton
           text="Send Item"
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginTop: 20,
-          }}
+          containerStyle={styles.buttonContainer}
           onPress={() => {
             navigation.navigate("Contacts");
           }}
@@ -52,16 +43,8 @@ const HomeScreen = ({ navigation }) => {
             text={`${numberOfRequests} ${
               numberOfRequests > 1 ? "Requests" : "Request"
             }`}
-            containerStyle={{
-              width: 200,
-              marginHorizontal: 50,
-              marginTop: 20,
-            }}
-            buttonStyle={{
-              backgroundColor: COLORS.orange,
-              padding: 15,
-              borderRadius: 50,
-            }}
+            containerStyle={styles.buttonContainer}
+            buttonStyle={styles.requestButton}
             onPress={() => {
               navigation.navigate("BuyerAccept", {
                 deliveryRequests: deliveryRequests,
@@ -84,24 +67,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  button: {
-    padding: 20,
+  logo: {
+    width: 150,
+    height: 167,
+    marginLeft: "auto",
+    marginRight: "auto",
   },
-  buttonContainer: {},
-  buttonOutline: {},
-  buttonOutlineText: {},
-  buttonText: {
-    color: "blue",
-  },
-  input: {
+  requestButton: {
+    backgroundColor: COLORS.orange,
     padding: 15,
-    borderBottomWidth: 1,
-    borderColor: "rgba(0, 0, 0, .2)",
+    borderRadius: 50,
   },
-  inputContainer: {},
-  heading: {
-    textAlign: "center",
-    padding: 5,
+  buttonContainer: {
+    width: 200,
+    marginHorizontal: 50,
+    marginTop: 20,
   },
   font: {
     marginTop: 20,

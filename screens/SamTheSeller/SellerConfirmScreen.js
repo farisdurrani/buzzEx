@@ -13,7 +13,7 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT, roundTo2 } from "../../constants";
 import {
   addNewDeliveryJob,
-  getServerTimestamp,
+  getCurrentTimestamp,
   generateGeolocation,
   getCurrentUser,
 } from "../../firebase";
@@ -37,13 +37,14 @@ const SellerConfirmScreen = ({ navigation, route }) => {
 
   const _saveDeliveryJob = () => {
     addNewDeliveryJob({
-      createdAt: getServerTimestamp(),
+      createdAt: getCurrentTimestamp(),
       delivered: false,
       deliverer_location: null,
       deliverer_uid: null,
       destinaton: generateGeolocation(79, 79),
       picked_up: false,
-      timestamp: getServerTimestamp(),
+      ready_to_pickup: false,
+      timestamp: getCurrentTimestamp(),
       package: {
         name: itemName,
         base_price: itemPrice,
