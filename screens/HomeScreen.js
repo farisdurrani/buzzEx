@@ -9,7 +9,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../components";
 import { COLORS } from "../constants";
-import { getIncompleteJobs } from "../firebase";
+import { getUnstartedJobs } from "../firebase";
 
 // import { useAuthState } from "react-firebase-hooks/auth";
 // import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     async function fetchIncompleteJobs() {
-      const jobs = await getIncompleteJobs();
+      const jobs = await getUnstartedJobs();
       setDeliveryRequests(jobs);
       setNumberOfRequests(jobs.length);
     }

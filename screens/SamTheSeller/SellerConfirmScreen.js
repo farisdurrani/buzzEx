@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../../constants";
+import { COLORS, LAYOUT, roundTo2 } from "../../constants";
 import {
   addNewDeliveryJob,
   getServerTimestamp,
@@ -19,17 +19,17 @@ import {
 } from "../../firebase";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
-  const { itemName, itemPrice } = route.params;
+  let { itemName, itemPrice, snapURI } = route.params;
+  itemPrice = roundTo2(itemPrice);
+  const DELIVERY_FEE = roundTo2(2.31);
 
-  const DELIVERY_FEE = 2.31;
-
-  const ItemDetailGroup = (props) => {
+  const _ItemDetailGroup = (props) => {
     const { title, text } = props;
     return (
       <View style={[LAYOUT.centerMiddle]}>
         <Text style={styles.detailTitle}>{title}</Text>
         <View>
-          <Text style={styles.inputText}>{text}</Text>
+          <Text style={{ fontSize: 20 }}>{text}</Text>
         </View>
       </View>
     );
@@ -37,11 +37,13 @@ const SellerConfirmScreen = ({ navigation, route }) => {
 
   const _saveDeliveryJob = () => {
     addNewDeliveryJob({
-      timestamp: getServerTimestamp(),
-      deliverer_location: null,
       createdAt: getServerTimestamp(),
+      delivered: false,
+      deliverer_location: null,
       deliverer_uid: null,
       destinaton: generateGeolocation(79, 79),
+      picked_up: false,
+      timestamp: getServerTimestamp(),
       package: {
         name: itemName,
         base_price: itemPrice,
@@ -56,7 +58,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
     });
   };
 
-  const PriceItem = (props) => {
+  const _PriceItem = (props) => {
     const { itemName, price, bold } = props;
     const stylesPI = StyleSheet.create({
       mainContainer: {
@@ -89,20 +91,10 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         <Text style={styles.receiverText}>Receiver</Text>
       </View>
 
-      <View
-        style={[
-          LAYOUT.centerMiddle,
-          LAYOUT.row,
-          { marginTop: 20, width: "75%" },
-        ]}
-      >
+      <View style={styles.profileInfo}>
         <Image
           source={require("../../assets/earth_face.png")}
-          style={{
-            width: 130,
-            height: 130,
-            borderRadius: 130 / 2,
-          }}
+          style={styles.profilePic}
         />
         <View style={[{ marginLeft: 20 }]}>
           <Text style={styles.name}>Bob The Buyer</Text>
@@ -119,11 +111,11 @@ const SellerConfirmScreen = ({ navigation, route }) => {
               navigation.navigate("TakePicture");
             }}
           >
-            {route.params.snapURI ? (
+            {snapURI ? (
               <Image
                 style={styles.picture}
                 source={{
-                  uri: route.params.snapURI,
+                  uri: snapURI,
                 }}
               />
             ) : (
@@ -132,26 +124,21 @@ const SellerConfirmScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.nameEta}>
-          <ItemDetailGroup title="Item Name" text={route.params.itemName} />
-          <ItemDetailGroup title="ETA" text="12:43 pm" />
+        <View style={{ width: "50%" }}>
+          <_ItemDetailGroup title="Item Name" text={itemName} />
+          <_ItemDetailGroup title="ETA" text="12:43 pm" />
         </View>
       </View>
 
       <View>
-        <PriceItem
-          itemName="Item price"
-          price={`\$${route.params.itemPrice}`}
-        />
-        <PriceItem itemName="Delivery" price={`\$${DELIVERY_FEE}`} />
-        <PriceItem
+        <_PriceItem itemName="Item price" price={`\$${itemPrice}`} />
+        <_PriceItem itemName="Delivery" price={`\$${DELIVERY_FEE}`} />
+        <_PriceItem
           itemName="Subtotal"
-          price={`\$${route.params.itemPrice + DELIVERY_FEE}`}
+          price={`\$${Number(itemPrice) + Number(DELIVERY_FEE)}`}
           bold="bold"
         />
       </View>
-
-      <View style={LAYOUT.centerMiddle}></View>
 
       <BButton
         text="Confirm"
@@ -199,12 +186,22 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: COLORS.transparent_gray,
   },
-  inputText: {
-    fontSize: 20,
-  },
   picture: {
     width: "90%",
     height: "90%",
+  },
+  profilePic: {
+    width: 130,
+    height: 130,
+    borderRadius: 130 / 2,
+  },
+  profileInfo: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    width: "75%",
   },
   cameraButton: {
     marginTop: 10,
@@ -215,8 +212,5 @@ const styles = StyleSheet.create({
   receiverText: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  nameEta: {
-    width: "50%",
   },
 });

@@ -15,6 +15,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  orderBy,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -34,8 +35,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-const complete_jobs = "delivery_jobs";
-const incomplete_jobs = "incomplete_jobs";
+const delivery_jobs = "delivery_jobs";
 
 export async function getUser() {
   const usersCol = collection(db, "users");
@@ -68,31 +68,26 @@ export function getServerTimestamp() {
   return serverTimestamp();
 }
 
-export async function completeDeliveryJob(job) {
-  const docRef = doc(db, incomplete_jobs, job.id);
-  if (docRef.exists) {
-    await getDoc(job);
-    await deleteDoc(doc(db, incomplete_jobs, job.id));
-    await setDoc(doc(db, complete_jobs, job.id), job);
+export async function completeDeliveryJob(jobID) {
+  updateDeliveryJob(jobID, { complete: true });
+}
+
+export async function getJob(jobID) {
+  const docRef = doc(db, delivery_jobs, jobID);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists) {
+    return { id: docSnap.id, data: docSnap.data() };
   } else {
-    throw new ReferenceError(`Deivery Job ${job.id} does not exist`);
+    throw new ReferenceError(`Deivery Job ${jobID} does not exist`);
   }
 }
 
-export async function getJob(job) {
-  // TODO fix
-  return await addDoc(collection(db, incomplete_jobs), job);
+export async function addNewDeliveryJob(jobData) {
+  const docSnap = await addDoc(collection(db, delivery_jobs), jobData);
+  return docSnap.id;
 }
 
-export async function addNewDeliveryJob(job) {
-  return await addDoc(collection(db, incomplete_jobs), job);
-}
-
-export async function getAllCompleteJobs() {
-  return (querySnapshot = await getDocs(collection(db, complete_jobs)));
-}
-
-export async function getIncompleteJobs() {
+export async function getUnstartedJobs() {
   // const q = query(
   //   collection(db, incomplete_jobs),
   //   where(
@@ -111,15 +106,21 @@ export async function getIncompleteJobs() {
   //   return allIncompleteJobs;
   // });
 
-  const querySnapshot = await getDocs(collection(db, incomplete_jobs));
-  const a = [];
+  const q = query(
+    collection(db, delivery_jobs),
+    where("picked_up", "==", false)
+  );
+
+  const querySnapshot = await getDocs(q);
+  const need_to_pick_up = [];
   querySnapshot.forEach((doc) => {
-    a.push({ id: doc.id, data: doc.data() });
+    need_to_pick_up.push({ id: doc.id, data: doc.data() });
   });
-  return a;
+  need_to_pick_up.sort((a, b) => a.data.createdAt - b.data.createdAt);
+  return need_to_pick_up;
 }
 
-export async function updateIncompleteDeliveryJob(jobID, updates) {
-  const job = doc(db, incomplete_jobs, jobID);
+export async function updateDeliveryJob(jobID, updates) {
+  const job = doc(db, delivery_jobs, jobID);
   await updateDoc(job, updates);
 }

@@ -23,3 +23,7 @@ export const LAYOUT = {
     justifyContent: "center",
   },
 };
+
+export const roundTo2 = (num) => {
+  return Number.parseFloat(num).toFixed(2);
+};
