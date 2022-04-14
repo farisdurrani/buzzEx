@@ -2,15 +2,19 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import {
-  getFirestore,
+  GeoPoint,
+  addDoc,
   collection,
-  getDocs,
-  setDoc,
   deleteDoc,
   doc,
-  addDoc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+  where,
+  query,
   serverTimestamp,
-  GeoPoint,
+  setDoc,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -30,7 +34,8 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-const delivery_jobs = "delivery_jobs";
+const complete_jobs = "delivery_jobs";
+const incomplete_jobs = "incomplete_jobs";
 
 export async function getUser() {
   const usersCol = collection(db, "users");
@@ -47,24 +52,64 @@ export function getCurrentUser() {
   return getAuth().currentUser;
 }
 
-export function getServerTimestamp() {
-  return serverTimestamp();
-}
-
 export async function addUser(data) {
   await setDoc(doc(db, "users", data.id), data);
   return;
 }
 
-export async function addFirestoreData(data) {
-  return await addDoc(collection(db, delivery_jobs), data);
-}
-
-export async function getAllDBData() {
-  return (querySnapshot = await getDocs(collection(db, delivery_jobs)));
-}
-
 export async function removeUser(data) {
   await deleteDoc(doc(db, "users", data.id));
   return;
+}
+
+// deliveries
+
+export function getServerTimestamp() {
+  return serverTimestamp();
+}
+
+export async function completeDeliveryJob(job) {
+  const docRef = doc(db, incomplete_jobs, job.id);
+  if (docRef.exists) {
+    await getDoc(job);
+    await deleteDoc(doc(db, incomplete_jobs, job.id));
+    await setDoc(doc(db, complete_jobs, job.id), job);
+  } else {
+    throw new ReferenceError(`Deivery Job ${job.id} does not exist`);
+  }
+}
+
+export async function addNewDeliveryJob(job) {
+  return await addDoc(collection(db, complete_jobs), job);
+}
+
+export async function getAllCompleteJobs() {
+  return (querySnapshot = await getDocs(collection(db, complete_jobs)));
+}
+
+export async function getIncompleteJobs() {
+  // const q = query(
+  //   collection(db, incomplete_jobs),
+  //   where(
+  //     "sender_uid",
+  //     "!=",
+  //     "CP5x%3unwf-WvTqAkL2FNVG*yd?Q4hZs_=aebmt>H@$JXE6MS7"
+  //   )
+  // );
+  // let allIncompleteJobs = [];
+  // onSnapshot(q, (querySnapshot) => {
+  //   allIncompleteJobs = [];
+  //   querySnapshot.forEach((doc) => {
+  //     allIncompleteJobs.push({ id: doc.id, data: doc.data() });
+  //   });
+  //   // console.log(allIncompleteJobs);
+  //   return allIncompleteJobs;
+  // });
+
+  const querySnapshot = await getDocs(collection(db, incomplete_jobs));
+  const a = [];
+  querySnapshot.forEach((doc) => {
+    a.push(doc.data());
+  });
+  return a;
 }

@@ -12,7 +12,7 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 import {
-  addFirestoreData,
+  addNewDeliveryJob,
   getServerTimestamp,
   generateGeolocation,
   getCurrentUser,
@@ -36,8 +36,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
   };
 
   const _saveDeliveryJob = () => {
-    addFirestoreData({
-      completed: false,
+    addNewDeliveryJob({
       timestamp: getServerTimestamp(),
       deliverer_location: null,
       createdAt: getServerTimestamp(),
