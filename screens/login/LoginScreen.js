@@ -80,10 +80,11 @@ const LoginScreen = ({ navigation }) => {
         />
         <Button
           title="Register"
-          onPress={() => navigation.navigate("Registration")}
-          buttonStyle={{
-            borderColor: "rgba(78, 116, 289, 1)",
+          onPress={() => {
+            
+            navigation.navigate("Registration");
           }}
+          buttonStyle={{ borderWidth: 0 }}
           type="outline"
           titleStyle={{ color: "rgba(78, 116, 289, 1)" }}
           containerStyle={{ width: "100%", marginTop: 20 }}

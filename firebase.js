@@ -18,7 +18,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import { NavigationContainer } from "@react-navigation/native";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -55,7 +59,7 @@ function login(email, password) {
     .then((userCredentials) => {
       const user = userCredentials.user;
       console.log("Logged in with: ", user.email);
-      return true;
+      return user;
     })
     .catch((error) => {
       throw new Error(error);
@@ -70,9 +74,25 @@ export function logout_current_user() {
   signOut(auth)
     .then(() => {
       console.log(`Signed out of ${currentUser.email}`);
-      return true;
+      return currentUser;
     })
     .catch((error) => {
+      throw new Error(error);
+    });
+}
+
+export function register_new_user(email, password) {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      console.log(111);
+      return userCredential.user;
+    })
+    .catch((error) => {
+      if (error.code == "auth/weak-password") {
+        alert("The password is too weak.");
+      } else if (error.code == "auth/email-already-in-use") {
+        alert("The email is already in use.");
+      }
       throw new Error(error);
     });
 }
