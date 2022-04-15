@@ -9,7 +9,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../components";
 import { COLORS } from "../constants";
-import { getUnstartedJobs } from "../firebase";
+import { getJobs } from "../firebase";
 
 const HomeScreen = ({ navigation }) => {
   const [numberOfRequests, setNumberOfRequests] = useState(0);
@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     async function fetchIncompleteJobs() {
-      const jobs = await getUnstartedJobs();
+      const jobs = await getJobs(0);
       setDeliveryRequests(jobs);
       setNumberOfRequests(jobs.length);
     }

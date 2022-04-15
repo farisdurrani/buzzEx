@@ -42,8 +42,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
       deliverer_location: null,
       deliverer_uid: null,
       destinaton: generateGeolocation(79, 79),
-      picked_up: false,
-      ready_to_pickup: false,
+      status: 0,
       timestamp: getCurrentTimestamp(),
       package: {
         name: itemName,

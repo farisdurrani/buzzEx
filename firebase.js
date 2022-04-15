@@ -65,12 +65,12 @@ export async function removeUser(data) {
 
 // deliveries
 
+/**
+ * Returns the current timestamp
+ * @returns the current timestamp
+ */
 export function getCurrentTimestamp() {
   return serverTimestamp();
-}
-
-export async function completeDeliveryJob(jobID) {
-  updateDeliveryJob(jobID, { complete: true });
 }
 
 export async function getJob(jobID) {
@@ -88,30 +88,14 @@ export async function addNewDeliveryJob(jobData) {
   return docSnap.id;
 }
 
-export async function getUnstartedJobs() {
-  // const q = query(
-  //   collection(db, incomplete_jobs),
-  //   where(
-  //     "sender_uid",
-  //     "!=",
-  //     "CP5x%3unwf-WvTqAkL2FNVG*yd?Q4hZs_=aebmt>H@$JXE6MS7"
-  //   )
-  // );
-  // let allIncompleteJobs = [];
-  // onSnapshot(q, (querySnapshot) => {
-  //   allIncompleteJobs = [];
-  //   querySnapshot.forEach((doc) => {
-  //     allIncompleteJobs.push({ id: doc.id, data: doc.data() });
-  //   });
-  //   // console.log(allIncompleteJobs);
-  //   return allIncompleteJobs;
-  // });
-
-  const q = query(
-    collection(db, delivery_jobs),
-    where("picked_up", "==", false),
-    where("ready_to_pickup", "==", false)
-  );
+/**
+ * Returns a JSON object of all jobs matching the status
+ *
+ * @param {Number} status 0: initialized, 1: accepted and ready to pick-up, 2: deliverer booked, 4: picked-up, 5: delivered
+ * @returns all delivery jobs with that status in an array of job objects
+ */
+export async function getJobs(status) {
+  const q = query(collection(db, delivery_jobs), where("status", "==", status));
 
   const querySnapshot = await getDocs(q);
   const need_to_pick_up = [];
@@ -122,15 +106,34 @@ export async function getUnstartedJobs() {
   return need_to_pick_up;
 }
 
-export async function setReadyToPickup(jobID, tip) {
-  const docRef = doc(db, delivery_jobs, jobID);
-  const package_info = (await getJob(jobID)).data.package;
-  package_info.tip = Number(tip);
+/**
+ * Updates the delivery status.
+ *
+ * @param {string} jobID
+ * @param {Number} status
+ * @param {Object} new_package New package that will be replacing the old package, in case of any changes. If none is defined, no changes to the old package will be made.
+ */
+export async function updateDeliveryStatus(jobID, status, new_package) {
+  const package_data = new_package
+    ? new_package
+    : (await getJob(jobID)).data.package;
 
   await updateDeliveryJob(jobID, {
-    package: package_info,
-    ready_to_pickup: true,
+    package: package_data,
+    status: status,
   });
+}
+
+/**
+ * Adds a tip amount to the package
+ * @param {string} jobID
+ * @param {string | Number} tip
+ * @returns a copy of the package with the set tip amount
+ */
+export async function addTip(jobID, tip) {
+  const new_package = (await getJob(jobID)).data.package;
+  new_package.tip = Number(tip);
+  return new_package;
 }
 
 export async function updateDeliveryJob(jobID, updates) {
