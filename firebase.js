@@ -18,6 +18,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { NavigationContainer } from "@react-navigation/native";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -38,6 +40,43 @@ export const db = getFirestore(app);
 
 const delivery_jobs = "delivery_jobs";
 
+// General
+
+// Login and Registration
+
+/**
+ * Logs in a user.
+ *
+ * @param {string} email
+ * @param {string} password
+ */
+function login(email, password) {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredentials) => {
+      const user = userCredentials.user;
+      console.log("Logged in with: ", user.email);
+      return true;
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
+}
+
+/**
+ * Logs out the current user.
+ */
+export function logout_current_user() {
+  const currentUser = getCurrentUser();
+  signOut(auth)
+    .then(() => {
+      console.log(`Signed out of ${currentUser.email}`);
+      return true;
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
+}
+
 export async function getUser() {
   const usersCol = collection(db, "users");
   const userSnapshot = await getDocs(usersCol);
@@ -45,12 +84,9 @@ export async function getUser() {
   return userList;
 }
 
-export function generateGeolocation(lat, long) {
-  return new GeoPoint(lat, long);
-}
-
 export function getCurrentUser() {
-  return getAuth().currentUser;
+  const u = getAuth().currentUser;
+  return u;
 }
 
 export async function addUser(data) {
@@ -63,7 +99,11 @@ export async function removeUser(data) {
   return;
 }
 
-// deliveries
+// Deliveries
+
+export function generateGeolocation(lat, long) {
+  return new GeoPoint(lat, long);
+}
 
 /**
  * Returns the current timestamp

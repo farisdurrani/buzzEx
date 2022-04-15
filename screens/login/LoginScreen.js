@@ -15,13 +15,13 @@ const LoginScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("Home");
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       navigation.navigate("Home");
+  //     }
+  //   });
+  // }, []);
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -66,7 +66,12 @@ const LoginScreen = ({ navigation }) => {
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}
           text="Buyer/Seller Login"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => {
+            if (email) {
+              handleLogin();
+            }
+            navigation.navigate("Home");
+          }}
         />
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}

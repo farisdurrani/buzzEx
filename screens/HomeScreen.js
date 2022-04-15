@@ -9,11 +9,13 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../components";
 import { COLORS } from "../constants";
-import { getJobs } from "../firebase";
+import { getJobs, logout_current_user, getCurrentUser } from "../firebase";
 
 const HomeScreen = ({ navigation }) => {
   const [numberOfRequests, setNumberOfRequests] = useState(0);
   const [deliveryRequests, setDeliveryRequests] = useState([]);
+
+  const current_user = getCurrentUser();
 
   useEffect(() => {
     async function fetchIncompleteJobs() {
@@ -54,6 +56,19 @@ const HomeScreen = ({ navigation }) => {
         ) : (
           <Text style={styles.font}>No incoming delivery requests...</Text>
         )}
+        {current_user ? (
+          <BButton
+            text="Log out"
+            onPress={() => {
+              try {
+                logout_current_user();
+                navigation.navigate("Login");
+              } catch (e) {
+                console.log(e.message);
+              }
+            }}
+          />
+        ) : undefined}
       </View>
     </KeyboardAvoidingView>
   );
