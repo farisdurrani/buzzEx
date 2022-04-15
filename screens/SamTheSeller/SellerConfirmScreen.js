@@ -38,7 +38,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
   const _saveDeliveryJob = () => {
     addNewDeliveryJob({
       createdAt: getCurrentTimestamp(),
-      delivered: false,
+      currency: "USD",
       deliverer_location: null,
       deliverer_uid: null,
       destinaton: generateGeolocation(79, 79),

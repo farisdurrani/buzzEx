@@ -125,19 +125,24 @@ export async function updateDeliveryStatus(jobID, status, new_package) {
 }
 
 /**
- * Adds a tip amount to the package
+ * Adds a tip amount to the package and sets it to be ready to be picked up
  * @param {string} jobID
- * @param {string | Number} tip
- * @returns a copy of the package with the set tip amount
+ * @param {string | Number} tip tip to add to the delivery job
  */
-export async function addTip(jobID, tip) {
+export async function setToReadyToPickup(jobID, tip) {
   const new_package = (await getJob(jobID)).data.package;
   new_package.tip = Number(tip);
-  return new_package;
+  updateDeliveryStatus(jobID, 1, new_package);
 }
 
-export async function updateDeliveryJob(jobID, updates) {
+/**
+ * Updates the delivery job data document on Firestore
+ *
+ * @param {string} jobID ID of the Firestore document
+ * @param {Object} updates an object containing all the intended modifications
+ */
+async function updateDeliveryJob(jobID, updates) {
   const docRef = doc(db, delivery_jobs, jobID);
-  updates[timestamp] = getCurrentTimestamp();
+  updates.timestamp = getCurrentTimestamp();
   await updateDoc(docRef, updates);
 }
