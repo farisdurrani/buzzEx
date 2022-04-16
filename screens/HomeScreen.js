@@ -18,12 +18,14 @@ const HomeScreen = ({ navigation }) => {
   const current_user = getCurrentUser();
 
   useEffect(() => {
-    async function fetchIncompleteJobs() {
-      const jobs = await getJobs(0);
+    async function fetchUnstartedJobs() {
+      const jobs = await getJobs(0, [
+        ["receiver_email", "==", current_user.email],
+      ]);
       setDeliveryRequests(jobs);
       setNumberOfRequests(jobs.length);
     }
-    fetchIncompleteJobs();
+    fetchUnstartedJobs();
   }, []);
 
   return (
@@ -67,6 +69,7 @@ const HomeScreen = ({ navigation }) => {
                 console.log(e.message);
               }
             }}
+            containerStyle={styles.buttonContainer}
           />
         ) : undefined}
       </View>

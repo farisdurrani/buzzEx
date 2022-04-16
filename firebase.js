@@ -39,8 +39,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 const delivery_jobs = "delivery_jobs";
 
@@ -54,7 +54,7 @@ const delivery_jobs = "delivery_jobs";
  * @param {string} email
  * @param {string} password
  */
-function login(email, password) {
+export function login(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredentials) => {
       const user = userCredentials.user;
@@ -111,8 +111,7 @@ export async function getUser() {
 }
 
 export function getCurrentUser() {
-  const u = getAuth().currentUser;
-  return u;
+  return getAuth().currentUser;
 }
 
 export async function addUser(data) {
@@ -158,10 +157,47 @@ export async function addNewDeliveryJob(jobData) {
  * Returns a JSON object of all jobs matching the status
  *
  * @param {Number} status 0: initialized, 1: accepted and ready to pick-up, 2: deliverer booked, 4: picked-up, 5: delivered
+ * @param {Array} add_queries additional queries
  * @returns all delivery jobs with that status in an array of job objects
  */
-export async function getJobs(status) {
-  const q = query(collection(db, delivery_jobs), where("status", "==", status));
+export async function getJobs(status, add_queries) {
+  let q = null;
+  switch (add_queries.length) {
+    case 1: {
+      q = query(
+        collection(db, delivery_jobs),
+        where("status", "==", status),
+        where(add_queries[0][0], add_queries[0][1], add_queries[0][2])
+      );
+      break;
+    }
+    case 2: {
+      q = query(
+        collection(db, delivery_jobs),
+        where("status", "==", status),
+        where(add_queries[0][0], add_queries[0][1], add_queries[0][2]),
+        where(add_queries[1][0], add_queries[1][1], add_queries[1][2])
+      );
+      break;
+    }
+    case 3: {
+      q = query(
+        collection(db, delivery_jobs),
+        where("status", "==", status),
+        where(add_queries[0][0], add_queries[0][1], add_queries[0][2]),
+        where(add_queries[1][0], add_queries[1][1], add_queries[1][2]),
+        where(add_queries[2][0], add_queries[2][1], add_queries[2][2])
+      );
+      break;
+    }
+    default: {
+      q = query(
+        collection(db, delivery_jobs),
+        where("status", "==", status)
+      );
+      break;
+    }
+  }
 
   const querySnapshot = await getDocs(q);
   const need_to_pick_up = [];

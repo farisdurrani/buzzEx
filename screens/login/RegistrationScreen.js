@@ -39,8 +39,8 @@ const RegistrationScreen = ({ navigation }) => {
       user_state: state,
       user_type: userType,
     };
-    const user = register_new_user(email, password, user_data);
-    // navigation.navigate("Login");
+    register_new_user(email, password, user_data);
+    navigation.navigate("Login");
   };
 
   return (

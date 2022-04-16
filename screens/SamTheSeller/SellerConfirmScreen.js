@@ -40,7 +40,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
       createdAt: getCurrentTimestamp(),
       currency: "USD",
       deliverer_location: null,
-      deliverer_uid: null,
+      deliverer_email: null,
       destinaton: generateGeolocation(79, 79),
       status: 0,
       timestamp: getCurrentTimestamp(),
@@ -52,8 +52,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         tax: 2.3,
         tip: 0,
       },
-      receiver_uid: null,
-      sender_uid: getCurrentUser().uid,
+      receiver_email: "b@gmail.com",
+      sender_email: getCurrentUser().email,
       source: generateGeolocation(89, 89),
     });
   };

@@ -7,9 +7,8 @@ import {
   Image,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
-import { auth } from "../../firebase";
+import { login, getUserFromEmail } from "../../firebase";
 import { BButton } from "../../components";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
@@ -22,17 +21,6 @@ const LoginScreen = ({ navigation }) => {
   //     }
   //   });
   // }, []);
-
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Logged in with: ", user.email);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -68,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
           text="Buyer/Seller Login"
           onPress={() => {
             if (email) {
-              handleLogin();
+              login(email, password);
             }
             navigation.navigate("Home");
           }}
@@ -81,7 +69,6 @@ const LoginScreen = ({ navigation }) => {
         <Button
           title="Register"
           onPress={() => {
-            
             navigation.navigate("Registration");
           }}
           buttonStyle={{ borderWidth: 0 }}
