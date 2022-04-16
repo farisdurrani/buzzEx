@@ -23,7 +23,6 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { NavigationContainer } from "@react-navigation/native";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -43,8 +42,28 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const delivery_jobs = "delivery_jobs";
+const users = "users";
 
 // General
+async function getAllCollectionDocuments(collection) {
+  const querySnapshot = await getDocs(collection(db, collection));
+  const collectionArray = [];
+  querySnapshot.forEach((doc) => {
+    collectionArray.push({ id: doc.id, data: doc.data() });
+  });
+  return collectionArray;
+}
+
+async function getCollectionDocument(collection, docID) {
+  const docRef = doc(db, collection, docID);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists) {
+    return { id: docSnap.id, data: docSnap.data() };
+  } else {
+    console.log(`Collection ${collection} document ${jobID} does not exist`);
+    return null;
+  }
+}
 
 // Login and Registration
 
@@ -103,11 +122,8 @@ export function register_new_user(email, password, user_data) {
     });
 }
 
-export async function getUser() {
-  const usersCol = collection(db, "users");
-  const userSnapshot = await getDocs(usersCol);
-  const userList = userSnapshot.docs.map((doc) => doc.data());
-  return userList;
+export async function getAllUsers() {
+  return await getAllCollectionDocuments(users);
 }
 
 export function getCurrentUser() {
@@ -115,12 +131,12 @@ export function getCurrentUser() {
 }
 
 export async function addUser(data) {
-  await setDoc(doc(db, "users", data.uid), data);
+  await setDoc(doc(db, users, data.uid), data);
   return;
 }
 
 export async function removeUser(data) {
-  await deleteDoc(doc(db, "users", data.id));
+  await deleteDoc(doc(db, users, data.id));
   return;
 }
 
@@ -139,13 +155,7 @@ export function getCurrentTimestamp() {
 }
 
 export async function getJob(jobID) {
-  const docRef = doc(db, delivery_jobs, jobID);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists) {
-    return { id: docSnap.id, data: docSnap.data() };
-  } else {
-    throw new ReferenceError(`Deivery Job ${jobID} does not exist`);
-  }
+  return await getCollectionDocument(delivery_jobs, jobID);
 }
 
 export async function addNewDeliveryJob(jobData) {
@@ -191,10 +201,7 @@ export async function getJobs(status, add_queries) {
       break;
     }
     default: {
-      q = query(
-        collection(db, delivery_jobs),
-        where("status", "==", status)
-      );
+      q = query(collection(db, delivery_jobs), where("status", "==", status));
       break;
     }
   }

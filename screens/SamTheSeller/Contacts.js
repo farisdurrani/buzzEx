@@ -12,78 +12,11 @@ import SectionListContacts from "react-native-sectionlist-contacts";
 import { registerRootComponent } from "expo";
 import { COLORS, LAYOUT } from "../../constants";
 import SearchBar from "react-native-dynamic-search-bar";
+import { getAllUsers } from "../../firebase";
 
 class Contacts extends Component {
   constructor(props) {
     super(props);
-    let nameData = [
-      {
-        name: "Anderson",
-        firstname: "Bill",
-        lastname: "Anderson",
-        fullname: "Bill Anderson",
-      },
-      {
-        name: "Aaron",
-        firstname: "Milton",
-        lastname: "Aaron",
-        fullname: "Milton Aaron",
-      },
-      {
-        name: "Alex",
-        firstname: "Michale",
-        lastname: "Alex",
-        fullname: "Michale Alex",
-      },
-      {
-        name: "Baarda",
-        firstname: "Will",
-        lastname: "Baarda",
-        fullname: "Will Baarda",
-      },
-      {
-        name: "Ballard",
-        firstname: "Bruce",
-        lastname: "Ballard",
-        fullname: "Bruce Ballard",
-      },
-      {
-        name: "Barlow",
-        firstname: "Michael",
-        lastname: "Barlow",
-        fullname: "Michael Barlow",
-      },
-      {
-        name: "Haro",
-        firstname: "Anna",
-        lastname: "Haro",
-        fullname: "Anna Haro",
-      },
-      {
-        name: "Calvin",
-        firstname: "David",
-        lastname: "Calvin",
-        fullname: "David Calvin",
-      },
-      {
-        name: "David",
-        firstname: "Carl",
-        lastname: "David",
-        fullname: "Carl David",
-      },
-      {
-        name: "Elaine",
-        firstname: "Mary",
-        lastname: "Elaine",
-        fullname: "Mary Elaine",
-      },
-      {
-        name: "Felix",
-        firstname: "David",
-        lastname: "Felix",
-        fullname: "David Felix",
-      },
-    ];
     this.state = {
       dataArray: nameData,
     };
@@ -133,7 +66,7 @@ class Contacts extends Component {
   };
 
   render() {
-    const { spinnerVisibility } = this.state;
+    // const { spinnerVisibility } = this.state;
     return (
       <View style={styles.container}>
         <View style={{ height: 200, backgroundColor: "#FFFFFF" }}>
@@ -177,8 +110,8 @@ class Contacts extends Component {
         <View style={styles.container}>
           <SectionListContacts
             ref={(s) => (this.sectionList = s)}
-            sectionListData={this.state.dataArray}
-            initialNumToRender={this.state.dataArray.length}
+            sectionListData={nameData}
+            initialNumToRender={nameData.length}
             otherAlphabet="#"
             renderHeader={this._renderHeader}
             renderItem={this._renderItem}
@@ -311,3 +244,72 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+const nameData = [
+  {
+    name: "Anderson",
+    firstname: "Bill",
+    lastname: "Anderson",
+    fullname: "Bill Anderson",
+  },
+  {
+    name: "Aaron",
+    firstname: "Milton",
+    lastname: "Aaron",
+    fullname: "Milton Aaron",
+  },
+  {
+    name: "Alex",
+    firstname: "Michale",
+    lastname: "Alex",
+    fullname: "Michale Alex",
+  },
+  {
+    name: "Baarda",
+    firstname: "Will",
+    lastname: "Baarda",
+    fullname: "Will Baarda",
+  },
+  {
+    name: "Ballard",
+    firstname: "Bruce",
+    lastname: "Ballard",
+    fullname: "Bruce Ballard",
+  },
+  {
+    name: "Barlow",
+    firstname: "Michael",
+    lastname: "Barlow",
+    fullname: "Michael Barlow",
+  },
+  {
+    name: "Haro",
+    firstname: "Anna",
+    lastname: "Haro",
+    fullname: "Anna Haro",
+  },
+  {
+    name: "Calvin",
+    firstname: "David",
+    lastname: "Calvin",
+    fullname: "David Calvin",
+  },
+  {
+    name: "David",
+    firstname: "Carl",
+    lastname: "David",
+    fullname: "Carl David",
+  },
+  {
+    name: "Elaine",
+    firstname: "Mary",
+    lastname: "Elaine",
+    fullname: "Mary Elaine",
+  },
+  {
+    name: "Felix",
+    firstname: "David",
+    lastname: "Felix",
+    fullname: "David Felix",
+  },
+];

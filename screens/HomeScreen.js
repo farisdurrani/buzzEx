@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     async function fetchUnstartedJobs() {
       const jobs = await getJobs(0, [
-        ["receiver_email", "==", current_user.email],
+        ["receiver_uid", "==", current_user.uid],
       ]);
       setDeliveryRequests(jobs);
       setNumberOfRequests(jobs.length);
