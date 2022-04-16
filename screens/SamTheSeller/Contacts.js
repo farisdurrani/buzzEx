@@ -27,13 +27,17 @@ const Contacts = ({ navigation }) => {
 
   (async () => {
     const allUsersData = await getAllUsers();
-    const allUsersDataNames = allUsersData.map((e) => ({
-      name: e.data.user_name.split(" ")[0],
-      firstname: e.data.user_name.split(" ")[0],
-      lastname: e.data.user_name.split(" ")[1],
-      fullname: e.data.user_name,
-      uid: e.data.uid,
-    }));
+    const allUsersDataNames = [];
+    allUsersData.forEach((e) => {
+      const split_name = e.data.user_name.split(" ");
+      allUsersDataNames.push({
+        name: split_name[0],
+        firstname: split_name[0],
+        lastname: split_name[split_name.length - 1],
+        fullname: e.data.user_name,
+        uid: e.data.uid,
+      });
+    });
     setNameData(allUsersDataNames);
   })();
 
