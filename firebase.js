@@ -45,8 +45,8 @@ const delivery_jobs = "delivery_jobs";
 const users = "users";
 
 // General
-async function getAllCollectionDocuments(collection) {
-  const querySnapshot = await getDocs(collection(db, collection));
+async function getAllCollectionDocuments(collectionOfDocs) {
+  const querySnapshot = await getDocs(collection(db, collectionOfDocs));
   const collectionArray = [];
   querySnapshot.forEach((doc) => {
     collectionArray.push({ id: doc.id, data: doc.data() });

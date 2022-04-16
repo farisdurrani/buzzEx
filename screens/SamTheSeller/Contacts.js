@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,16 +14,8 @@ import { COLORS, LAYOUT } from "../../constants";
 import SearchBar from "react-native-dynamic-search-bar";
 import { getAllUsers } from "../../firebase";
 
-class Contacts extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataArray: nameData,
-    };
-    this.arrayholder = nameData;
-  }
-
-  _renderHeader = (params) => {
+const Contacts = ({ navigation }) => {
+  const _renderHeader = (params) => {
     return (
       <View style={styles.sectionView}>
         <Text style={styles.sectionText}>{params.key}</Text>
@@ -31,98 +23,83 @@ class Contacts extends Component {
     );
   };
 
-  _renderItem = (item, index, section) => {
+  const [nameData, setNameData] = useState([]);
+
+  (async () => {
+    const allUsersData = await getAllUsers();
+    const allUsersDataNames = allUsersData.map((e) => ({
+      name: e.data.user_name.split(" ")[0],
+      firstname: e.data.user_name.split(" ")[0],
+      lastname: e.data.user_name.split(" ")[1],
+      fullname: e.data.user_name,
+      uid: e.data.uid,
+    }));
+    setNameData(allUsersDataNames);
+  })();
+
+  const _renderItem = (item, index, section) => {
     return (
       <View style={styles.itemView}>
         <View style={styles.itemTextView}>
           <Button
             title={item.fullname}
-            onPress={() => this.props.navigation.navigate("ItemPrice")} // change later
+            onPress={() => {
+              const receiver_uid = nameData[index].uid;
+              navigation.navigate("ItemPrice", { receiver_uid: receiver_uid });
+            }}
           />
         </View>
       </View>
     );
   };
-  handleOnChangeText = (text) => {
-    // ? Visible the spinner
-    this.setState({
-      searchText: text,
-      spinnerVisibility: true,
-    });
 
-    // ? After you've done to implement your use-case
-    // ? Do not forget to set false to spinner's visibility
-    this.setState({
-      spinnerVisibility: false,
-    });
-  };
-  searchFunction = (text) => {
-    const updatedData = this.arrayholder.filter((item) => {
-      const item_data = `${item.fullnamei.toUpperCase()})`;
-      const text_data = text.toUpperCase();
-      return item_data.indexOf(text_data) > -1;
-    });
-    this.setState({ data: updatedData, searchValue: text });
-  };
-
-  render() {
-    // const { spinnerVisibility } = this.state;
-    return (
-      <View style={styles.container}>
-        <View style={{ height: 200, backgroundColor: "#FFFFFF" }}>
-          <View style={styles.headerView}>
-            <Button
-              title="Home"
-              onPress={() => this.props.navigation.navigate("Home")}
-            />
-          </View>
-          <View style={styles.headerContactsView}>
-            <Text style={styles.headerContacts}>Contacts</Text>
-          </View>
-          <SearchBar
-            placeholder="Search here"
-            onPress={() => alert("onPress")}
-            onChangeText={(text) => this.searchFunction(text)}
-          />
+  return (
+    <View style={styles.container}>
+      <View style={{ height: 200, backgroundColor: "#FFFFFF" }}>
+        <View style={styles.headerView}>
+          <Button title="Home" onPress={() => navigation.navigate("Home")} />
         </View>
+        <View style={styles.headerContactsView}>
+          <Text style={styles.headerContacts}>Contacts</Text>
+        </View>
+        <SearchBar placeholder="Search here" onPress={() => alert("onPress")} />
+      </View>
+      <View
+        style={{
+          height: 80,
+          backgroundColor: "#FFFFFF",
+          flexDirection: "row",
+        }}
+      >
+        <Image
+          source={require("../../assets/images/defaultUser.jpeg")}
+          style={styles.avatar}
+        />
         <View
           style={{
-            height: 80,
-            backgroundColor: "#FFFFFF",
-            flexDirection: "row",
+            marginLeft: 15,
+            alignItems: "flex-start",
+            justifyContent: "center",
           }}
         >
-          <Image
-            source={require("../../assets/images/defaultUser.jpeg")}
-            style={styles.avatar}
-          />
-          <View
-            style={{
-              marginLeft: 15,
-              alignItems: "flex-start",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={styles.accountText}>Sally the Seller</Text>
-            <Text style={styles.introText}>My Card</Text>
-          </View>
-        </View>
-        <View style={styles.container}>
-          <SectionListContacts
-            ref={(s) => (this.sectionList = s)}
-            sectionListData={nameData}
-            initialNumToRender={nameData.length}
-            otherAlphabet="#"
-            renderHeader={this._renderHeader}
-            renderItem={this._renderItem}
-            letterViewStyle={styles.letterView}
-            letterTextStyle={styles.letterText}
-          />
+          <Text style={styles.accountText}>Sally the Seller</Text>
+          <Text style={styles.introText}>My Card</Text>
         </View>
       </View>
-    );
-  }
-}
+      <View style={styles.container}>
+        <SectionListContacts
+          sectionListData={nameData}
+          initialNumToRender={nameData.length}
+          otherAlphabet="#"
+          renderHeader={_renderHeader}
+          renderItem={_renderItem}
+          letterViewStyle={styles.letterView}
+          letterTextStyle={styles.letterText}
+        />
+      </View>
+    </View>
+  );
+};
 
 export default Contacts;
 
@@ -245,7 +222,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const nameData = [
+const nameDataArchive = [
   {
     name: "Anderson",
     firstname: "Bill",
