@@ -28,38 +28,24 @@ const RegistrationScreen = ({ navigation }) => {
     { label: "Deliverer", value: "Deliverer" },
   ];
 
-  const handleSignup = () => {
-    try {
-      const user = register_new_user(email, password);
-      if (user) {
-        addUser({
-          id: user.id,
-          user_name: fullName,
-          user_email: email,
-          user_addr1: addr1,
-          user_addr2: addr2,
-          user_zip: zip,
-          user_city: city,
-          user_state: state,
-          user_type: userType,
-        })
-          .then(() => {
-            console.log("added new user");
-          })
-          .catch((error) => {
-            alert(error.message);
-          });
-      }
-      console.log(222);
-    } catch (e) {
-      console.log(1111);
-    }
+  const handleSignup = async () => {
+    const user_data = {
+      user_name: fullName,
+      user_email: email,
+      user_addr1: addr1,
+      user_addr2: addr2,
+      user_zip: zip,
+      user_city: city,
+      user_state: state,
+      user_type: userType,
+    };
+    const user = register_new_user(email, password, user_data);
     // navigation.navigate("Login");
   };
 
   return (
     <View style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
+      <View>
         <KeyboardAvoidingView>
           <TextInput
             placeholder="Full Name"
@@ -118,47 +104,29 @@ const RegistrationScreen = ({ navigation }) => {
             style={[styles.input]}
           ></TextInput>
         </KeyboardAvoidingView>
-        <Text style={[styles.label]}> User Type:</Text>
+        <Text style={{ padding: 15 }}> User Type:</Text>
         <RadioForm
           radio_props={radio_props}
           formHorizontal={false}
           initial={"Buyer/Seller"}
-          onPress={(value) => {
-            onChangeUserType(value);
-          }}
+          onPress={(value) => onChangeUserType(value)}
         />
       </View>
 
-      <View style={styles.buttonContainer}>
+      <View>
         <BButton
           text="Register"
           onPress={handleSignup}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
+          containerStyle={styles.buttonContainer}
         />
         <Button
           title="Login"
           onPress={() => navigation.navigate("Login")}
-          buttonStyle={{
-            borderColor: "rgba(78, 116, 289, 1)",
-          }}
+          buttonStyle={{ borderWidth: 0 }}
           type="outline"
           titleStyle={{ color: "rgba(78, 116, 289, 1)" }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
+          containerStyle={styles.buttonContainer}
         />
-        {/* <Button
-                  onPress={() => navigation.navigate('Login')}
-                  style={[styles.button, styles.buttonOutline]}
-                  title="Login"
-              >
-              </Button> */}
       </View>
     </View>
   );
@@ -172,30 +140,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  button: {
-    padding: 5,
-  },
-  buttonContainer: {},
-  buttonOutline: {},
-  buttonOutlineText: {},
-  buttonText: {
-    color: "blue",
-  },
-  row: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  heading: {
-    textAlign: "center",
-    padding: 5,
-  },
-  label: {
-    padding: 15,
+  buttonContainer: {
+    width: 200,
+    marginHorizontal: 50,
+    marginVertical: 5,
   },
   input: {
     padding: 15,
     borderBottomWidth: 1,
     borderColor: "rgba(0, 0, 0, .2)",
   },
-  inputContainer: {},
 });

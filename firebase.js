@@ -62,7 +62,7 @@ function login(email, password) {
       return user;
     })
     .catch((error) => {
-      throw new Error(error);
+      alert(error.message);
     });
 }
 
@@ -77,14 +77,19 @@ export function logout_current_user() {
       return currentUser;
     })
     .catch((error) => {
-      throw new Error(error);
+      alert(error.message);
     });
 }
 
-export function register_new_user(email, password) {
+export function register_new_user(email, password, user_data) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      console.log(111);
+      console.log(`User ${userCredential.user.email} registered`);
+      user_data.uid = userCredential.user.uid;
+      (async () => {
+        await addUser(user_data);
+      })();
+      console.log(`Data for user ${userCredential.user.email} registered`);
       return userCredential.user;
     })
     .catch((error) => {
@@ -92,8 +97,9 @@ export function register_new_user(email, password) {
         alert("The password is too weak.");
       } else if (error.code == "auth/email-already-in-use") {
         alert("The email is already in use.");
+      } else {
+        alert(error.message);
       }
-      throw new Error(error);
     });
 }
 
@@ -110,7 +116,7 @@ export function getCurrentUser() {
 }
 
 export async function addUser(data) {
-  await setDoc(doc(db, "users", data.id), data);
+  await setDoc(doc(db, "users", data.uid), data);
   return;
 }
 
