@@ -20,7 +20,6 @@ import {
   PictureDropoff,
   // SamTheSeller
   Contacts,
-  ContactScreen,
   ItemPriceScreen,
   SellerAcceptedScreen,
   SellerAwaitingScreen,

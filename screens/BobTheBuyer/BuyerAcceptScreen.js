@@ -10,7 +10,8 @@ import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components";
 import { COLORS } from "../../constants";
 
-const BuyerAcceptScreen = ({ navigation }) => {
+const BuyerAcceptScreen = ({ navigation, route }) => {
+  const { deliveryRequests } = route.params;
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.container}>
@@ -23,7 +24,9 @@ const BuyerAcceptScreen = ({ navigation }) => {
           containerStyle={styles.buttonContainer}
           text="Accept"
           onPress={() => {
-            navigation.navigate("Payment");
+            navigation.navigate("Payment", {
+              deliveryRequests: deliveryRequests,
+            });
           }}
         />
         <BButton

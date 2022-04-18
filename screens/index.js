@@ -19,7 +19,6 @@ export { default as PictureDropoff } from "./DanTheDeliverer/PictureDropoff";
 
 // SamTheSeller
 export { default as Contacts } from "./SamTheSeller/Contacts";
-export { default as ContactScreen } from "./SamTheSeller/ContactScreen";
 export { default as ItemPriceScreen } from "./SamTheSeller/ItemPriceScreen";
 export { default as SellerAcceptedScreen } from "./SamTheSeller/SellerAcceptedScreen";
 export { default as SellerAwaitingScreen } from "./SamTheSeller/SellerAwaitingScreen";

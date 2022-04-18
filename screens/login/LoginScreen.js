@@ -7,32 +7,20 @@ import {
   Image,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
-import { auth } from "../../firebase";
+import { login, getUserFromEmail } from "../../firebase";
 import { BButton } from "../../components";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("ItemPrice");
-      }
-    });
-  }, []);
-
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Logged in with: ", user.email);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       navigation.navigate("Home");
+  //     }
+  //   });
+  // }, []);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -66,7 +54,12 @@ const LoginScreen = ({ navigation }) => {
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}
           text="Buyer/Seller Login"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => {
+            if (email) {
+              login(email, password);
+            }
+            navigation.navigate("Home");
+          }}
         />
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}
@@ -75,10 +68,10 @@ const LoginScreen = ({ navigation }) => {
         />
         <Button
           title="Register"
-          onPress={() => navigation.navigate("Registration")}
-          buttonStyle={{
-            borderColor: "rgba(78, 116, 289, 1)",
+          onPress={() => {
+            navigation.navigate("Registration");
           }}
+          buttonStyle={{ borderWidth: 0 }}
           type="outline"
           titleStyle={{ color: "rgba(78, 116, 289, 1)" }}
           containerStyle={{ width: "100%", marginTop: 20 }}
