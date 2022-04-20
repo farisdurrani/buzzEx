@@ -11,8 +11,8 @@ import {
 import SectionListContacts from "react-native-sectionlist-contacts";
 import { registerRootComponent } from "expo";
 import { COLORS, LAYOUT } from "../../constants";
-import SearchBar from "react-native-dynamic-search-bar";
-import { getAllUsers, getUserDetails } from "../../firebase";
+// import SearchBar from "react-native-dynamic-search-bar";
+import { getAllUsers } from "../../firebase";
 
 const Contacts = ({ navigation }) => {
   const _renderHeader = (params) => {
@@ -66,7 +66,7 @@ const Contacts = ({ navigation }) => {
         <View style={styles.headerContactsView}>
           <Text style={styles.headerContacts}>Contacts</Text>
         </View>
-        <SearchBar placeholder="Search here" onPress={() => alert("onPress")} />
+        {/* <SearchBar placeholder="Search here" onPress={() => alert("onPress")} /> */}
       </View>
       <View
         style={{
