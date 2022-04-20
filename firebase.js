@@ -141,7 +141,7 @@ export async function removeUser(data) {
 }
 
 export async function getUserDetails(uid) {
-  await getCollectionDocument(users, uid);
+  return await getCollectionDocument(users, uid);
 }
 
 // Deliveries

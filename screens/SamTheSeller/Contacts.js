@@ -12,9 +12,17 @@ import SectionListContacts from "react-native-sectionlist-contacts";
 import { registerRootComponent } from "expo";
 import { COLORS, LAYOUT } from "../../constants";
 // import SearchBar from "react-native-dynamic-search-bar";
-import { getAllUsers } from "../../firebase";
+import { getAllUsers, getUserDetails, getCurrentUser } from "../../firebase";
 
 const Contacts = ({ navigation }) => {
+  const [currentUserName, setCurrentUserName] = React.useState("");
+  const currentUser = getCurrentUser();
+
+  React.useEffect(async () => {
+    const current_name = (await getUserDetails(currentUser.uid)).data.user_name;
+    setCurrentUserName(current_name);
+  }, []);
+
   const _renderHeader = (params) => {
     return (
       <View style={styles.sectionView}>
@@ -66,7 +74,6 @@ const Contacts = ({ navigation }) => {
         <View style={styles.headerContactsView}>
           <Text style={styles.headerContacts}>Contacts</Text>
         </View>
-        {/* <SearchBar placeholder="Search here" onPress={() => alert("onPress")} /> */}
       </View>
       <View
         style={{
@@ -86,11 +93,7 @@ const Contacts = ({ navigation }) => {
             justifyContent: "center",
           }}
         >
-          <Text style={styles.accountText}>
-            {/* {(async () => {
-              await getUserDetails.data.user_name;
-            })()} */}
-          </Text>
+          <Text style={styles.accountText}>{`${currentUserName}`}</Text>
           <Text style={styles.introText}>My Card</Text>
         </View>
       </View>
