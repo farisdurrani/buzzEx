@@ -7,7 +7,7 @@ import {
   Image,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
-import { login, getUserFromEmail } from "../../firebase";
+import { login, getUserFromEmail, getCurrentUser } from "../../firebase";
 import { BButton } from "../../components";
 
 const LoginScreen = ({ navigation }) => {
@@ -56,7 +56,8 @@ const LoginScreen = ({ navigation }) => {
           text="Buyer/Seller Login"
           onPress={() => {
             if (email) {
-              if (login(email, password)) {
+              login(email, password);
+              if (getCurrentUser()) {
                 navigation.navigate("Home");
               } else {
                 return
