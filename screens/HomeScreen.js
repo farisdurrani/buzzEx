@@ -15,9 +15,6 @@ const HomeScreen = ({ navigation }) => {
   const [numberOfRequests, setNumberOfRequests] = useState(0);
   const [deliveryRequests, setDeliveryRequests] = useState([]);
 
-  const current_user = getCurrentUser();
-  console.log(current_user);
-
   useEffect(() => {
     async function fetchUnstartedJobs() {
       const jobs = await getJobs(0, [
