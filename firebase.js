@@ -140,6 +140,10 @@ export async function removeUser(data) {
   return;
 }
 
+export async function getUserDetails(uid) {
+  await getCollectionDocument(users, uid);
+}
+
 // Deliveries
 
 export function generateGeolocation(lat, long) {

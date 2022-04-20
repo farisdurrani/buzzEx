@@ -12,7 +12,7 @@ import SectionListContacts from "react-native-sectionlist-contacts";
 import { registerRootComponent } from "expo";
 import { COLORS, LAYOUT } from "../../constants";
 import SearchBar from "react-native-dynamic-search-bar";
-import { getAllUsers } from "../../firebase";
+import { getAllUsers, getUserDetails } from "../../firebase";
 
 const Contacts = ({ navigation }) => {
   const _renderHeader = (params) => {
@@ -86,7 +86,11 @@ const Contacts = ({ navigation }) => {
             justifyContent: "center",
           }}
         >
-          <Text style={styles.accountText}>Sally the Seller</Text>
+          <Text style={styles.accountText}>
+            {(async () => {
+              await getUserDetails.data.user_name;
+            })()}
+          </Text>
           <Text style={styles.introText}>My Card</Text>
         </View>
       </View>

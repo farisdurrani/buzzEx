@@ -56,7 +56,11 @@ const LoginScreen = ({ navigation }) => {
           text="Buyer/Seller Login"
           onPress={() => {
             if (email) {
-              login(email, password);
+              if (login(email, password)) {
+                navigation.navigate("Home");
+              } else {
+                return
+              }
             }
             navigation.navigate("Home");
           }}
