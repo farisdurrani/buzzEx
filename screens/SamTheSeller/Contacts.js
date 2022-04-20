@@ -87,9 +87,9 @@ const Contacts = ({ navigation }) => {
           }}
         >
           <Text style={styles.accountText}>
-            {(async () => {
+            {/* {(async () => {
               await getUserDetails.data.user_name;
-            })()}
+            })()} */}
           </Text>
           <Text style={styles.introText}>My Card</Text>
         </View>
