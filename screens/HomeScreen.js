@@ -15,15 +15,16 @@ const HomeScreen = ({ navigation }) => {
   const [numberOfRequests, setNumberOfRequests] = useState(0);
   const [deliveryRequests, setDeliveryRequests] = useState([]);
 
+  const current_user = getCurrentUser();
+
   useEffect(() => {
-    async function fetchUnstartedJobs() {
+    (async function fetchUnstartedJobs() {
       const jobs = await getJobs(0, [
         ["receiver_uid", "==", current_user.uid],
       ]);
       setDeliveryRequests(jobs);
       setNumberOfRequests(jobs.length);
-    }
-    fetchUnstartedJobs();
+    })();
   }, []);
 
   return (
