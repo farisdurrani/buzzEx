@@ -7,7 +7,6 @@ import {
   Image,
 } from "react-native";
 import RadioForm from "react-native-simple-radio-button";
-import Toast from "react-native-toast-message";
 import { BButton } from "../../components";
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { addUser, register_new_user } from "../../firebase";
@@ -29,6 +28,7 @@ const RegistrationScreen = ({ navigation }) => {
   ];
 
   const handleSignup = async () => {
+    _showSuccessRegisterToast();
     const user_data = {
       user_name: fullName,
       user_email: email,

@@ -14,17 +14,21 @@ const LoginScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       navigation.navigate("Home");
-  //     }
-  //   });
-  // }, []);
+  const _loginAndNavigateTo = (screen = "Home") => {
+    if (!email) {
+      navigation.navigate(screen); // TODO remove and stop access
+      return;
+    }
+    login(email, password);
+    if (!getCurrentUser()) {
+      return;
+    }
+    navigation.navigate(screen);
+  };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <View style={styles.inputContainer}>
+    <View style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.inputContainer}>
         <Image
           source={require("../../assets/buzzExLogo.png")}
           style={{
@@ -48,41 +52,29 @@ const LoginScreen = ({ navigation }) => {
           style={styles.input}
           secureTextEntry={true}
         ></TextInput>
-      </View>
+      </KeyboardAvoidingView>
 
       <View style={styles.buttonContainer}>
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}
           text="Buyer/Seller Login"
-          onPress={() => {
-            if (email) {
-              login(email, password);
-              if (getCurrentUser()) {
-                navigation.navigate("Home");
-              } else {
-                return
-              }
-            }
-            navigation.navigate("Home");
-          }}
+          onPress={() => _loginAndNavigateTo("Home")}
         />
         <BButton
           containerStyle={{ width: "100%", marginTop: 20 }}
           text="Deliverer Login"
-          onPress={() => navigation.navigate("DeliveriesAvailable")}
+          onPress={() => _loginAndNavigateTo("DeliveriesAvailable")}
         />
         <Button
           title="Register"
-          onPress={() => {
-            navigation.navigate("Registration");
-          }}
+          onPress={() => navigation.navigate("Registration")}
           buttonStyle={{ borderWidth: 0 }}
           type="outline"
           titleStyle={{ color: "rgba(78, 116, 289, 1)" }}
           containerStyle={{ width: "100%", marginTop: 20 }}
         />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

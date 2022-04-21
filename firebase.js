@@ -109,7 +109,6 @@ export function register_new_user(email, password, user_data) {
         await addUser(user_data);
       })();
       console.log(`Data for user ${userCredential.user.email} registered`);
-      return userCredential.user;
     })
     .catch((error) => {
       if (error.code == "auth/weak-password") {
