@@ -19,9 +19,11 @@ const ASPECT_RATIO = width/height
 const LATITUDE_DELTA = 0.04  // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO // Dependent on LATITUDE_DELTA
 
-const SellerAcceptedScreen = ({ navigation }) => {
+const SellerAcceptedScreen = ({ navigation, route }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const { packageItemData } = route.params;
+  const { destination_address, source_address }= packageItemData;
 
   useEffect(() => {
     (async () => {
@@ -43,17 +45,18 @@ const SellerAcceptedScreen = ({ navigation }) => {
   }
   const mapProps = location ? {
     source: {
-      sourceLat: location.coords.latitude,
-      sourceLong: location.coords.longitude,
+      sourceLat: source_address.latitude,
+      sourceLong: source_address.longitude,
     },
     dest: {
-      destLat: null,
-      destLong: null
+      destLat: destination_address.latitude,
+      destLong: destination_address.latitude,
     },
     LATITUDE_DELTA: LATITUDE_DELTA, 
     LONGITUDE_DELTA: LONGITUDE_DELTA,
     style: styles.map
   } : null
+  console.log(mapProps)
 
   return (
     <View style={styles.mainContainer}>

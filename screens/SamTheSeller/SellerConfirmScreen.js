@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT, roundTo2 } from "../../constants";
@@ -24,6 +24,34 @@ const SellerConfirmScreen = ({ navigation, route }) => {
   const DELIVERY_FEE = Math.random() * 5;
   const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
 
+  const [packageItemData, setPackageItemData] = useState({})
+  useEffect(() => {
+    const data = {
+      createdAt: getCurrentTimestamp(),
+      currency: "USD",
+      deliverer_location: null,
+      deliverer_uid: null,
+      status: 0,
+      timestamp: getCurrentTimestamp(),
+      package: {
+        name: itemName,
+        base_price: itemPrice,
+        delivery_fee: DELIVERY_FEE,
+        sender_given_photoURL: null,
+        deliverer_given_photoURL: null,
+        tax: Math.random() * 5,
+        tip: 0,
+      },
+      receiver_uid: receiver_uid,
+      sender_uid: sender_data.uid,
+      source_address: sender_data.address.address_coord,
+      destination_address: receiver_data.address.address_coord,
+    };
+    setPackageItemData(data)
+
+  }, [])
+
+
   const _ItemDetailGroup = (props) => {
     const { title, text } = props;
     return (
@@ -37,29 +65,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
   };
 
   const _saveDeliveryJob = (receiver_uid) => {
-    const currentUserID = getCurrentUser().uid;
+    console.log(packageItemData)
     const addNewDeliveryJobToDB = async () => {
-      const packageItemData = {
-        createdAt: getCurrentTimestamp(),
-        currency: "USD",
-        deliverer_location: null,
-        deliverer_uid: null,
-        status: 0,
-        timestamp: getCurrentTimestamp(),
-        package: {
-          name: itemName,
-          base_price: itemPrice,
-          delivery_fee: DELIVERY_FEE,
-          sender_given_photoURL: null,
-          deliverer_given_photoURL: null,
-          tax: Math.random() * 5,
-          tip: 0,
-        },
-        receiver_uid: receiver_uid,
-        sender_uid: currentUserID,
-        source_address: sender_data.address.address_coord,
-        destination_address: receiver_data.address.address_coord,
-      };
       addNewDeliveryJob(packageItemData);
     };
     addNewDeliveryJobToDB();
@@ -96,8 +103,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
           style={styles.profilePic}
         />
         <View style={[{ marginLeft: 20 }]}>
-          <Text style={styles.name}>Bob The Buyer</Text>
-          <Text style={styles.username}>@bobTheBuyer</Text>
+          <Text style={styles.name}>{receiver_data.fullname}</Text>
+          <Text style={styles.username}>{receiver_data.email}</Text>
         </View>
       </View>
 
@@ -137,7 +144,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
       <BButton
         text="Confirm"
         onPress={() => {
-          navigation.navigate("SellerAwaiting");
+          navigation.navigate("SellerAwaiting", {packageItemData: packageItemData});
           _saveDeliveryJob(receiver_uid);
         }}
       />
