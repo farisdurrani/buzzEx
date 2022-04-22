@@ -17,40 +17,17 @@ import {
   generateGeolocation,
   getCurrentUser,
   getUserDetails,
+  getJob,
 } from "../../firebase";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
-  const { sender_data, receiver_data, receiver_uid, itemName, itemPrice, snapURI } = route.params;
+  const { senderItem, receiverItem, itemName, itemPrice, snapURI } =
+    route.params;
   const DELIVERY_FEE = Math.random() * 5;
   const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
+  const TOTAL_TAX_PERCENTAGE = 8.9;
 
-  const [packageItemData, setPackageItemData] = useState({})
-  useEffect(() => {
-    const data = {
-      createdAt: getCurrentTimestamp(),
-      currency: "USD",
-      deliverer_location: null,
-      deliverer_uid: null,
-      status: 0,
-      timestamp: getCurrentTimestamp(),
-      package: {
-        name: itemName,
-        base_price: itemPrice,
-        delivery_fee: DELIVERY_FEE,
-        sender_given_photoURL: null,
-        deliverer_given_photoURL: null,
-        tax: Math.random() * 5,
-        tip: 0,
-      },
-      receiver_uid: receiver_uid,
-      sender_uid: sender_data.uid,
-      source_address: sender_data.address.address_coord,
-      destination_address: receiver_data.address.address_coord,
-    };
-    setPackageItemData(data)
-
-  }, [])
-
+  const [addedDeliveryItem, setAddedDeliveryItem] = useState();
 
   const _ItemDetailGroup = (props) => {
     const { title, text } = props;
@@ -64,12 +41,33 @@ const SellerConfirmScreen = ({ navigation, route }) => {
     );
   };
 
-  const _saveDeliveryJob = (receiver_uid) => {
-    console.log(packageItemData)
+  const _saveDeliveryJob = async () => {
     const addNewDeliveryJobToDB = async () => {
-      addNewDeliveryJob(packageItemData);
+      const deliveryJobToAdd = {
+        createdAt: getCurrentTimestamp(),
+        currency: "USD",
+        deliverer_location: null,
+        deliverer_uid: null,
+        status: 0,
+        timestamp: getCurrentTimestamp(),
+        package: {
+          name: itemName,
+          base_price: itemPrice,
+          delivery_fee: DELIVERY_FEE,
+          sender_given_photoURL: null,
+          deliverer_given_photoURL: null,
+          tax: (itemPrice * TOTAL_TAX_PERCENTAGE) / 100,
+          tip: 0,
+        },
+        receiver_uid: receiverItem.data.uid,
+        sender_uid: senderItem.data.uid,
+        source_address: senderItem.data.address,
+        destination_address: receiverItem.data.address,
+      };
+      const newDeliveryJobID = await addNewDeliveryJob(deliveryJobToAdd);
+      setAddedDeliveryItem(await getJob(newDeliveryJobID));
     };
-    addNewDeliveryJobToDB();
+    await addNewDeliveryJobToDB();
   };
 
   const _PriceItem = (props) => {
@@ -81,6 +79,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         fontSize: 20,
       },
     });
+
     return (
       <View style={stylesPI.mainContainer}>
         <Text style={stylesPIText.text}>{itemName}</Text>
@@ -102,19 +101,26 @@ const SellerConfirmScreen = ({ navigation, route }) => {
           source={require("../../assets/earth_face.png")}
           style={styles.profilePic}
         />
-        <View style={[{ marginLeft: 20 }]}>
-          <Text style={styles.name}>{receiver_data.fullname}</Text>
-          <Text style={styles.username}>{receiver_data.email}</Text>
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles.name}>{receiverItem.data.full_name}</Text>
+          <Text style={styles.username}>{receiverItem.data.email}</Text>
         </View>
       </View>
 
-      <View style={[LAYOUT.row]}>
+      <View style={LAYOUT.row}>
         <View style={LAYOUT.centerMiddle}>
           <Text style={styles.detailTitle}>Item Picture</Text>
           <TouchableOpacity
             style={[styles.cameraButton, LAYOUT.centerMiddle]}
             onPress={() => {
-              navigation.navigate("TakePicture");
+              navigation.navigate("TakePicture", {
+                nextScreen: "SellerConfirm",
+                senderItem: senderItem,
+                receiverItem: receiverItem,
+                itemName: itemName,
+                itemPrice: itemPrice,
+                snapURI: snapURI,
+              });
             }}
           >
             {snapURI ? (
@@ -143,9 +149,13 @@ const SellerConfirmScreen = ({ navigation, route }) => {
 
       <BButton
         text="Confirm"
-        onPress={() => {
-          navigation.navigate("SellerAwaiting", {packageItemData: packageItemData});
-          _saveDeliveryJob(receiver_uid);
+        onPress={async () => {
+          await _saveDeliveryJob();
+          navigation.navigate("SellerAwaiting", {
+            senderItem: senderItem,
+            receiverItem: receiverItem,
+            deliveryItem: addedDeliveryItem,
+          });
         }}
       />
     </View>

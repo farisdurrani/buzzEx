@@ -16,6 +16,8 @@ const WINDOW_HEIGHT = Dimensions.get("window").height;
 const CAPTURE_SIZE = Math.floor(WINDOW_HEIGHT * 0.08);
 
 const TakePictureScreen = ({ navigation, route }) => {
+  const { nextScreen } = route.params;
+
   const cameraRef = useRef();
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
@@ -23,7 +25,6 @@ const TakePictureScreen = ({ navigation, route }) => {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [currentSnapURI, setCurrentSnapURI] = useState(null);
 
-  const returnScreen = route.params.returnScreen;
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -39,7 +40,7 @@ const TakePictureScreen = ({ navigation, route }) => {
         {
           text: "OK",
           onPress: () => {
-            navigation.navigate(returnScreen, route.params);
+            navigation.navigate(nextScreen, route.params);
           },
         },
       ]
@@ -110,7 +111,7 @@ const TakePictureScreen = ({ navigation, route }) => {
                 onPress={() => {
                   const newRouteParams = route.params;
                   newRouteParams.snapURI = currentSnapURI;
-                  navigation.navigate(returnScreen, newRouteParams);
+                  navigation.navigate(nextScreen, newRouteParams);
                 }}
               />
             </View>
@@ -121,7 +122,7 @@ const TakePictureScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => {
-                navigation.navigate(returnScreen, route.params);
+                navigation.navigate(nextScreen, route.params);
               }}
             >
               <MaterialIcons name="cancel" size={24} color="white" />

@@ -7,7 +7,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
@@ -15,12 +15,10 @@ import { InputTextField } from "../../components";
 import { getUserDetails } from "../../firebase";
 
 const ItemPriceScreen = ({ navigation, route }) => {
-  const { sender_data, receiver_data } = route.params;
+  const { senderItem, receiverItem, snapURI = undefined } = route.params;
 
   const [itemName, setItemName] = useState("Bike");
   const [itemPrice, setItemPrice] = useState((Math.random() * 50).toString());
-
-  let snapURI = null;
 
   const ItemDetailGroup = (props) => {
     const { title, placeholder, state, setState } = props;
@@ -36,17 +34,13 @@ const ItemPriceScreen = ({ navigation, route }) => {
     );
   };
 
-  if (route.params && route.params.snapURI) {
-    snapURI = route.params.snapURI;
-  }
-
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
       <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.name}>{receiver_data.fullname}</Text>
-        <Text style={styles.username}>{receiver_data.email}</Text>
+        <Text style={styles.name}>{receiverItem.data.full_name}</Text>
+        <Text style={styles.username}>{receiverItem.data.email}</Text>
       </View>
       <ItemDetailGroup
         title="Item Name"
@@ -65,15 +59,18 @@ const ItemPriceScreen = ({ navigation, route }) => {
         <TouchableOpacity
           style={[styles.cameraButton, LAYOUT.centerMiddle]}
           onPress={() => {
-            navigation.navigate("TakePicture", { returnScreen: "ItemPrice" });
+            navigation.navigate("TakePicture", {
+              nextScreen: "ItemPrice",
+              senderItem: senderItem,
+              receiverItem: receiverItem,
+              snapURI: snapURI,
+            });
           }}
         >
           {snapURI ? (
             <Image
               style={styles.picture}
-              source={{
-                uri: route.params.snapURI,
-              }}
+              source={{ uri: route.params.snapURI }}
             />
           ) : (
             <AntDesign name="camera" size={50} color={COLORS.primary_red} />
@@ -84,9 +81,8 @@ const ItemPriceScreen = ({ navigation, route }) => {
         text="Continue"
         onPress={() =>
           navigation.navigate("SellerConfirm", {
-            sender_data: sender_data,
-            receiver_data: receiver_data,
-            receiver_uid: receiver_data.uid,
+            senderItem: senderItem,
+            receiverItem: receiverItem,
             itemName: itemName ? itemName : "Bike",
             itemPrice: itemPrice && !isNaN(itemPrice) ? Number(itemPrice) : 12,
             snapURI: snapURI,

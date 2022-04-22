@@ -13,14 +13,19 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
 const SellerAwaitingScreen = ({ navigation, route }) => {
-  const { packageItemData } = route.params;
+  const { senderItem, receiverItem, deliveryItem } = route.params;
+
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("SellerAccepted", {packageItemData: packageItemData});
+          navigation.navigate("SellerAccepted", {
+            senderItem: senderItem,
+            receiverItem: receiverItem,
+            deliveryItem: deliveryItem,
+          });
         }}
       >
         <Text style={styles.awaitingText}>Awaiting for Bob to Accept...</Text>
