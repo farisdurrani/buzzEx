@@ -15,7 +15,7 @@ import { InputTextField } from "../../components";
 import { getUserDetails } from "../../firebase";
 
 const ItemPriceScreen = ({ navigation, route }) => {
-  const { receiver_data } = route.params;
+  const { sender_data, receiver_data } = route.params;
 
   const [itemName, setItemName] = useState("Bike");
   const [itemPrice, setItemPrice] = useState((Math.random() * 50).toString());
@@ -84,6 +84,8 @@ const ItemPriceScreen = ({ navigation, route }) => {
         text="Continue"
         onPress={() =>
           navigation.navigate("SellerConfirm", {
+            sender_data: sender_data,
+            receiver_data: receiver_data,
             receiver_uid: receiver_data.uid,
             itemName: itemName ? itemName : "Bike",
             itemPrice: itemPrice && !isNaN(itemPrice) ? Number(itemPrice) : 12,
