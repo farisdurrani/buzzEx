@@ -7,38 +7,33 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
+import { getUserDetails } from "../../firebase";
 
 const PickupScreen = ({ navigation, route }) => {
   const { packageItem } = route.params;
 
+  const [addr1, setAddr1] = useState("");
+  const [addr2, setAddr2] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
+  const [state, setState] = useState("");
+
+  useEffect(async () => {
+    const sender_uid = packageItem.data.sender_uid;
+    const sender_address = (await getUserDetails(sender_uid)).data.address;
+    setAddr1(sender_address.line1);
+    setAddr2(sender_address.line2);
+    setCity(sender_address.city);
+    setZip(sender_address.zip);
+    setState(sender_address.state);
+  }, []);
+
   const _ChoiceRow = (props) => {
     const { choice } = props;
-
-    const stylesRow = StyleSheet.create({
-      container: {
-        backgroundColor: COLORS.transparent_gray,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        width: 350,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-      itemDetailGroup: {
-        display: "flex",
-        flexDirection: "row",
-        width: "60%",
-        justifyContent: "space-between",
-      },
-      text: {
-        fontSize: 23,
-      },
-    });
 
     return (
       <View style={stylesRow.container}>
@@ -63,9 +58,9 @@ const PickupScreen = ({ navigation, route }) => {
       </Text>
 
       <View style={styles.addressContainer}>
-        <Text style={styles.address}>123 Peachtree Rd</Text>
-        <Text style={styles.address}>Apt 777</Text>
-        <Text style={styles.address}>Atlanta, GA 30318</Text>
+        <Text style={styles.address}>{addr1}</Text>
+        {addr2 ? <Text style={styles.address}>{addr2}</Text> : undefined}
+        <Text style={styles.address}>{`${city}, ${state} ${zip}`}</Text>
       </View>
 
       <_ChoiceRow choice="Google Maps" />
@@ -123,5 +118,27 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     backgroundColor: COLORS.transparent_gray,
+  },
+});
+
+const stylesRow = StyleSheet.create({
+  container: {
+    backgroundColor: COLORS.transparent_gray,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    width: 350,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  itemDetailGroup: {
+    display: "flex",
+    flexDirection: "row",
+    width: "60%",
+    justifyContent: "space-between",
+  },
+  text: {
+    fontSize: 23,
   },
 });
