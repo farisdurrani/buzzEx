@@ -69,7 +69,7 @@ const Contacts = ({ navigation }) => {
     <View style={styles.container}>
       <View style={{ height: 200, backgroundColor: "#FFFFFF" }}>
         <View style={styles.headerView}>
-          <Button title="Home" onPress={() => navigation.navigate("Home")} />
+          <Button title="Home" onPress={() => navigation.replace("Home")} />
         </View>
         <View style={styles.headerContactsView}>
           <Text style={styles.headerContacts}>Contacts</Text>

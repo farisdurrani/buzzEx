@@ -7,13 +7,25 @@ import { COLORS, LAYOUT } from "../../constants";
 import { TextInput } from "react-native";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { InputTextField } from "../../components";
+import { getJobs, getUserDetails, getCurrentUser } from "../../firebase";
 
 const DeliveriesAvailable = ({ navigation }) => {
-  const deliverer = "Dan";
+  const [deliverer, setDeliverer] = useState("");
   const item_list = ["Bike", "Robot", "Laptop", "PS5", "Atari"];
   const [zipcode, setZipcode] = useState("30332");
+  const [allAvailableJobs, setAllAvailableJobs] = useState([]);
 
-  const DeliveryRow = (props) => {
+  React.useEffect(async () => {
+    const current_name = (
+      await getUserDetails(getCurrentUser().uid)
+    ).data.user_name.split(" ")[0];
+    setDeliverer(current_name);
+
+    const available_jobs = await getJobs(1);
+    setAllAvailableJobs(available_jobs);
+  }, []);
+
+  const _DeliveryRow = (props) => {
     const { item, distance } = props;
 
     const stylesRow = StyleSheet.create({
@@ -31,7 +43,7 @@ const DeliveriesAvailable = ({ navigation }) => {
         display: "flex",
         flexDirection: "row",
         width: "60%",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
       },
       text: {
         fontSize: 20,
@@ -46,18 +58,11 @@ const DeliveriesAvailable = ({ navigation }) => {
         </View>
         <BButton
           text="Accept"
-          onPress={() => {
-            navigation.navigate("PickupScreen");
-          }}
+          onPress={() => navigation.navigate("PickupScreen")}
         />
       </View>
     );
   };
-
-  const radio_props = [
-    { label: item_list[0], value: item_list[0] },
-    { label: item_list[1], value: item_list[1] },
-  ];
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -73,9 +78,9 @@ const DeliveriesAvailable = ({ navigation }) => {
         setTextState={setZipcode}
       />
       <View style={styles.inputContainer}>
-        <DeliveryRow item="Guitar" distance="5 miles" />
-        <DeliveryRow item="Drill" distance="8 miles" />
-        <DeliveryRow item="Bike" distance="3 miles" />
+        <_DeliveryRow item="Guitar" distance="5 miles" />
+        <_DeliveryRow item="Drill" distance="8 miles" />
+        <_DeliveryRow item="Bike" distance="3 miles" />
       </View>
     </KeyboardAvoidingView>
   );

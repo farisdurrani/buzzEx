@@ -45,7 +45,7 @@ const delivery_jobs = "delivery_jobs";
 const users = "users";
 
 // General
-async function getAllCollectionDocuments(collectionOfDocs) {
+async function _getAllCollectionDocuments(collectionOfDocs) {
   const querySnapshot = await getDocs(collection(db, collectionOfDocs));
   const collectionArray = [];
   querySnapshot.forEach((doc) => {
@@ -54,7 +54,7 @@ async function getAllCollectionDocuments(collectionOfDocs) {
   return collectionArray;
 }
 
-async function getCollectionDocument(collection, docID) {
+async function _getCollectionDocument(collection, docID) {
   const docRef = doc(db, collection, docID);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists) {
@@ -109,7 +109,6 @@ export function register_new_user(email, password, user_data) {
         await addUser(user_data);
       })();
       console.log(`Data for user ${userCredential.user.email} registered`);
-      return userCredential.user;
     })
     .catch((error) => {
       if (error.code == "auth/weak-password") {
@@ -123,7 +122,7 @@ export function register_new_user(email, password, user_data) {
 }
 
 export async function getAllUsers() {
-  return await getAllCollectionDocuments(users);
+  return await _getAllCollectionDocuments(users);
 }
 
 export function getCurrentUser() {
@@ -141,7 +140,7 @@ export async function removeUser(data) {
 }
 
 export async function getUserDetails(uid) {
-  return await getCollectionDocument(users, uid);
+  return await _getCollectionDocument(users, uid);
 }
 
 // Deliveries
@@ -159,7 +158,7 @@ export function getCurrentTimestamp() {
 }
 
 export async function getJob(jobID) {
-  return await getCollectionDocument(delivery_jobs, jobID);
+  return await _getCollectionDocument(delivery_jobs, jobID);
 }
 
 export async function addNewDeliveryJob(jobData) {
@@ -174,7 +173,7 @@ export async function addNewDeliveryJob(jobData) {
  * @param {Array} add_queries additional queries
  * @returns all delivery jobs with that status in an array of job objects
  */
-export async function getJobs(status, add_queries) {
+export async function getJobs(status, add_queries = []) {
   let q = null;
   switch (add_queries.length) {
     case 1: {
