@@ -21,7 +21,7 @@ import {
 
 const SellerConfirmScreen = ({ navigation, route }) => {
   const { receiver_uid, itemName, itemPrice, snapURI } = route.params;
-  const DELIVERY_FEE = 2.31;
+  const DELIVERY_FEE = Math.random() * 5;
   const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
 
   const _ItemDetailGroup = (props) => {
