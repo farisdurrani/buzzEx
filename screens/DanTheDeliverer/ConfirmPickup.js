@@ -10,7 +10,9 @@ import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
 import { COLORS } from "../../constants";
 
-const ConfirmPickup = ({ navigation }) => {
+const ConfirmPickup = ({ navigation, route }) => {
+  const { packageItem } = route.params;
+
   return (
     <View style={styles.container}>
       <BackCancelButtons navigation={navigation} />
@@ -19,14 +21,14 @@ const ConfirmPickup = ({ navigation }) => {
         containerStyle={styles.buttonContainer}
         text="Yes"
         onPress={() => {
-          navigation.navigate("DropoffAt");
+          navigation.navigate("DropoffAt", { packageItem: packageItem });
         }}
       />
       <BButton
         containerStyle={styles.buttonContainer}
         text="No"
         onPress={() => {
-          navigation.navigate("PickupPackage");
+          navigation.replace("PickupPackage", { packageItem: packageItem });
         }}
       />
     </View>

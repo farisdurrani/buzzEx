@@ -39,7 +39,7 @@ const TakePictureScreen = ({ navigation, route }) => {
         {
           text: "OK",
           onPress: () => {
-            navigation.navigate(returnScreen);
+            navigation.navigate(returnScreen, route.params);
           },
         },
       ]
@@ -108,7 +108,9 @@ const TakePictureScreen = ({ navigation, route }) => {
                 title="Confirm"
                 bgColor="#00ff0060"
                 onPress={() => {
-                  navigation.navigate(returnScreen, { snapURI: currentSnapURI });
+                  const newRouteParams = route.params;
+                  newRouteParams.snapURI = currentSnapURI;
+                  navigation.navigate(returnScreen, newRouteParams);
                 }}
               />
             </View>
@@ -119,7 +121,7 @@ const TakePictureScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.closeButton}
               onPress={() => {
-                navigation.goBack();
+                navigation.navigate(returnScreen, route.params);
               }}
             >
               <MaterialIcons name="cancel" size={24} color="white" />

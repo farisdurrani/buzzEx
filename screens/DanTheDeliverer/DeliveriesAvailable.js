@@ -63,7 +63,7 @@ const DeliveriesAvailable = ({ navigation }) => {
         <BButton
           text="Accept"
           onPress={async () => {
-            await updateDeliveryStatus(packageItem.id, 2);
+            // await updateDeliveryStatus(packageItem.id, 2);  // TODO REMOVE
             navigation.navigate("PickupScreen", { packageItem: packageItem });
           }}
         />

@@ -18,7 +18,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
   const { receiver_data } = route.params;
 
   const [itemName, setItemName] = useState("Bike");
-  const [itemPrice, setItemPrice] = useState("43");
+  const [itemPrice, setItemPrice] = useState((Math.random() * 50).toString());
 
   let snapURI = null;
 
@@ -35,7 +35,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
       </View>
     );
   };
-  
+
   if (route.params && route.params.snapURI) {
     snapURI = route.params.snapURI;
   }
