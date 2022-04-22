@@ -16,13 +16,16 @@ import { getAllUsers, getUserDetails, getCurrentUser } from "../../firebase";
 
 const Contacts = ({ navigation }) => {
   const [currentUserName, setCurrentUserName] = useState("");
+  const [currentUserDetails, setCurrentUserDetails] = useState({})
   const [nameData, setNameData] = useState([]);
 
   const currentUser = getCurrentUser();
 
   React.useEffect(async () => {
-    const current_name = (await getUserDetails(currentUser.uid)).data.full_name;
+    const userDetails = (await getUserDetails(currentUser.uid)).data
+    const current_name = userDetails.full_name;
     setCurrentUserName(current_name);
+    setCurrentUserDetails(userDetails)
     const allUsersData = await getAllUsers();
       const allUsersDataNames = [];
       allUsersData.forEach((e) => {
@@ -35,6 +38,7 @@ const Contacts = ({ navigation }) => {
             fullname: e.data.full_name,
             uid: e.data.uid,
             email: e.data.email,
+            address: e.data.address
           });
         }
       });
@@ -57,7 +61,7 @@ const Contacts = ({ navigation }) => {
           <Button
             title={item.fullname}
             onPress={() => {
-              navigation.navigate("ItemPrice", { receiver_data: item });
+              navigation.navigate("ItemPrice", { sender_data: currentUserDetails, receiver_data: item });
             }}
           />
         </View>

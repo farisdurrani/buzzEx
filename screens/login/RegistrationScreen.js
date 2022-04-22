@@ -10,6 +10,7 @@ import RadioForm from "react-native-simple-radio-button";
 import { BButton } from "../../components";
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { register_new_user, getRandomCoord } from "../../firebase";
+import * as Location from "expo-location";
 
 const RegistrationScreen = ({ navigation }) => {
   const [fullName, onChangeFullName] = useState("");
@@ -28,6 +29,8 @@ const RegistrationScreen = ({ navigation }) => {
   ];
 
   const handleSignup = async () => {
+    const addressString = addr1 + " " + addr2 + " " + zip + " " + city;
+    const coords = await Location.geocodeAsync(addressString)
     const user_data = {
       full_name: fullName,
       email: email,
@@ -38,7 +41,7 @@ const RegistrationScreen = ({ navigation }) => {
         city: city,
         state: state,
         country: "United States",
-        address_coord: getRandomCoord(),
+        address_coord: [coords.latitude, coords.longitude],
       },
       user_type: userType,
     };
