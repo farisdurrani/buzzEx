@@ -12,12 +12,14 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 import { InputTextField } from "../../components";
+import { getUserDetails } from "../../firebase";
 
 const ItemPriceScreen = ({ navigation, route }) => {
-  const { receiver_uid } = route.params;
+  const { receiver_data } = route.params;
 
   const [itemName, setItemName] = useState("Bike");
   const [itemPrice, setItemPrice] = useState("43");
+
   let snapURI = null;
 
   const ItemDetailGroup = (props) => {
@@ -43,8 +45,8 @@ const ItemPriceScreen = ({ navigation, route }) => {
       <BackCancelButtons navigation={navigation} />
 
       <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.name}>Bob Builder</Text>
-        <Text style={styles.username}>@bobTheBuilder</Text>
+        <Text style={styles.name}>{receiver_data.fullname}</Text>
+        <Text style={styles.username}>{`${receiver_data.email}`}</Text>
       </View>
       <ItemDetailGroup
         title="Item Name"

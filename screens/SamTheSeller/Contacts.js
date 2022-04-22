@@ -23,19 +23,7 @@ const Contacts = ({ navigation }) => {
   React.useEffect(async () => {
     const current_name = (await getUserDetails(currentUser.uid)).data.full_name;
     setCurrentUserName(current_name);
-  }, []);
-
-  const _renderHeader = (params) => {
-    return (
-      <View style={styles.sectionView}>
-        <Text style={styles.sectionText}>{params.key}</Text>
-      </View>
-    );
-  };
-
-  React.useEffect(() => {
-    (async () => {
-      const allUsersData = await getAllUsers();
+    const allUsersData = await getAllUsers();
       const allUsersDataNames = [];
       allUsersData.forEach((e) => {
         const split_name = e.data.full_name.split(" ");
@@ -46,13 +34,21 @@ const Contacts = ({ navigation }) => {
             lastname: split_name[split_name.length - 1],
             fullname: e.data.full_name,
             uid: e.data.uid,
+            email: e.data.email,
           });
         }
       });
       allUsersDataNames.sort((a, b) => a.fullname.localeCompare(b.fullname));
       setNameData(allUsersDataNames);
-    })();
   }, []);
+
+  const _renderHeader = (params) => {
+    return (
+      <View style={styles.sectionView}>
+        <Text style={styles.sectionText}>{params.key}</Text>
+      </View>
+    );
+  };
 
   const _renderItem = (item, index, section) => {
     return (
@@ -61,7 +57,7 @@ const Contacts = ({ navigation }) => {
           <Button
             title={item.fullname}
             onPress={() => {
-              navigation.navigate("ItemPrice", { receiver_uid: item.uid });
+              navigation.navigate("ItemPrice", { receiver_data: item });
             }}
           />
         </View>
