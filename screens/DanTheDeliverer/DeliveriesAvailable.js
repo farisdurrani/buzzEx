@@ -80,7 +80,7 @@ const DeliveriesAvailable = ({ navigation }) => {
       );
     }
     return allAvailableJobs.map((e) => {
-      return <_DeliveryRow packageItem={e} />;
+      return <_DeliveryRow packageItem={e} key={e.id} />;
     });
   };
 
