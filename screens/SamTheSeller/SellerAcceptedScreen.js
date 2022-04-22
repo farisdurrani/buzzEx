@@ -42,8 +42,14 @@ const SellerAcceptedScreen = ({ navigation }) => {
     text = JSON.stringify(location);
   }
   const mapProps = location ? {
-    latitude: location.coords.latitude,
-    longitude: location.coords.longitude,
+    source: {
+      sourceLat: location.coords.latitude,
+      sourceLong: location.coords.longitude,
+    },
+    dest: {
+      destLat: null,
+      destLong: null
+    },
     LATITUDE_DELTA: LATITUDE_DELTA, 
     LONGITUDE_DELTA: LONGITUDE_DELTA,
     style: styles.map

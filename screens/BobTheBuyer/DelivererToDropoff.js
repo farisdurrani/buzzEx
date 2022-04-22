@@ -22,7 +22,7 @@ const DelivererToDropoff = ({ route, navigation }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const { mapProps } = route.params;
   const hasLocationData =
-    mapProps.latitude !== null && mapProps.longitude !== null;
+    mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>

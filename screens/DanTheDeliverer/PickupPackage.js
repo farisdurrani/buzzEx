@@ -26,7 +26,7 @@ const PickupPackage = ({ navigation, route }) => {
   }
 
   const hasLocationData =
-    mapProps && mapProps.latitude !== null && mapProps.longitude !== null;
+    mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
 
   return (
     <View style={styles.container}>

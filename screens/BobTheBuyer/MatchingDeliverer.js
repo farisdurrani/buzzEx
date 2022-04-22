@@ -43,12 +43,18 @@ const MatchingDeliverer = ({ navigation }) => {
   }
   const mapProps = location
     ? {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        LATITUDE_DELTA: LATITUDE_DELTA,
-        LONGITUDE_DELTA: LONGITUDE_DELTA,
-        style: styles.map,
-      }
+      source: {
+        sourceLat: location.coords.latitude,
+        sourceLong: location.coords.longitude,
+      },
+      dest: {
+        destLat: null,
+        destLong: null
+      },
+      LATITUDE_DELTA: LATITUDE_DELTA, 
+      LONGITUDE_DELTA: LONGITUDE_DELTA,
+      style: styles.map
+    }
     : null;
 
   return (
