@@ -6,57 +6,64 @@ import {
   KeyboardAvoidingView,
   Image,
   TextInput,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 
-let {width, height} = Dimensions.get('window') //Screen dimensions
-const ASPECT_RATIO = width/height
-const LATITUDE_DELTA = 0.04  // Controls the zoom level of the map. Smaller means more zoomed in
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO // Dependent on LATITUDE_DELTA
+let { width, height } = Dimensions.get("window"); //Screen dimensions
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const SellerAcceptedScreen = ({ navigation, route }) => {
+  const { deliveryItem } = route.params;
+
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const { packageItemData } = route.params;
-  const { destination_address, source_address }= packageItemData;
+
+  const { destination_address, source_address } = deliveryItem.data;
+
+  const [sourceLat, sourceLong] = [
+    source_address.address.address_coord.latitude,
+    source_address.address.address_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    destination_address.address.address_coord.latitude,
+    destination_address.address.address_coord.longitude,
+  ];
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
         return;
       }
       let location = await Location.getLastKnownPositionAsync({});
       setLocation(location);
     })();
   }, []);
-  
-  let text = 'Getting Current Location..';
+
+  let text = "Getting Current Location..";
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
     text = JSON.stringify(location);
   }
-  const mapProps = location ? {
-    source: {
-      sourceLat: source_address.latitude,
-      sourceLong: source_address.longitude,
-    },
-    dest: {
-      destLat: destination_address.latitude,
-      destLong: destination_address.latitude,
-    },
-    LATITUDE_DELTA: LATITUDE_DELTA, 
-    LONGITUDE_DELTA: LONGITUDE_DELTA,
-    style: styles.map
-  } : null
-  console.log(mapProps)
+  const mapProps = location
+    ? {
+        source: { sourceLat: sourceLat, sourceLong: sourceLong },
+        dest: { destLat: destinationLat, destLong: destinationLong },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
+  console.log(mapProps);
 
   return (
     <View style={styles.mainContainer}>
@@ -79,18 +86,18 @@ const SellerAcceptedScreen = ({ navigation, route }) => {
       </View>
 
       <View style={{ marginTop: 60 }}>
-        {
-          location ? <BButton
+        {location ? (
+          <BButton
             text="Continue"
             onPress={() => {
               navigation.navigate("DelivererToPickup", {
-                mapProps: mapProps
+                mapProps: mapProps,
               });
             }}
-           />
-          : <Text> Loading location data...</Text>
-        }
-        
+          />
+        ) : (
+          <Text> Loading location data...</Text>
+        )}
       </View>
     </View>
   );
