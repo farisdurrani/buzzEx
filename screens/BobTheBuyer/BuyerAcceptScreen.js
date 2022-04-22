@@ -9,15 +9,26 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components";
 import { COLORS } from "../../constants";
+import { getUserDetails } from "../../firebase";
 
 const BuyerAcceptScreen = ({ navigation, route }) => {
   const { deliveryRequests } = route.params;
+  const [senderDetails, setSenderDetails] = useState({})
+  const [receiverDetails, setReceiverDetails] = useState({})
+
+  useEffect(async () => {
+    const senderDetails = (await getUserDetails(deliveryRequests[0].data.sender_uid)).data
+    const receiverDetails = (await getUserDetails(deliveryRequests[0].data.receiver_uid)).data
+    setSenderDetails(senderDetails)
+    setReceiverDetails(receiverDetails)
+  }, []);
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.container}>
-        <Text style={styles.greeting}>Hi Bob!</Text>
+        <Text style={styles.greeting}>Hi {receiverDetails.full_name}!</Text>
         <Text style={styles.query1}>
-          Sally would like to send you a package!
+          {senderDetails.full_name} would like to send you a package!
         </Text>
         <Text style={styles.query2}>Would you like to accept the package?</Text>
         <BButton
