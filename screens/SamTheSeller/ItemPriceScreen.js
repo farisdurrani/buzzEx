@@ -84,7 +84,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
         text="Continue"
         onPress={() =>
           navigation.navigate("SellerConfirm", {
-            receiver_uid: receiver_uid,
+            receiver_uid: receiver_data.uid,
             itemName: itemName ? itemName : "Bike",
             itemPrice: itemPrice && !isNaN(itemPrice) ? Number(itemPrice) : 12,
             snapURI: snapURI,
