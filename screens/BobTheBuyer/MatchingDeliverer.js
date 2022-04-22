@@ -70,7 +70,7 @@ const MatchingDeliverer = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.heading}>
-          <Text style={styles.lineone}> {currentDelivery.status} Matching Deliverer...</Text>
+          <Text style={styles.lineone}>  Matching Deliverer...</Text>
         </View>
 
         {hasLocationData ? (
