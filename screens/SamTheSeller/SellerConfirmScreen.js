@@ -20,12 +20,7 @@ import {
 } from "../../firebase";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
-  const {
-    receiver_uid,
-    itemName,
-    itemPrice,
-    snapURI,
-  } = route.params;
+  const { receiver_uid, itemName, itemPrice, snapURI } = route.params;
   const DELIVERY_FEE = 2.31;
   const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
 
@@ -62,8 +57,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         },
         receiver_uid: receiver_uid,
         sender_uid: currentUserID,
-        // source_address: null,
-        // destination_address: null,
+        // source_address: null,  // Idk how to add the sender's address here...
+        // destination_address: null,  // Idk how to add the receiver's address here...
       };
       addNewDeliveryJob(packageItemData);
     };
