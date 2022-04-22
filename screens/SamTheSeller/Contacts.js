@@ -16,34 +16,36 @@ import { getAllUsers, getUserDetails, getCurrentUser } from "../../firebase";
 
 const Contacts = ({ navigation }) => {
   const [currentUserName, setCurrentUserName] = useState("");
-  const [currentUserDetails, setCurrentUserDetails] = useState({})
+  const [senderItem, setSenderItem] = useState();
   const [nameData, setNameData] = useState([]);
 
   const currentUser = getCurrentUser();
 
   React.useEffect(async () => {
-    const userDetails = (await getUserDetails(currentUser.uid)).data
-    const current_name = userDetails.full_name;
+    const userSenderItem = await getUserDetails(currentUser.uid);
+    setSenderItem(userSenderItem);
+    const senderData = userSenderItem.data;
+    const current_name = senderData.full_name;
     setCurrentUserName(current_name);
-    setCurrentUserDetails(userDetails)
     const allUsersData = await getAllUsers();
-      const allUsersDataNames = [];
-      allUsersData.forEach((e) => {
-        const split_name = e.data.full_name.split(" ");
-        if (e.data.user_type === "Buyer/Seller") {
-          allUsersDataNames.push({
-            name: split_name[0],
-            firstname: split_name[0],
-            lastname: split_name[split_name.length - 1],
-            fullname: e.data.full_name,
-            uid: e.data.uid,
-            email: e.data.email,
-            address: e.data.address
-          });
-        }
-      });
-      allUsersDataNames.sort((a, b) => a.fullname.localeCompare(b.fullname));
-      setNameData(allUsersDataNames);
+    const allUsersDataNames = [];
+    allUsersData.forEach((e) => {
+      const split_name = e.data.full_name.split(" ");
+      if (e.data.user_type === "Buyer/Seller") {
+        allUsersDataNames.push({
+          name: split_name[0],
+          firstname: split_name[0],
+          lastname: split_name[split_name.length - 1],
+          fullname: e.data.full_name,
+          uid: e.data.uid,
+          email: e.data.email,
+          address: e.data.address,
+          receiverItem: e,
+        });
+      }
+    });
+    allUsersDataNames.sort((a, b) => a.fullname.localeCompare(b.fullname));
+    setNameData(allUsersDataNames);
   }, []);
 
   const _renderHeader = (params) => {
@@ -61,7 +63,10 @@ const Contacts = ({ navigation }) => {
           <Button
             title={item.fullname}
             onPress={() => {
-              navigation.navigate("ItemPrice", { sender_data: currentUserDetails, receiver_data: item });
+              navigation.navigate("ItemPrice", {
+                senderItem: senderItem,
+                receiverItem: item.receiverItem,
+              });
             }}
           />
         </View>
