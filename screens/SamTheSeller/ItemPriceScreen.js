@@ -12,10 +12,14 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 import { InputTextField } from "../../components";
+import { getUserDetails } from "../../firebase";
 
 const ItemPriceScreen = ({ navigation, route }) => {
-  const [itemName, setItemName] = useState("");
-  const [itemPrice, setItemPrice] = useState("");
+  const { receiver_data } = route.params;
+
+  const [itemName, setItemName] = useState("Bike");
+  const [itemPrice, setItemPrice] = useState("43");
+
   let snapURI = null;
 
   const ItemDetailGroup = (props) => {
@@ -41,8 +45,8 @@ const ItemPriceScreen = ({ navigation, route }) => {
       <BackCancelButtons navigation={navigation} />
 
       <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.name}>{route.params.receiver_data.fullname}</Text>
-        <Text style={styles.username}>{route.params.receiver_data.email}</Text>
+        <Text style={styles.name}>{receiver_data.fullname}</Text>
+        <Text style={styles.username}>{receiver_data.email}</Text>
       </View>
       <ItemDetailGroup
         title="Item Name"
@@ -80,6 +84,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
         text="Continue"
         onPress={() =>
           navigation.navigate("SellerConfirm", {
+            receiver_uid: receiver_uid,
             itemName: itemName ? itemName : "Bike",
             itemPrice: itemPrice && !isNaN(itemPrice) ? Number(itemPrice) : 12,
             snapURI: snapURI,

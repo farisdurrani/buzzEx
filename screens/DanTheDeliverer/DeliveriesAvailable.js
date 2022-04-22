@@ -7,18 +7,22 @@ import { COLORS, LAYOUT } from "../../constants";
 import { TextInput } from "react-native";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { InputTextField } from "../../components";
-import { getJobs, getUserDetails, getCurrentUser } from "../../firebase";
+import {
+  getJobs,
+  getUserDetails,
+  getCurrentUser,
+  updateDeliveryStatus,
+} from "../../firebase";
 
 const DeliveriesAvailable = ({ navigation }) => {
   const [deliverer, setDeliverer] = useState("");
-  const item_list = ["Bike", "Robot", "Laptop", "PS5", "Atari"];
   const [zipcode, setZipcode] = useState("30332");
   const [allAvailableJobs, setAllAvailableJobs] = useState([]);
 
   React.useEffect(async () => {
     const current_name = (
       await getUserDetails(getCurrentUser().uid)
-    ).data.user_name.split(" ")[0];
+    ).data.full_name.split(" ")[0];
     setDeliverer(current_name);
 
     const available_jobs = await getJobs(1);
@@ -26,7 +30,7 @@ const DeliveriesAvailable = ({ navigation }) => {
   }, []);
 
   const _DeliveryRow = (props) => {
-    const { item, distance } = props;
+    const { packageItem } = props;
 
     const stylesRow = StyleSheet.create({
       container: {
@@ -53,15 +57,31 @@ const DeliveriesAvailable = ({ navigation }) => {
     return (
       <View style={stylesRow.container}>
         <View style={stylesRow.itemDetailGroup}>
-          <Text style={stylesRow.text}>{item}</Text>
-          <Text style={stylesRow.text}>{distance}</Text>
+          <Text style={stylesRow.text}>{packageItem.data.package.name}</Text>
+          <Text style={stylesRow.text}>5 miles</Text>
         </View>
         <BButton
           text="Accept"
-          onPress={() => navigation.navigate("PickupScreen")}
+          onPress={async () => {
+            await updateDeliveryStatus(packageItem.id, 2);
+            navigation.navigate("PickupScreen", { packageItem: packageItem });
+          }}
         />
       </View>
     );
+  };
+
+  const _AllDeliveryRows = () => {
+    if (allAvailableJobs.length === 0) {
+      return (
+        <View>
+          <Text>No deliveries available...</Text>
+        </View>
+      );
+    }
+    return allAvailableJobs.map((e) => {
+      return <_DeliveryRow packageItem={e} />;
+    });
   };
 
   return (
@@ -78,9 +98,7 @@ const DeliveriesAvailable = ({ navigation }) => {
         setTextState={setZipcode}
       />
       <View style={styles.inputContainer}>
-        <_DeliveryRow item="Guitar" distance="5 miles" />
-        <_DeliveryRow item="Drill" distance="8 miles" />
-        <_DeliveryRow item="Bike" distance="3 miles" />
+        <_AllDeliveryRows />
       </View>
     </KeyboardAvoidingView>
   );
