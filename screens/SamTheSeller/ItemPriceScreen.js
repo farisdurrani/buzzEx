@@ -14,8 +14,10 @@ import { COLORS, LAYOUT } from "../../constants";
 import { InputTextField } from "../../components";
 
 const ItemPriceScreen = ({ navigation, route }) => {
-  const [itemName, setItemName] = useState("");
-  const [itemPrice, setItemPrice] = useState("");
+  const { receiver_uid } = route.params;
+
+  const [itemName, setItemName] = useState("Bike");
+  const [itemPrice, setItemPrice] = useState("43");
   let snapURI = null;
 
   const ItemDetailGroup = (props) => {
@@ -80,6 +82,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
         text="Continue"
         onPress={() =>
           navigation.navigate("SellerConfirm", {
+            receiver_uid: receiver_uid,
             itemName: itemName ? itemName : "Bike",
             itemPrice: itemPrice && !isNaN(itemPrice) ? Number(itemPrice) : 12,
             snapURI: snapURI,

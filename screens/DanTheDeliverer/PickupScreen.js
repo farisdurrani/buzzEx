@@ -12,8 +12,10 @@ import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
-const PickupScreen = ({ navigation }) => {
-  const ChoiceRow = (props) => {
+const PickupScreen = ({ navigation, route }) => {
+  const { packageItem } = route.params;
+
+  const _ChoiceRow = (props) => {
     const { choice } = props;
 
     const stylesRow = StyleSheet.create({
@@ -31,7 +33,7 @@ const PickupScreen = ({ navigation }) => {
         display: "flex",
         flexDirection: "row",
         width: "60%",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
       },
       text: {
         fontSize: 23,
@@ -49,12 +51,9 @@ const PickupScreen = ({ navigation }) => {
             navigation.navigate("PickupPackage");
           }}
         />
-
       </View>
     );
   };
-
-
 
   return (
     <View style={styles.container}>
@@ -69,9 +68,8 @@ const PickupScreen = ({ navigation }) => {
         <Text style={styles.address}>Atlanta, GA 30318</Text>
       </View>
 
-      <ChoiceRow choice="Google Maps" />
-      <ChoiceRow choice="Waze" />
-
+      <_ChoiceRow choice="Google Maps" />
+      <_ChoiceRow choice="Waze" />
     </View>
   );
 };

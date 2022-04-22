@@ -15,11 +15,13 @@ import { COLORS, LAYOUT } from "../../constants";
 import { getAllUsers, getUserDetails, getCurrentUser } from "../../firebase";
 
 const Contacts = ({ navigation }) => {
-  const [currentUserName, setCurrentUserName] = React.useState("");
+  const [currentUserName, setCurrentUserName] = useState("");
+  const [nameData, setNameData] = useState([]);
+
   const currentUser = getCurrentUser();
 
   React.useEffect(async () => {
-    const current_name = (await getUserDetails(currentUser.uid)).data.user_name;
+    const current_name = (await getUserDetails(currentUser.uid)).data.full_name;
     setCurrentUserName(current_name);
   }, []);
 
@@ -31,23 +33,26 @@ const Contacts = ({ navigation }) => {
     );
   };
 
-  const [nameData, setNameData] = useState([]);
-
-  (async () => {
-    const allUsersData = await getAllUsers();
-    const allUsersDataNames = [];
-    allUsersData.forEach((e) => {
-      const split_name = e.data.user_name.split(" ");
-      allUsersDataNames.push({
-        name: split_name[0],
-        firstname: split_name[0],
-        lastname: split_name[split_name.length - 1],
-        fullname: e.data.user_name,
-        uid: e.data.uid,
+  React.useEffect(() => {
+    (async () => {
+      const allUsersData = await getAllUsers();
+      const allUsersDataNames = [];
+      allUsersData.forEach((e) => {
+        const split_name = e.data.full_name.split(" ");
+        if (e.data.user_type === "Buyer/Seller") {
+          allUsersDataNames.push({
+            name: split_name[0],
+            firstname: split_name[0],
+            lastname: split_name[split_name.length - 1],
+            fullname: e.data.full_name,
+            uid: e.data.uid,
+          });
+        }
       });
-    });
-    setNameData(allUsersDataNames);
-  })();
+      allUsersDataNames.sort((a, b) => a.fullname.localeCompare(b.fullname));
+      setNameData(allUsersDataNames);
+    })();
+  }, []);
 
   const _renderItem = (item, index, section) => {
     return (
@@ -56,8 +61,7 @@ const Contacts = ({ navigation }) => {
           <Button
             title={item.fullname}
             onPress={() => {
-              const receiver_uid = nameData[index].uid;
-              navigation.navigate("ItemPrice", { receiver_uid: receiver_uid });
+              navigation.navigate("ItemPrice", { receiver_uid: item.uid });
             }}
           />
         </View>

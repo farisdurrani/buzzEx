@@ -9,7 +9,7 @@ import {
 import RadioForm from "react-native-simple-radio-button";
 import { BButton } from "../../components";
 import { Input, Button, Text, useTheme } from "react-native-elements";
-import { addUser, register_new_user } from "../../firebase";
+import { register_new_user, getRandomCoord } from "../../firebase";
 
 const RegistrationScreen = ({ navigation }) => {
   const [fullName, onChangeFullName] = useState("");
@@ -28,15 +28,18 @@ const RegistrationScreen = ({ navigation }) => {
   ];
 
   const handleSignup = async () => {
-    _showSuccessRegisterToast();
     const user_data = {
-      user_name: fullName,
-      user_email: email,
-      user_addr1: addr1,
-      user_addr2: addr2,
-      user_zip: zip,
-      user_city: city,
-      user_state: state,
+      full_name: fullName,
+      email: email,
+      address: {
+        line1: addr1,
+        line2: addr2,
+        zip: zip,
+        city: city,
+        state: state,
+        country: "United States",
+        address_coord: getRandomCoord(),
+      },
       user_type: userType,
     };
     register_new_user(email, password, user_data);

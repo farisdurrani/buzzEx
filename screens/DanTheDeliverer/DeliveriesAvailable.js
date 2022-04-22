@@ -16,14 +16,13 @@ import {
 
 const DeliveriesAvailable = ({ navigation }) => {
   const [deliverer, setDeliverer] = useState("");
-  const item_list = ["Bike", "Robot", "Laptop", "PS5", "Atari"];
   const [zipcode, setZipcode] = useState("30332");
   const [allAvailableJobs, setAllAvailableJobs] = useState([]);
 
   React.useEffect(async () => {
     const current_name = (
       await getUserDetails(getCurrentUser().uid)
-    ).data.user_name.split(" ")[0];
+    ).data.full_name.split(" ")[0];
     setDeliverer(current_name);
 
     const available_jobs = await getJobs(1);

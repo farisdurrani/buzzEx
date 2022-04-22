@@ -16,10 +16,16 @@ import {
   getCurrentTimestamp,
   generateGeolocation,
   getCurrentUser,
+  getUserDetails,
 } from "../../firebase";
 
 const SellerConfirmScreen = ({ navigation, route }) => {
-  const { itemName, itemPrice, snapURI } = route.params;
+  const {
+    receiver_uid,
+    itemName,
+    itemPrice,
+    snapURI,
+  } = route.params;
   const DELIVERY_FEE = 2.31;
   const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
 
@@ -35,41 +41,39 @@ const SellerConfirmScreen = ({ navigation, route }) => {
     );
   };
 
-  const _saveDeliveryJob = () => {
-    addNewDeliveryJob({
-      createdAt: getCurrentTimestamp(),
-      currency: "USD",
-      deliverer_location: null,
-      deliverer_uid: null,
-      destinaton: generateGeolocation(79, 79),
-      status: 0,
-      timestamp: getCurrentTimestamp(),
-      package: {
-        name: itemName,
-        base_price: itemPrice,
-        delivery_fee: DELIVERY_FEE,
-        sender_photoURL: null,
-        tax: 2.3,
-        tip: 0,
-      },
-      receiver_uid: "k2BHY0Hd3iWDPFdZ2HYNnIDdnga2",
-      sender_uid: getCurrentUser().uid,
-      source: generateGeolocation(89, 89),
-    });
+  const _saveDeliveryJob = (receiver_uid) => {
+    const currentUserID = getCurrentUser().uid;
+    const addNewDeliveryJobToDB = async () => {
+      const packageItemData = {
+        createdAt: getCurrentTimestamp(),
+        currency: "USD",
+        deliverer_location: null,
+        deliverer_uid: null,
+        status: 0,
+        timestamp: getCurrentTimestamp(),
+        package: {
+          name: itemName,
+          base_price: itemPrice,
+          delivery_fee: DELIVERY_FEE,
+          sender_given_photoURL: null,
+          deliverer_given_photoURL: null,
+          tax: Math.random() * 5,
+          tip: 0,
+        },
+        receiver_uid: receiver_uid,
+        sender_uid: currentUserID,
+        // source_address: null,
+        // destination_address: null,
+      };
+      addNewDeliveryJob(packageItemData);
+    };
+    addNewDeliveryJobToDB();
   };
 
   const _PriceItem = (props) => {
     const { itemName, price, bold } = props;
-    const stylesPI = StyleSheet.create({
-      mainContainer: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: COLORS.transparent_gray,
-        padding: 10,
-        width: 300,
-      },
+
+    const stylesPIText = StyleSheet.create({
       text: {
         fontWeight: bold ? "bold" : "normal",
         fontSize: 20,
@@ -77,8 +81,8 @@ const SellerConfirmScreen = ({ navigation, route }) => {
     });
     return (
       <View style={stylesPI.mainContainer}>
-        <Text style={stylesPI.text}>{itemName}</Text>
-        <Text style={stylesPI.text}>{price}</Text>
+        <Text style={stylesPIText.text}>{itemName}</Text>
+        <Text style={stylesPIText.text}>{price}</Text>
       </View>
     );
   };
@@ -112,12 +116,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
             }}
           >
             {snapURI ? (
-              <Image
-                style={styles.picture}
-                source={{
-                  uri: snapURI,
-                }}
-              />
+              <Image style={styles.picture} source={{ uri: snapURI }} />
             ) : (
               <AntDesign name="camera" size={50} color={COLORS.primary_red} />
             )}
@@ -144,7 +143,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         text="Confirm"
         onPress={() => {
           navigation.navigate("SellerAwaiting");
-          _saveDeliveryJob();
+          _saveDeliveryJob(receiver_uid);
         }}
       />
     </View>
@@ -212,5 +211,17 @@ const styles = StyleSheet.create({
   receiverText: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+});
+
+const stylesPI = StyleSheet.create({
+  mainContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: COLORS.transparent_gray,
+    padding: 10,
+    width: 300,
   },
 });

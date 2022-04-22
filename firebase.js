@@ -106,7 +106,7 @@ export function register_new_user(email, password, user_data) {
       console.log(`User ${userCredential.user.email} registered`);
       user_data.uid = userCredential.user.uid;
       (async () => {
-        await addUser(user_data);
+        await _addUser(user_data);
       })();
       console.log(`Data for user ${userCredential.user.email} registered`);
     })
@@ -129,7 +129,7 @@ export function getCurrentUser() {
   return getAuth().currentUser;
 }
 
-export async function addUser(data) {
+async function _addUser(data) {
   await setDoc(doc(db, users, data.uid), data);
   return;
 }
@@ -154,7 +154,8 @@ export function generateGeolocation(lat, long) {
  * @returns the current timestamp
  */
 export function getCurrentTimestamp() {
-  return serverTimestamp();
+  const time = serverTimestamp();
+  return time;
 }
 
 export async function getJob(jobID) {
@@ -169,12 +170,12 @@ export async function addNewDeliveryJob(jobData) {
 /**
  * Returns a JSON object of all jobs matching the status
  *
- * @param {Number} 
- * status 
- * 0: initialized, 
- * 1: accepted and ready to pick-up, 
- * 2: deliverer booked, 
- * 3: picked-up, 
+ * @param {Number}
+ * status
+ * 0: initialized,
+ * 1: accepted and ready to pick-up,
+ * 2: deliverer booked,
+ * 3: picked-up,
  * 4: delivered
  * @param {Array} add_queries additional queries
  * @returns all delivery jobs with that status in an array of job objects
@@ -234,7 +235,7 @@ export async function getJobs(status, add_queries = []) {
 export async function updateDeliveryStatus(jobID, status, new_package = null) {
   if (new_package) {
     await updateDeliveryJob(jobID, {
-      package: package_data,
+      package: new_package,
       status: status,
     });
     return;
@@ -261,8 +262,20 @@ export async function setToReadyToPickup(jobID, tip) {
  * @param {string} jobID ID of the Firestore document
  * @param {Object} updates an object containing all the intended modifications
  */
-async function updateDeliveryJob(jobID, updates) {
+export async function updateDeliveryJob(jobID, updates) {
   const docRef = doc(db, delivery_jobs, jobID);
   updates.timestamp = getCurrentTimestamp();
   await updateDoc(docRef, updates);
+}
+
+/**
+ *
+ * @returns a random GeoPoint coordinate between [-90, -90] and [90, 90]
+ */
+export function getRandomCoord() {
+  const min = -90,
+    max = 90;
+  const lat = Math.random() * (max - min) + min;
+  const long = Math.random() * (max - min) + min;
+  return generateGeolocation(lat, long);
 }
