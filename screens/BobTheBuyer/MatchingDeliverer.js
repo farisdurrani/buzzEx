@@ -19,37 +19,21 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const MatchingDeliverer = ({ navigation }) => {
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+const MatchingDeliverer = ({ navigation, route }) => {
+  const { deliveryRequests } = route.params;
+  console.log(deliveryRequests[0])
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-      let location = await Location.getLastKnownPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
-
-  let text = "Getting Current Location..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-  const mapProps = location
+  const {destination_address, source_address} = deliveryRequests[0].data
+  const hasLocationData = source_address && destination_address
+  const mapProps = hasLocationData
     ? {
       source: {
-        sourceLat: location.coords.latitude,
-        sourceLong: location.coords.longitude,
+        sourceLat: source_address.latitude,
+        sourceLong: source_address.longitude,
       },
       dest: {
-        destLat: null,
-        destLong: null
+        destLat: destination_address.latitude,
+        destLong: destination_address.longitude,
       },
       LATITUDE_DELTA: LATITUDE_DELTA, 
       LONGITUDE_DELTA: LONGITUDE_DELTA,
@@ -74,7 +58,7 @@ const MatchingDeliverer = ({ navigation }) => {
         <Text style={styles.lineone}> Matching Deliverer...</Text>
       </View>
 
-      {location ? (
+      {hasLocationData ? (
         <MapComponent mapProps={mapProps} />
       ) : (
         <Text style={styles.paragraph}>Loading Map...</Text>
@@ -85,6 +69,7 @@ const MatchingDeliverer = ({ navigation }) => {
           onPress={() =>
             navigation.navigate("Matched", {
               mapProps: mapProps,
+              deliveryRequests: deliveryRequests
             })
           }
           containerStyle={{

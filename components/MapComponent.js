@@ -19,6 +19,7 @@ const MapComponent = (props) => {
   const {sourceLat, sourceLong} = source;
   const {destLat, destLong} = dest;
   console.log(sourceLat, sourceLong)
+  console.log(destLat, destLong)
 
 
   return (
@@ -27,10 +28,10 @@ const MapComponent = (props) => {
       provider={PROVIDER_GOOGLE}
       showsUserLocation
       initialRegion={{
-        latitude: sourceLat,
-        longitude: sourceLong,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
+        latitude: (sourceLat + destLat) / 2,
+        longitude: (sourceLong + destLong) / 2,
+        latitudeDelta: Math.abs(sourceLat - destLat),
+        longitudeDelta: Math.abs(sourceLong - destLong)
       }}
     >
       <Marker
@@ -41,7 +42,7 @@ const MapComponent = (props) => {
       />
       <Marker
         key={1}
-        coordinate={{ latitude :  sourceLat + .001 , longitude : sourceLong + .001}}
+        coordinate={{ latitude :  destLat, longitude : destLong}}
         title={"Pickup/Dropoff"}
         description={"Pickup/Dropoff Location"}
       />

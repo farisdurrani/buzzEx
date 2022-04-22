@@ -98,7 +98,7 @@ const PaymentScreen = ({ navigation, route }) => {
         onPress={() => {
           const setPackageToReady = async () => {
             await setToReadyToPickup(deliveryRequests[0].id, tip);
-            navigation.navigate("MatchingDeliverer");
+            navigation.navigate("MatchingDeliverer", {deliveryRequests: deliveryRequests});
           };
           setPackageToReady();
         }}
