@@ -31,7 +31,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
       </View>
     );
   };
-
+  
   if (route.params && route.params.snapURI) {
     snapURI = route.params.snapURI;
   }
@@ -41,8 +41,8 @@ const ItemPriceScreen = ({ navigation, route }) => {
       <BackCancelButtons navigation={navigation} />
 
       <View style={LAYOUT.centerMiddle}>
-        <Text style={styles.name}>Bob Builder</Text>
-        <Text style={styles.username}>@bobTheBuilder</Text>
+        <Text style={styles.name}>{route.params.receiver_data.fullname}</Text>
+        <Text style={styles.username}>{route.params.receiver_data.email}</Text>
       </View>
       <ItemDetailGroup
         title="Item Name"
