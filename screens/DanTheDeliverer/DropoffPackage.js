@@ -19,7 +19,7 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const DeliveryComplete = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const { receiverItem, packageItem } = route.params;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   let mapProps = null;
@@ -65,6 +65,7 @@ const DeliveryComplete = ({ navigation, route }) => {
           onPress={() =>
             navigation.navigate("PictureDropoff", {
               mapProps: mapProps,
+              receiverItem: receiverItem,
               packageItem: packageItem,
             })
           }

@@ -65,7 +65,7 @@ const ItemPriceScreen = ({ navigation, route }) => {
         <TouchableOpacity
           style={[styles.cameraButton, LAYOUT.centerMiddle]}
           onPress={() => {
-            navigation.navigate("TakePicture", { returnScreen: "ItemPrice" });
+            navigation.navigate("TakePicture", { nextScreen: "ItemPrice" });
           }}
         >
           {snapURI ? (

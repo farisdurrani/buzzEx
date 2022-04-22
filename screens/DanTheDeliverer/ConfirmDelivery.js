@@ -1,10 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { BackCancelButtons, BButton } from "../../components";
-import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
 const ConfirmDelivery = ({ navigation, route }) => {
+  const { receiverItem, packageItem } = route.params;
+
   let snapURI = null;
 
   if (route.params && route.params.snapURI) {
@@ -22,23 +23,23 @@ const ConfirmDelivery = ({ navigation, route }) => {
           style={[styles.pictureContainer, LAYOUT.centerMiddle]}
           onPress={() => {
             navigation.navigate("TakePicture", {
-              returnScreen: "ConfirmDelivery",
+              nextScreen: "ConfirmDelivery",
             });
           }}
         >
           <Image
             style={styles.picture}
-            source={{
-              uri: route.params.snapURI,
-            }}
+            source={{ uri: route.params.snapURI }}
           />
         </TouchableOpacity>
       </View>
       <BButton
         text="Confirm"
         onPress={() =>
-          navigation.navigate("DeliveryComplete", {
+          navigation.replace("DeliveryComplete", {
             homeScreen: "DeliveriesAvailable",
+            receiverItem: receiverItem,
+            packageItem: packageItem,
           })
         }
       />

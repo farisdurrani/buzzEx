@@ -16,6 +16,7 @@ import { getUserDetails } from "../../firebase";
 const DropoffAt = ({ navigation, route }) => {
   const { packageItem } = route.params;
 
+  const [receiverItem, setReceiverItem] = useState();
   const [addr1, setAddr1] = useState("");
   const [addr2, setAddr2] = useState("");
   const [city, setCity] = useState("");
@@ -24,7 +25,9 @@ const DropoffAt = ({ navigation, route }) => {
 
   useEffect(async () => {
     const receiver_uid = packageItem.data.receiver_uid;
-    const sender_address = (await getUserDetails(receiver_uid)).data.address;
+    const receiver_in_package = await getUserDetails(receiver_uid);
+    const sender_address = receiverItem.data.address;
+    setReceiverItem(receiver_in_package);
     setAddr1(sender_address.line1);
     setAddr2(sender_address.line2);
     setCity(sender_address.city);
@@ -43,7 +46,10 @@ const DropoffAt = ({ navigation, route }) => {
         <BButton
           text="Go"
           onPress={() => {
-            navigation.navigate("DropoffPackage", { packageItem: packageItem });
+            navigation.navigate("DropoffPackage", {
+              receiverItem: receiverItem,
+              packageItem: packageItem,
+            });
           }}
         />
       </View>

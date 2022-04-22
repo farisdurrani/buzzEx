@@ -5,7 +5,7 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
 const PictureDropoff = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const { receiverItem, packageItem } = route.params;
 
   return (
     <View style={styles.mainContainer}>
@@ -21,8 +21,9 @@ const PictureDropoff = ({ navigation, route }) => {
           style={[styles.cameraButton, LAYOUT.centerMiddle]}
           onPress={() => {
             navigation.navigate("TakePicture", {
-              returnScreen: "ConfirmDelivery",
+              nextScreen: "ConfirmDelivery",
               packageItem: packageItem,
+              receiverItem: receiverItem,
             });
           }}
         >
