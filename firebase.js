@@ -169,7 +169,13 @@ export async function addNewDeliveryJob(jobData) {
 /**
  * Returns a JSON object of all jobs matching the status
  *
- * @param {Number} status 0: initialized, 1: accepted and ready to pick-up, 2: deliverer booked, 4: picked-up, 5: delivered
+ * @param {Number} 
+ * status 
+ * 0: initialized, 
+ * 1: accepted and ready to pick-up, 
+ * 2: deliverer booked, 
+ * 3: picked-up, 
+ * 4: delivered
  * @param {Array} add_queries additional queries
  * @returns all delivery jobs with that status in an array of job objects
  */
@@ -225,13 +231,15 @@ export async function getJobs(status, add_queries = []) {
  * @param {Number} status
  * @param {Object} new_package New package that will be replacing the old package, in case of any changes. If none is defined, no changes to the old package will be made.
  */
-export async function updateDeliveryStatus(jobID, status, new_package) {
-  const package_data = new_package
-    ? new_package
-    : (await getJob(jobID)).data.package;
-
+export async function updateDeliveryStatus(jobID, status, new_package = null) {
+  if (new_package) {
+    await updateDeliveryJob(jobID, {
+      package: package_data,
+      status: status,
+    });
+    return;
+  }
   await updateDeliveryJob(jobID, {
-    package: package_data,
     status: status,
   });
 }
