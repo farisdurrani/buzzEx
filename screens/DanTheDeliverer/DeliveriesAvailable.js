@@ -64,6 +64,19 @@ const DeliveriesAvailable = ({ navigation }) => {
     );
   };
 
+  const _AllDeliveryRows = () => {
+    if (allAvailableJobs.length === 0) {
+      return (
+        <View>
+          <Text>No deliveries available...</Text>
+        </View>
+      );
+    }
+    return allAvailableJobs.map((e) => {
+      return <_DeliveryRow item={e.data.package.name} distance="5 miles" />;
+    });
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <BackCancelButtons navigation={navigation} />
@@ -78,9 +91,7 @@ const DeliveriesAvailable = ({ navigation }) => {
         setTextState={setZipcode}
       />
       <View style={styles.inputContainer}>
-        <_DeliveryRow item="Guitar" distance="5 miles" />
-        <_DeliveryRow item="Drill" distance="8 miles" />
-        <_DeliveryRow item="Bike" distance="3 miles" />
+        <_AllDeliveryRows />
       </View>
     </KeyboardAvoidingView>
   );
