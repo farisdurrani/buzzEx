@@ -13,6 +13,7 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 import MapComponent from "../../components/MapComponent";
 import * as Location from "expo-location";
+import {onDeliveryUpdate} from "../../firebase";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -21,9 +22,14 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 
 const MatchingDeliverer = ({ navigation, route }) => {
   const { deliveryRequests } = route.params;
-  console.log(deliveryRequests[0])
+  const [currentDelivery, setCurrentDelivery] = useState(deliveryRequests[0].data)
+  const [deliveryID, setDeliveryID] = useState(deliveryRequests[0].id)
 
-  const {destination_address, source_address} = deliveryRequests[0].data
+  useEffect(() => { 
+    onDeliveryUpdate(deliveryID, setCurrentDelivery)
+  }, []);
+
+  const {destination_address, source_address} = currentDelivery
   const hasLocationData = source_address && destination_address
   const mapProps = hasLocationData
     ? {
@@ -40,47 +46,57 @@ const MatchingDeliverer = ({ navigation, route }) => {
       style: styles.map
     }
     : null;
+  
+    useEffect(()=> {
+      if (currentDelivery.status == "2") {
+        navigation.navigate("Matched", {
+          mapProps: mapProps,
+          currentDelivery: currentDelivery,
+          deliveryID: deliveryID
+        })
+      }
+    }, [currentDelivery])
+    return (
+      <View style={styles.container}>
+        <View style={styles.topleftbutton}>
+          <TouchableOpacity onPress={navigation.goBack}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.topleftbutton}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.toprightbutton}>
+          <TouchableOpacity onPress={() => navigation.navigate("Cancellation")}>
+            <MaterialIcons name="cancel" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.heading}>
+          <Text style={styles.lineone}> {currentDelivery.status} Matching Deliverer...</Text>
+        </View>
 
-      <View style={styles.toprightbutton}>
-        <TouchableOpacity onPress={() => navigation.navigate("Cancellation")}>
-          <MaterialIcons name="cancel" size={24} color="black" />
-        </TouchableOpacity>
+        {hasLocationData ? (
+          <MapComponent mapProps={mapProps} />
+        ) : (
+          <Text style={styles.paragraph}>Loading Map...</Text>
+        )}
+        <View style={styles.buttonView}>
+          <BButton
+            text="Go to deliverer pickup screen"
+            onPress={() =>
+              navigation.navigate("Matched", {
+                mapProps: mapProps,
+                currentDelivery: currentDelivery,
+                deliveryID: deliveryID
+              })
+            }
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 20,
+            }}
+          />
+        </View>
       </View>
-      <View style={styles.heading}>
-        <Text style={styles.lineone}> Matching Deliverer...</Text>
-      </View>
-
-      {hasLocationData ? (
-        <MapComponent mapProps={mapProps} />
-      ) : (
-        <Text style={styles.paragraph}>Loading Map...</Text>
-      )}
-      <View style={styles.buttonView}>
-        <BButton
-          text="Go to deliverer pickup screen"
-          onPress={() =>
-            navigation.navigate("Matched", {
-              mapProps: mapProps,
-              deliveryRequests: deliveryRequests
-            })
-          }
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 20,
-          }}
-        />
-      </View>
-    </View>
-  );
+    );
 };
 
 export default MatchingDeliverer;

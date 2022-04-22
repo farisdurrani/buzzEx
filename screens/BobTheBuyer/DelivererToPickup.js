@@ -12,6 +12,7 @@ import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../../components/MapComponent";
+import {onDeliveryUpdate} from "../../firebase";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -21,6 +22,26 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 const DelivererToPickup = ({ route, navigation }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const { mapProps } = route.params;
+  const [currentDelivery, setCurrentDelivery] = useState(route.params.currentDelivery)
+  const [deliveryID, setDeliveryID] = useState(route.params.deliveryID)
+
+  useEffect(() => { 
+    onDeliveryUpdate(deliveryID, setCurrentDelivery)
+  }, []);
+
+
+  useEffect(()=> {
+    if (currentDelivery.status == "3") {
+      navigation.navigate("DelivererToDropoff", {
+        mapProps: mapProps,
+        currentDelivery: currentDelivery,
+        deliveryID: deliveryID
+      })
+    }
+  }, [currentDelivery])
+  
+
+
   const hasLocationData =
     mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
   return (
@@ -60,6 +81,8 @@ const DelivererToPickup = ({ route, navigation }) => {
           onPress={() =>
             navigation.navigate("DelivererToDropoff", {
               mapProps: mapProps,
+              currentDelivery: currentDelivery,
+              deliveryID: deliveryID
             })
           }
           containerStyle={{
