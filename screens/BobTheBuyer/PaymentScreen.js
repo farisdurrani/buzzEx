@@ -12,10 +12,10 @@ import { COLORS, LAYOUT, roundTo2 } from "../../constants";
 import { setToReadyToPickup, updateDeliveryStatus } from "../../firebase";
 
 const PaymentScreen = ({ navigation, route }) => {
-  const { deliveryItem, senderItem, receiverItem } = route.params;
+  const { packageItem, senderItem, receiverItem } = route.params;
 
-  const itemPrice = deliveryItem.data.package.base_price;
-  const deliveryFee = deliveryItem.data.package.delivery_fee;
+  const itemPrice = packageItem.data.package.base_price;
+  const deliveryFee = packageItem.data.package.delivery_fee;
   const [tip, setTip] = useState("");
 
   const _ItemDetailGroup = (props) => {
@@ -96,9 +96,9 @@ const PaymentScreen = ({ navigation, route }) => {
         text="Pay"
         containerStyle={{ width: 150, marginTop: 60 }}
         onPress={async () => {
-          await setToReadyToPickup(deliveryItem.id, tip);
+          await setToReadyToPickup(packageItem.id, tip);
           navigation.navigate("MatchingDeliverer", {
-            deliveryItem: deliveryItem,
+            packageItem: packageItem,
             senderItem: senderItem,
             receiverItem: receiverItem,
           });

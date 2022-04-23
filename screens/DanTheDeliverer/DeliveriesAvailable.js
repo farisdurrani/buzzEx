@@ -73,7 +73,7 @@ const DeliveriesAvailable = ({ navigation }) => {
       <Text>
         <Text style={styles.welcome}>Welcome</Text>
         <Text style={styles.name}>
-          {`${
+          {` ${
             delivererItem ? delivererItem.data.full_name.split(" ")[0] : ""
           }!`}
         </Text>

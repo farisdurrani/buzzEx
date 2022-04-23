@@ -21,15 +21,15 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const MatchingDeliverer = ({ navigation, route }) => {
-  const { deliveryItem, senderItem, receiverItem } = route.params;
+  const { packageItem, senderItem, receiverItem } = route.params;
 
-  const [currentDelivery, setCurrentDelivery] = useState(deliveryItem.data);
+  const [currentDelivery, setCurrentDelivery] = useState(packageItem.data);
 
   useEffect(() => {
-    onDeliveryUpdate(deliveryItem.id, setCurrentDelivery);
+    onDeliveryUpdate(packageItem.id, setCurrentDelivery);
   }, []);
 
-  const { destination_address, source_address } = deliveryItem.data;
+  const { destination_address, source_address } = packageItem.data;
 
   const [sourceLat, sourceLong] = [
     source_address.address_coord.latitude,
@@ -62,10 +62,11 @@ const MatchingDeliverer = ({ navigation, route }) => {
       navigation.navigate("Matched", {
         mapProps: mapProps,
         currentDelivery: currentDelivery,
-        deliveryID: deliveryItem.id,
+        deliveryID: packageItem.id,
       });
     }
   }, [currentDelivery]);
+  
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>
@@ -95,7 +96,7 @@ const MatchingDeliverer = ({ navigation, route }) => {
             navigation.navigate("Matched", {
               mapProps: mapProps,
               currentDelivery: currentDelivery,
-              deliveryID: deliveryItem.id,
+              deliveryID: packageItem.id,
             })
           }
           containerStyle={{

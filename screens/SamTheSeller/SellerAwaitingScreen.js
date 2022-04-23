@@ -13,11 +13,11 @@ import { getJob } from "../../firebase";
 
 const SellerAwaitingScreen = ({ navigation, route }) => {
   const { senderItem, receiverItem, deliveryJobID } = route.params;
-  const [deliveryItem, setDeliveryItem] = useState();
+  const [packageItem, setPackageItem] = useState();
 
   useEffect(async () => {
     const delivItem = await getJob(deliveryJobID);
-    setDeliveryItem(delivItem);
+    setPackageItem(delivItem);
   }, []);
 
   return (
@@ -29,7 +29,7 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
           navigation.navigate("SellerAccepted", {
             senderItem: senderItem,
             receiverItem: receiverItem,
-            deliveryItem: deliveryItem,
+            packageItem: packageItem,
           });
         }}
       >

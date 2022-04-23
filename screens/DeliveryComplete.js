@@ -20,7 +20,6 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 
 const DeliveryComplete = ({ navigation, route }) => {
   const {
-    mapProps = null,
     packageItem,
     delivererItem = null,
     receiverItem,
@@ -30,7 +29,8 @@ const DeliveryComplete = ({ navigation, route }) => {
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
 
-  const destination_address = packageItem.data.destination_address;
+  const { destination_address, source_address } = packageItem.data;
+
   const line2Present = Boolean(destination_address.line2);
 
   const full_dropOff_address = `${destination_address.line1}, ${
@@ -39,10 +39,31 @@ const DeliveryComplete = ({ navigation, route }) => {
     destination_address.state
   }, ${destination_address.zip}`;
 
-  const hasLocationData =
-    mapProps &&
-    mapProps.source.sourceLat !== null &&
-    mapProps.source.sourceLong !== null;
+  const [sourceLat, sourceLong] = [
+    source_address.address_coord.latitude,
+    source_address.address_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    destination_address.address_coord.latitude,
+    destination_address.address_coord.longitude,
+  ];
+
+  const hasLocationData = source_address && destination_address;
+  const mapProps = hasLocationData
+    ? {
+        source: {
+          sourceLat: sourceLat,
+          sourceLong: sourceLong,
+        },
+        dest: {
+          destLat: destinationLat,
+          destLong: destinationLong,
+        },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
 
   return (
     <View style={styles.container}>

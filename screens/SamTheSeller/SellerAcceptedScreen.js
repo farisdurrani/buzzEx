@@ -20,12 +20,12 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const SellerAcceptedScreen = ({ navigation, route }) => {
-  const { deliveryItem } = route.params;
+  const { packageItem } = route.params;
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
-  const { destination_address, source_address } = deliveryItem.data;
+  const { destination_address, source_address } = packageItem.data;
 
   const [sourceLat, sourceLong] = [
     source_address.address_coord.latitude,
