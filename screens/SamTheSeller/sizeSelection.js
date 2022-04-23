@@ -1,16 +1,19 @@
-import { StyleSheet, Text, View } from "react-native";
-import { BackCancelButtons } from "../../components";
-
-import React from "react";
+import {StyleSheet, Text, View} from 'react-native'
+import { BackCancelButtons } from '../../components';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import React from 'react'
 
 const SizeSelection = ({ navigation, route }) => {
   return (
-    <View style={styles.Maincontainer}>
-      <BackCancelButtons style={styles.backcancel} navigation={navigation} />
-      <View style={styles.container}>
-        <View style={styles.box}>
-          <View style={styles.inner}></View>
-        </View>
+    <View style= {styles.Maincontainer}>
+        <BackCancelButtons style = {styles.backcancel} navigation={navigation} />
+        <View style = {styles.container}>
+            
+            <View style = {styles.box}>
+                <View style = {styles.inner}>
+                <Icon size={80} name="bicycle"></Icon>
+                </View>
+            </View>
 
         <View style={styles.box}>
           <View style={styles.inner}></View>
