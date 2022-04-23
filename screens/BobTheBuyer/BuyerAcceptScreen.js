@@ -12,13 +12,13 @@ import { COLORS } from "../../constants";
 import { getUserDetails } from "../../firebase";
 
 const BuyerAcceptScreen = ({ navigation, route }) => {
-  const { deliveryItem, receiverItem } = route.params;
+  const { packageItem, receiverItem } = route.params;
   const [senderItem, setSenderItem] = useState({
     data: { full_name: "Loading..." },
   });
 
   useEffect(async () => {
-    const senderDetails = await getUserDetails(deliveryItem.data.sender_uid);
+    const senderDetails = await getUserDetails(packageItem.data.sender_uid);
     setSenderItem(senderDetails);
   }, []);
 
@@ -37,7 +37,7 @@ const BuyerAcceptScreen = ({ navigation, route }) => {
           text="Accept"
           onPress={() => {
             navigation.navigate("Payment", {
-              deliveryItem: deliveryItem,
+              packageItem: packageItem,
               senderItem: senderItem,
               receiverItem: receiverItem,
             });

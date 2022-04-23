@@ -20,14 +20,23 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 
 const PickupPackage = ({ navigation, route }) => {
   const {
-    mapProps = null,
     packageItem,
     delivererItem,
     receiverItem,
     senderItem,
   } = route.params;
 
-  const source_address = packageItem.data.source_address;
+  const { destination_address, source_address } = packageItem.data;
+
+  const [sourceLat, sourceLong] = [
+    source_address.address_coord.latitude,
+    source_address.address_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    destination_address.address_coord.latitude,
+    destination_address.address_coord.longitude,
+  ];
+
   const line2Present = Boolean(source_address.line2);
 
   const full_pickUp_address = `${source_address.line1}, ${
@@ -42,6 +51,24 @@ const PickupPackage = ({ navigation, route }) => {
     mapProps &&
     mapProps.source.sourceLat !== null &&
     mapProps.source.sourceLong !== null;
+
+  const mapProps = hasLocationData
+    ? {
+        source: {
+          sourceLat: sourceLat,
+          sourceLong: sourceLong,
+        },
+        dest: {
+          destLat: destinationLat,
+          destLong: destinationLong,
+        },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
+
+
 
   return (
     <View style={styles.container}>
