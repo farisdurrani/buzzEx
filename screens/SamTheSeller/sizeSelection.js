@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native'
 import { BackCancelButtons } from '../../components';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import React from 'react'
 
 const SizeSelection = ({ navigation, route }) => {
@@ -11,6 +11,7 @@ const SizeSelection = ({ navigation, route }) => {
             
             <View style = {styles.box}>
                 <View style = {styles.inner}>
+                <Icon size={80} name="bicycle"></Icon>
                 </View>
             </View>
 
