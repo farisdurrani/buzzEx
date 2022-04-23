@@ -9,6 +9,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
 import { COLORS } from "../../constants";
+import { updateDeliveryStatus } from "../../firebase";
 
 const ConfirmPickup = ({ navigation, route }) => {
   const { packageItem, delivererItem, receiverItem, senderItem } = route.params;

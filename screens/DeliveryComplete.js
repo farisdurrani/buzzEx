@@ -30,6 +30,9 @@ const DeliveryComplete = ({ navigation, route }) => {
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
 
+  const destination_address = packageItem.data.destination_address;
+  const line2Present = Boolean(destination_address.line2);
+
   const full_dropOff_address = `${destination_address.line1}, ${
     destination_address.line2
   }${line2Present ? ", " : " "}${destination_address.city}, ${
@@ -37,7 +40,9 @@ const DeliveryComplete = ({ navigation, route }) => {
   }, ${destination_address.zip}`;
 
   const hasLocationData =
-    mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
+    mapProps &&
+    mapProps.source.sourceLat !== null &&
+    mapProps.source.sourceLong !== null;
 
   return (
     <View style={styles.container}>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "buzzex2",
-    "slug": "buzzex2",
+    "name": "buzzEx",
+    "slug": "buzzEx",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

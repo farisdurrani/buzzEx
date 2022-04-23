@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { BButton } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../constants";
+import { getCurrentUser } from "../firebase";
 
 const CancellationScreen = ({ navigation }) => {
   return (
