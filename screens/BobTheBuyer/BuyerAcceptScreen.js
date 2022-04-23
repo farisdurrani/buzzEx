@@ -12,23 +12,24 @@ import { COLORS } from "../../constants";
 import { getUserDetails } from "../../firebase";
 
 const BuyerAcceptScreen = ({ navigation, route }) => {
-  const { deliveryRequests } = route.params;
-  const [senderDetails, setSenderDetails] = useState({})
-  const [receiverDetails, setReceiverDetails] = useState({})
+  const { deliveryItem, receiverItem } = route.params;
+  const [senderItem, setSenderItem] = useState({
+    data: { full_name: "Loading..." },
+  });
 
   useEffect(async () => {
-    const senderDetails = (await getUserDetails(deliveryRequests[0].data.sender_uid)).data
-    const receiverDetails = (await getUserDetails(deliveryRequests[0].data.receiver_uid)).data
-    setSenderDetails(senderDetails)
-    setReceiverDetails(receiverDetails)
+    const senderDetails = await getUserDetails(deliveryItem.data.sender_uid);
+    setSenderItem(senderDetails);
   }, []);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.container}>
-        <Text style={styles.greeting}>Hi {receiverDetails.full_name}!</Text>
+        <Text style={styles.greeting}>
+          Hi {receiverItem.data.full_name.split(" ")[0]}!
+        </Text>
         <Text style={styles.query1}>
-          {senderDetails.full_name} would like to send you a package!
+          {senderItem.data.full_name} would like to send you a package!
         </Text>
         <Text style={styles.query2}>Would you like to accept the package?</Text>
         <BButton
@@ -36,16 +37,16 @@ const BuyerAcceptScreen = ({ navigation, route }) => {
           text="Accept"
           onPress={() => {
             navigation.navigate("Payment", {
-              deliveryRequests: deliveryRequests,
+              deliveryItem: deliveryItem,
+              senderItem: senderItem,
+              receiverItem: receiverItem,
             });
           }}
         />
         <BButton
           containerStyle={styles.buttonContainer}
           text="Deny"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
+          onPress={() => navigation.navigate("Home")}
         />
       </View>
     </KeyboardAvoidingView>

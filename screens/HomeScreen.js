@@ -9,23 +9,30 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../components";
 import { COLORS } from "../constants";
-import { getJobs, logout_current_user, getCurrentUser } from "../firebase";
+import {
+  getJobs,
+  logout_current_user,
+  getCurrentUser,
+  getUserDetails,
+} from "../firebase";
 
 const HomeScreen = ({ navigation }) => {
   const [numberOfRequests, setNumberOfRequests] = useState(0);
   const [deliveryRequests, setDeliveryRequests] = useState([]);
+  const [receiverItem, setReceiverItem] = useState();
 
   const current_user = getCurrentUser();
 
-  useEffect(() => {
-    (async function fetchUnstartedJobs() {
-      const jobs = await getJobs(0, [
-        ["receiver_uid", "==", current_user.uid],
-      ]);
-      setDeliveryRequests(jobs);
-      setNumberOfRequests(jobs.length);
-    })();
-  }, []);
+  useEffect(async () => {
+    if (!current_user) {
+      return;
+    }
+    // fetch unstarted jobs
+    const jobs = await getJobs(0, [["receiver_uid", "==", current_user.uid]]);
+    setDeliveryRequests(jobs);
+    setNumberOfRequests(jobs.length);
+    setReceiverItem(await getUserDetails(current_user.uid));
+  }, [current_user]);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -50,7 +57,8 @@ const HomeScreen = ({ navigation }) => {
             buttonStyle={styles.requestButton}
             onPress={() => {
               navigation.navigate("BuyerAccept", {
-                deliveryRequests: deliveryRequests,
+                deliveryItem: deliveryRequests[0],
+                receiverItem: receiverItem,
               });
             }}
           />

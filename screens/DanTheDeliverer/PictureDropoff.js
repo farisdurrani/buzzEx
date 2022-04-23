@@ -5,14 +5,14 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
 const PictureDropoff = ({ navigation, route }) => {
-  const { receiverItem, packageItem } = route.params;
+  const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
 
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
       <View>
         <Text style={styles.titleText}>
-          Take a picture of Bike in dropoff location
+          {`Take a picture of the ${packageItem.data.package.name} in dropoff location`}
         </Text>
       </View>
       <View style={LAYOUT.centerMiddle}>
@@ -23,7 +23,9 @@ const PictureDropoff = ({ navigation, route }) => {
             navigation.navigate("TakePicture", {
               nextScreen: "ConfirmDelivery",
               packageItem: packageItem,
+              delivererItem: delivererItem,
               receiverItem: receiverItem,
+              senderItem: senderItem,
             });
           }}
         >

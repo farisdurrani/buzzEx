@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import RadioForm from "react-native-simple-radio-button";
 import { KeyboardAvoidingView } from "react-native";
 import { initialWindowMetrics } from "react-native-safe-area-context";
@@ -15,15 +15,13 @@ import {
 } from "../../firebase";
 
 const DeliveriesAvailable = ({ navigation }) => {
-  const [deliverer, setDeliverer] = useState("");
+  const [delivererItem, setDelivererItem] = useState();
   const [zipcode, setZipcode] = useState("30332");
   const [allAvailableJobs, setAllAvailableJobs] = useState([]);
 
-  React.useEffect(async () => {
-    const current_name = (
-      await getUserDetails(getCurrentUser().uid)
-    ).data.full_name.split(" ")[0];
-    setDeliverer(current_name);
+  useEffect(async () => {
+    const delivererItem = await getUserDetails(getCurrentUser().uid);
+    setDelivererItem(delivererItem);
 
     const available_jobs = await getJobs(1);
     setAllAvailableJobs(available_jobs);
@@ -31,28 +29,6 @@ const DeliveriesAvailable = ({ navigation }) => {
 
   const _DeliveryRow = (props) => {
     const { packageItem } = props;
-
-    const stylesRow = StyleSheet.create({
-      container: {
-        backgroundColor: COLORS.transparent_gray,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        width: 350,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-      itemDetailGroup: {
-        display: "flex",
-        flexDirection: "row",
-        width: "60%",
-        justifyContent: "space-between",
-      },
-      text: {
-        fontSize: 20,
-      },
-    });
 
     return (
       <View style={stylesRow.container}>
@@ -63,8 +39,15 @@ const DeliveriesAvailable = ({ navigation }) => {
         <BButton
           text="Accept"
           onPress={async () => {
-            // await updateDeliveryStatus(packageItem.id, 2);  // TODO REMOVE
-            navigation.navigate("PickupScreen", { packageItem: packageItem });
+            await updateDeliveryStatus(packageItem.id, 2, {
+              deliverer_uid: delivererItem.data.uid,
+            });
+            packageItem.data.deliverer_uid = delivererItem.data.uid;
+            packageItem.data.status = 2;
+            navigation.navigate("PickupScreen", {
+              packageItem: packageItem,
+              delivererItem: delivererItem,
+            });
           }}
         />
       </View>
@@ -85,22 +68,28 @@ const DeliveriesAvailable = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <ScrollView contentContainerStyle={styles.container} behavior="padding">
       <BackCancelButtons navigation={navigation} />
       <Text>
-        <Text style={[styles.welcome]}> Welcome</Text>{" "}
-        <Text style={[styles.name]}>{deliverer}!</Text>
+        <Text style={styles.welcome}>Welcome</Text>
+        <Text style={styles.name}>
+          {`${
+            delivererItem ? delivererItem.data.full_name.split(" ")[0] : ""
+          }!`}
+        </Text>
       </Text>
-      <Text style={[styles.label]}> Showing available deliveries for...</Text>
-      <InputTextField
-        placeholder={"Zipcode"}
-        textState={zipcode}
-        setTextState={setZipcode}
-      />
+      <Text style={styles.label}> Showing available deliveries for...</Text>
+      <KeyboardAvoidingView>
+        <InputTextField
+          placeholder={"Zipcode"}
+          textState={zipcode}
+          setTextState={setZipcode}
+        />
+      </KeyboardAvoidingView>
       <View style={styles.inputContainer}>
         <_AllDeliveryRows />
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -131,4 +120,26 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   inputContainer: {},
+});
+
+const stylesRow = StyleSheet.create({
+  container: {
+    backgroundColor: COLORS.transparent_gray,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    width: 350,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  itemDetailGroup: {
+    display: "flex",
+    flexDirection: "row",
+    width: "60%",
+    justifyContent: "space-between",
+  },
+  text: {
+    fontSize: 20,
+  },
 });

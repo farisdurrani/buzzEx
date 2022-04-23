@@ -7,13 +7,18 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
-import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../../constants";
+import { getJob } from "../../firebase";
 
 const SellerAwaitingScreen = ({ navigation, route }) => {
-  const { senderItem, receiverItem, deliveryItem } = route.params;
+  const { senderItem, receiverItem, deliveryJobID } = route.params;
+  const [deliveryItem, setDeliveryItem] = useState();
+
+  useEffect(async () => {
+    const delivItem = await getJob(deliveryJobID);
+    setDeliveryItem(delivItem);
+  }, []);
 
   return (
     <View style={styles.mainContainer}>

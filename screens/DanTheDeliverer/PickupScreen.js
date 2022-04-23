@@ -14,22 +14,15 @@ import { COLORS, LAYOUT } from "../../constants";
 import { getUserDetails } from "../../firebase";
 
 const PickupScreen = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const { packageItem, delivererItem } = route.params;
 
-  const [addr1, setAddr1] = useState("");
-  const [addr2, setAddr2] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [state, setState] = useState("");
+  const [senderItem, setSenderItem] = useState();
+  const [receiverItem, setReceiverItem] = useState();
+  const source_address = packageItem.data.source_address;
 
   useEffect(async () => {
-    const sender_uid = packageItem.data.sender_uid;
-    const sender_address = (await getUserDetails(sender_uid)).data.address;
-    setAddr1(sender_address.line1);
-    setAddr2(sender_address.line2);
-    setCity(sender_address.city);
-    setZip(sender_address.zip);
-    setState(sender_address.state);
+    setSenderItem(await getUserDetails(packageItem.data.sender_uid));
+    setReceiverItem(await getUserDetails(packageItem.data.receiver_uid));
   }, []);
 
   const _ChoiceRow = (props) => {
@@ -43,7 +36,12 @@ const PickupScreen = ({ navigation, route }) => {
         <BButton
           text="Go"
           onPress={() => {
-            navigation.navigate("PickupPackage", { packageItem: packageItem });
+            navigation.navigate("PickupPackage", {
+              packageItem: packageItem,
+              delivererItem: delivererItem,
+              receiverItem: receiverItem,
+              senderItem: senderItem,
+            });
           }}
         />
       </View>
@@ -54,13 +52,19 @@ const PickupScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <BackCancelButtons navigation={navigation} />
       <Text style={{ fontSize: 40, marginTop: 70 }}>
-        Pickup Bike at Sally's
+        {`Pickup ${packageItem.data.package.name} at ${
+          senderItem ? senderItem.data.full_name.split(" ")[0] : ""
+        }'s`}
       </Text>
 
       <View style={styles.addressContainer}>
-        <Text style={styles.address}>{addr1}</Text>
-        {addr2 ? <Text style={styles.address}>{addr2}</Text> : undefined}
-        <Text style={styles.address}>{`${city}, ${state} ${zip}`}</Text>
+        <Text style={styles.address}>{source_address.line1}</Text>
+        {source_address.line2 ? (
+          <Text style={styles.address}>{source_address.line2}</Text>
+        ) : undefined}
+        <Text
+          style={styles.address}
+        >{`${source_address.city}, ${source_address.state} ${source_address.zip}`}</Text>
       </View>
 
       <_ChoiceRow choice="Google Maps" />

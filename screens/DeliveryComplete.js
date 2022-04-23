@@ -8,22 +8,33 @@ import {
   Dimensions,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
-import { BButton, BackCancelButtons } from "../../components/index";
+import { BButton, BackCancelButtons } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
-import MapComponent from "../../components/MapComponent";
+import MapComponent from "../components/MapComponent";
 
-let { width, height } = Dimensions.get("window"); //Screen dimensions
+const { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const DeliveryComplete = ({ navigation, route }) => {
+  const {
+    mapProps = null,
+    packageItem,
+    delivererItem = null,
+    receiverItem,
+    senderItem,
+    homeScreen,
+  } = route.params;
+
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  let mapProps = null;
-  if (route.params && route.params.mapProps) {
-    mapProps = route.params.mapProps;
-  }
+
+  const full_dropOff_address = `${destination_address.line1}, ${
+    destination_address.line2
+  }${line2Present ? ", " : " "}${destination_address.city}, ${
+    destination_address.state
+  }, ${destination_address.zip}`;
 
   const hasLocationData =
     mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
@@ -46,9 +57,9 @@ const DeliveryComplete = ({ navigation, route }) => {
       )}
       <View style={styles.bottomContainer}>
         <Text style={styles.linetwo}>
-          Arrived at 555 Braves Win Dr, Atlanta, GA 30318
+          {`Arrived at ${full_dropOff_address}`}
         </Text>
-        
+
         <Icon.Button
           name="phone"
           backgroundColor="#000000"
@@ -56,7 +67,7 @@ const DeliveryComplete = ({ navigation, route }) => {
         ></Icon.Button>
         <BButton
           text="Return to Home"
-          onPress={() => navigation.navigate(route.params.homeScreen)}
+          onPress={() => navigation.replace(homeScreen)}
           containerStyle={{
             width: 200,
             marginHorizontal: 50,

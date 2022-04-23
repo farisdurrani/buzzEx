@@ -28,24 +28,22 @@ const SellerAcceptedScreen = ({ navigation, route }) => {
   const { destination_address, source_address } = deliveryItem.data;
 
   const [sourceLat, sourceLong] = [
-    source_address.address.address_coord.latitude,
-    source_address.address.address_coord.longitude,
+    source_address.address_coord.latitude,
+    source_address.address_coord.longitude,
   ];
   const [destinationLat, destinationLong] = [
-    destination_address.address.address_coord.latitude,
-    destination_address.address.address_coord.longitude,
+    destination_address.address_coord.latitude,
+    destination_address.address_coord.longitude,
   ];
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
-      let location = await Location.getLastKnownPositionAsync({});
-      setLocation(location);
-    })();
+  useEffect(async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+    let location = await Location.getLastKnownPositionAsync({});
+    setLocation(location);
   }, []);
 
   let text = "Getting Current Location..";

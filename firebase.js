@@ -66,12 +66,12 @@ async function _getCollectionDocument(collection, docID) {
 }
 
 export function onDeliveryUpdate(delivery_id, callback) {
-  const docRef = doc(db, delivery_jobs, delivery_id)
+  const docRef = doc(db, delivery_jobs, delivery_id);
   const unsub = onSnapshot(docRef, (doc) => {
     const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-    callback(doc.data())
+    callback(doc.data());
   });
-  return unsub
+  return unsub;
 }
 
 // Login and Registration
@@ -177,7 +177,7 @@ export async function addNewDeliveryJob(jobData) {
 }
 
 /**
- * Returns a JSON object of all jobs matching the status
+ * Returns an array of JSON objects of all jobs matching the status
  *
  * @param {Number}
  * status
@@ -239,17 +239,19 @@ export async function getJobs(status, add_queries = []) {
  *
  * @param {string} jobID
  * @param {Number} status
- * @param {Object} new_package New package that will be replacing the old package, in case of any changes. If none is defined, no changes to the old package will be made.
+ * @param {Object} other_changes A JS object containing all changes to the document fields, e.g., new deliverer_uid and source_destination, if any. If none is defined, no changes to the old package will be made.
  */
-export async function updateDeliveryStatus(jobID, status, new_package = null) {
-  if (new_package) {
-    await updateDeliveryJob(jobID, {
-      package: new_package,
-      status: status,
-    });
+export async function updateDeliveryStatus(
+  jobID,
+  status,
+  other_changes = null
+) {
+  if (other_changes) {
+    other_changes.status = status;
+    await _updateDeliveryJob(jobID, other_changes);
     return;
   }
-  await updateDeliveryJob(jobID, {
+  await _updateDeliveryJob(jobID, {
     status: status,
   });
 }
@@ -271,7 +273,7 @@ export async function setToReadyToPickup(jobID, tip) {
  * @param {string} jobID ID of the Firestore document
  * @param {Object} updates an object containing all the intended modifications
  */
-export async function updateDeliveryJob(jobID, updates) {
+async function _updateDeliveryJob(jobID, updates) {
   const docRef = doc(db, delivery_jobs, jobID);
   updates.timestamp = getCurrentTimestamp();
   await updateDoc(docRef, updates);

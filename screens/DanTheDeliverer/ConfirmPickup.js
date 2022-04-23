@@ -11,7 +11,7 @@ import { BButton, BackCancelButtons } from "../../components";
 import { COLORS } from "../../constants";
 
 const ConfirmPickup = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
 
   return (
     <View style={styles.container}>
@@ -20,15 +20,27 @@ const ConfirmPickup = ({ navigation, route }) => {
       <BButton
         containerStyle={styles.buttonContainer}
         text="Yes"
-        onPress={() => {
-          navigation.navigate("DropoffAt", { packageItem: packageItem });
+        onPress={async() => {
+          await updateDeliveryStatus(packageItem.id, 3);
+          packageItem.data.status = 3;
+          navigation.navigate("DropoffAt", {
+            packageItem: packageItem,
+            delivererItem: delivererItem,
+            receiverItem: receiverItem,
+            senderItem: senderItem,
+          });
         }}
       />
       <BButton
         containerStyle={styles.buttonContainer}
         text="No"
         onPress={() => {
-          navigation.replace("PickupPackage", { packageItem: packageItem });
+          navigation.replace("PickupPackage", {
+            packageItem: packageItem,
+            delivererItem: delivererItem,
+            receiverItem: receiverItem,
+            senderItem: senderItem,
+          });
         }}
       />
     </View>

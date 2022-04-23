@@ -2,15 +2,16 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { BackCancelButtons, BButton } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
+import { updateDeliveryStatus } from "../../firebase";
 
 const ConfirmDelivery = ({ navigation, route }) => {
-  const { receiverItem, packageItem } = route.params;
-
-  let snapURI = null;
-
-  if (route.params && route.params.snapURI) {
-    snapURI = route.params.snapURI;
-  }
+  const {
+    snapURI = null,
+    packageItem,
+    delivererItem,
+    receiverItem,
+    senderItem,
+  } = route.params;
 
   return (
     <View style={styles.mainContainer}>
@@ -21,27 +22,34 @@ const ConfirmDelivery = ({ navigation, route }) => {
       <View style={[LAYOUT.centerMiddle, { marginBottom: 50 }]}>
         <TouchableOpacity
           style={[styles.pictureContainer, LAYOUT.centerMiddle]}
-          onPress={() => {
+          onPress={() =>
             navigation.navigate("TakePicture", {
               nextScreen: "ConfirmDelivery",
-            });
-          }}
+              snapURI: snapURI,
+              packageItem: packageItem,
+              delivererItem: delivererItem,
+              receiverItem: receiverItem,
+              senderItem: senderItem,
+            })
+          }
         >
-          <Image
-            style={styles.picture}
-            source={{ uri: route.params.snapURI }}
-          />
+          <Image style={styles.picture} source={{ uri: snapURI }} />
         </TouchableOpacity>
       </View>
       <BButton
         text="Confirm"
-        onPress={() =>
+        onPress={async () => {
+          await updateDeliveryStatus(packageItem.id, 4);
+          packageItem.data.status = 4;
           navigation.replace("DeliveryComplete", {
             homeScreen: "DeliveriesAvailable",
             receiverItem: receiverItem,
             packageItem: packageItem,
-          })
-        }
+            delivererItem: delivererItem,
+            receiverItem: receiverItem,
+            senderItem: senderItem,
+          });
+        }}
       />
     </View>
   );

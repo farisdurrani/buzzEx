@@ -14,26 +14,10 @@ import { COLORS, LAYOUT } from "../../constants";
 import { getUserDetails } from "../../firebase";
 
 const DropoffAt = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
 
-  const [receiverItem, setReceiverItem] = useState();
-  const [addr1, setAddr1] = useState("");
-  const [addr2, setAddr2] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [state, setState] = useState("");
-
-  useEffect(async () => {
-    const receiver_uid = packageItem.data.receiver_uid;
-    const receiver_in_package = await getUserDetails(receiver_uid);
-    const sender_address = receiverItem.data.address;
-    setReceiverItem(receiver_in_package);
-    setAddr1(sender_address.line1);
-    setAddr2(sender_address.line2);
-    setCity(sender_address.city);
-    setZip(sender_address.zip);
-    setState(sender_address.state);
-  }, []);
+  const destination_address = packageItem.data.destination_address;
+  const receiver_first_name = receiverItem.data.full_name.split(" ")[0];
 
   const _ChoiceRow = (props) => {
     const { choice } = props;
@@ -47,8 +31,10 @@ const DropoffAt = ({ navigation, route }) => {
           text="Go"
           onPress={() => {
             navigation.navigate("DropoffPackage", {
-              receiverItem: receiverItem,
               packageItem: packageItem,
+              delivererItem: delivererItem,
+              receiverItem: receiverItem,
+              senderItem: senderItem,
             });
           }}
         />
@@ -59,12 +45,18 @@ const DropoffAt = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <BackCancelButtons navigation={navigation} />
-      <Text style={{ fontSize: 40, marginTop: 70 }}>Dropoff Bike at Bob's</Text>
+      <Text
+        style={{ fontSize: 40, marginTop: 70 }}
+      >{`Dropoff ${packageItem.data.package.name} at ${receiver_first_name}'s`}</Text>
 
       <View style={styles.addressContainer}>
-        <Text style={styles.address}>{addr1}</Text>
-        {addr2 ? <Text style={styles.address}>{addr2}</Text> : undefined}
-        <Text style={styles.address}>{`${city}, ${state} ${zip}`}</Text>
+        <Text style={styles.address}>{destination_address.line1}</Text>
+        {destination_address.line2 ? (
+          <Text style={styles.address}>{destination_address.line2}</Text>
+        ) : undefined}
+        <Text
+          style={styles.address}
+        >{`${destination_address.city}, ${destination_address.state} ${destination_address.zip}`}</Text>
       </View>
 
       <_ChoiceRow choice="Google Maps" />
