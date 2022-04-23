@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import RadioForm from "react-native-simple-radio-button";
 import { KeyboardAvoidingView } from "react-native";
 import { initialWindowMetrics } from "react-native-safe-area-context";
@@ -15,11 +15,11 @@ import {
 } from "../../firebase";
 
 const DeliveriesAvailable = ({ navigation }) => {
-  const [delivererItem, setDelivererItem] = useState("");
+  const [delivererItem, setDelivererItem] = useState();
   const [zipcode, setZipcode] = useState("30332");
   const [allAvailableJobs, setAllAvailableJobs] = useState([]);
 
-  React.useEffect(async () => {
+  useEffect(async () => {
     const delivererItem = await getUserDetails(getCurrentUser().uid);
     setDelivererItem(delivererItem);
 
@@ -39,7 +39,11 @@ const DeliveriesAvailable = ({ navigation }) => {
         <BButton
           text="Accept"
           onPress={async () => {
-            await updateDeliveryStatus(packageItem.id, 2);
+            await updateDeliveryStatus(packageItem.id, 2, {
+              deliverer_uid: delivererItem.data.uid,
+            });
+            packageItem.data.deliverer_uid = delivererItem.data.uid;
+            packageItem.data.status = 2;
             navigation.navigate("PickupScreen", {
               packageItem: packageItem,
               delivererItem: delivererItem,
@@ -64,22 +68,28 @@ const DeliveriesAvailable = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <ScrollView contentContainerStyle={styles.container} behavior="padding">
       <BackCancelButtons navigation={navigation} />
       <Text>
-        <Text style={styles.welcome}> Welcome</Text>{" "}
-        <Text style={styles.name}>{delivererItem}!</Text>
+        <Text style={styles.welcome}>Welcome</Text>
+        <Text style={styles.name}>
+          {`${
+            delivererItem ? delivererItem.data.full_name.split(" ")[0] : ""
+          }!`}
+        </Text>
       </Text>
       <Text style={styles.label}> Showing available deliveries for...</Text>
-      <InputTextField
-        placeholder={"Zipcode"}
-        textState={zipcode}
-        setTextState={setZipcode}
-      />
+      <KeyboardAvoidingView>
+        <InputTextField
+          placeholder={"Zipcode"}
+          textState={zipcode}
+          setTextState={setZipcode}
+        />
+      </KeyboardAvoidingView>
       <View style={styles.inputContainer}>
         <_AllDeliveryRows />
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 

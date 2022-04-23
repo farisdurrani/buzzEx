@@ -47,7 +47,7 @@ const DropoffAt = ({ navigation, route }) => {
       <BackCancelButtons navigation={navigation} />
       <Text
         style={{ fontSize: 40, marginTop: 70 }}
-      >{`Dropoff ${packageItem.data.name} at ${receiver_first_name}'s`}</Text>
+      >{`Dropoff ${packageItem.data.package.name} at ${receiver_first_name}'s`}</Text>
 
       <View style={styles.addressContainer}>
         <Text style={styles.address}>{destination_address.line1}</Text>

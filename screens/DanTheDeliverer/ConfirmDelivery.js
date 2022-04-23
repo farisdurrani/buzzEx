@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
 import { BackCancelButtons, BButton } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
+import { updateDeliveryStatus } from "../../firebase";
 
 const ConfirmDelivery = ({ navigation, route }) => {
   const {
@@ -37,7 +38,9 @@ const ConfirmDelivery = ({ navigation, route }) => {
       </View>
       <BButton
         text="Confirm"
-        onPress={() =>
+        onPress={async () => {
+          await updateDeliveryStatus(packageItem.id, 4);
+          packageItem.data.status = 4;
           navigation.replace("DeliveryComplete", {
             homeScreen: "DeliveriesAvailable",
             receiverItem: receiverItem,
@@ -45,8 +48,8 @@ const ConfirmDelivery = ({ navigation, route }) => {
             delivererItem: delivererItem,
             receiverItem: receiverItem,
             senderItem: senderItem,
-          })
-        }
+          });
+        }}
       />
     </View>
   );

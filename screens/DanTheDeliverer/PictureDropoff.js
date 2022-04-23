@@ -5,15 +5,14 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
 const PictureDropoff = ({ navigation, route }) => {
-  const { packageItem, delivererItem, receiverItem, senderItem } =
-    route.params;
+  const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
 
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
       <View>
         <Text style={styles.titleText}>
-          {`Take a picture of the ${packageItem.name} in dropoff location`}
+          {`Take a picture of the ${packageItem.data.package.name} in dropoff location`}
         </Text>
       </View>
       <View style={LAYOUT.centerMiddle}>

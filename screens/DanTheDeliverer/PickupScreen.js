@@ -19,7 +19,6 @@ const PickupScreen = ({ navigation, route }) => {
   const [senderItem, setSenderItem] = useState();
   const [receiverItem, setReceiverItem] = useState();
   const source_address = packageItem.data.source_address;
-  const sender_first_name = senderItem.data.full_name.split(" ")[0];
 
   useEffect(async () => {
     setSenderItem(await getUserDetails(packageItem.data.sender_uid));
@@ -53,7 +52,9 @@ const PickupScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <BackCancelButtons navigation={navigation} />
       <Text style={{ fontSize: 40, marginTop: 70 }}>
-        {`Pickup ${packageItem.data.name} at ${sender_first_name}'s`}
+        {`Pickup ${packageItem.data.package.name} at ${
+          senderItem ? senderItem.data.full_name.split(" ")[0] : ""
+        }'s`}
       </Text>
 
       <View style={styles.addressContainer}>

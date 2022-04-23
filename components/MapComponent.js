@@ -18,9 +18,8 @@ const MapComponent = (props) => {
   const {source, dest, LATITUDE_DELTA, LONGITUDE_DELTA, style} = props.mapProps;
   const {sourceLat, sourceLong} = source;
   const {destLat, destLong} = dest;
-  console.log(sourceLat, sourceLong)
-  console.log(destLat, destLong)
-
+  // console.log(sourceLat, sourceLong)
+  // console.log(destLat, destLong)
 
   return (
     <MapView

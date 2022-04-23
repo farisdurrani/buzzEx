@@ -27,7 +27,9 @@ const PaymentScreen = ({ navigation, route }) => {
           <TextInput
             style={styles.inputText}
             placeholder={placeholder}
-            onChangeText={setState}
+            onEndEditing={(e) => {
+              setState(e.nativeEvent.text);
+            }}
             defaultValue={state}
           />
         </KeyboardAvoidingView>
