@@ -65,6 +65,15 @@ async function _getCollectionDocument(collection, docID) {
   }
 }
 
+export function onDeliveryUpdate(delivery_id, callback) {
+  const docRef = doc(db, delivery_jobs, delivery_id)
+  const unsub = onSnapshot(docRef, (doc) => {
+    const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+    callback(doc.data())
+  });
+  return unsub
+}
+
 // Login and Registration
 
 /**

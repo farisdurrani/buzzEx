@@ -13,7 +13,7 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 
 const MatchedScreen = ({ route, navigation }) => {
-  const { mapProps, deliveryRequests } = route.params;
+  const { mapProps, currentDelivery, deliveryID } = route.params;
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
@@ -42,7 +42,8 @@ const MatchedScreen = ({ route, navigation }) => {
           onPress={() => {
             navigation.navigate("DelivererToPickup", {
               mapProps: mapProps,
-              deliveryRequests: deliveryRequests
+              currentDelivery: currentDelivery,
+              deliveryID: deliveryID
             });
           }}
         />
