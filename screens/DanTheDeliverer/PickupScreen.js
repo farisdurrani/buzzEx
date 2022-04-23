@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
-import { getUserDetails } from "../../firebase";
+import { getUserDetails, getCurrentLocation } from "../../firebase";
 
 const PickupScreen = ({ navigation, route }) => {
   const { packageItem, delivererItem } = route.params;
@@ -27,7 +27,6 @@ const PickupScreen = ({ navigation, route }) => {
 
   const _ChoiceRow = (props) => {
     const { choice } = props;
-
     return (
       <View style={stylesRow.container}>
         <View style={stylesRow.itemDetailGroup}>

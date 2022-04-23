@@ -23,6 +23,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import * as Location from "expo-location";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -290,3 +291,30 @@ export function getRandomCoord() {
   const long = Math.random() * (max - min) + min;
   return generateGeolocation(lat, long);
 }
+
+/**
+ * Full location Object {
+  "coords": Object {
+    "accuracy": 6.6973393244065,
+    "altitude": 278.69948411826044,
+    "altitudeAccuracy": 1.9028470109609013,
+    "heading": -1,
+    "latitude": 33.78632529004801,
+    "longitude": -84.40599885580073,
+    "speed": 0,
+  },
+  "timestamp": 1650731077001.6946,
+}
+ * @returns current location of user in a GeoPoint format
+ */
+export const getCurrentLocation = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== "granted") {
+    alert("Permission to access location was denied");
+    return;
+  }
+  const location = await Location.getCurrentPositionAsync({}).then((e) => {
+    return generateGeolocation(e.coords.latitude, e.coords.longitude);
+  });
+  return location;
+};

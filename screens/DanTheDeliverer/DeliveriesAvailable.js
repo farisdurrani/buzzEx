@@ -12,6 +12,7 @@ import {
   getUserDetails,
   getCurrentUser,
   updateDeliveryStatus,
+  getCurrentLocation,
 } from "../../firebase";
 
 const DeliveriesAvailable = ({ navigation }) => {
@@ -39,8 +40,11 @@ const DeliveriesAvailable = ({ navigation }) => {
         <BButton
           text="Accept"
           onPress={async () => {
-            await updateDeliveryStatus(packageItem.id, 2, {
-              deliverer_uid: delivererItem.data.uid,
+            await getCurrentLocation().then(async (loc) => {
+              await updateDeliveryStatus(packageItem.id, 2, {
+                deliverer_uid: delivererItem.data.uid,
+                deliverer_location: loc,
+              });
             });
             packageItem.data.deliverer_uid = delivererItem.data.uid;
             packageItem.data.status = 2;
@@ -62,9 +66,9 @@ const DeliveriesAvailable = ({ navigation }) => {
         </View>
       );
     }
-    return allAvailableJobs.map((e) => {
-      return <_DeliveryRow packageItem={e} key={e.id} />;
-    });
+    return allAvailableJobs.map((e) => (
+      <_DeliveryRow packageItem={e} key={e.id} />
+    ));
   };
 
   return (
