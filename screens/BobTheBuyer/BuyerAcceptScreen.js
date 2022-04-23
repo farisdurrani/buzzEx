@@ -12,13 +12,13 @@ import { COLORS } from "../../constants";
 import { getUserDetails } from "../../firebase";
 
 const BuyerAcceptScreen = ({ navigation, route }) => {
-  const { firstDeliveryItem, receiverItem } = route.params;
-  const [senderItem, setSenderItem] = useState();
+  const { deliveryItem, receiverItem } = route.params;
+  const [senderItem, setSenderItem] = useState({
+    data: { full_name: "Loading..." },
+  });
 
   useEffect(async () => {
-    const senderDetails = await getUserDetails(
-      firstDeliveryItem.data.sender_uid
-    );
+    const senderDetails = await getUserDetails(deliveryItem.data.sender_uid);
     setSenderItem(senderDetails);
   }, []);
 
@@ -37,16 +37,16 @@ const BuyerAcceptScreen = ({ navigation, route }) => {
           text="Accept"
           onPress={() => {
             navigation.navigate("Payment", {
-              deliveryRequests: deliveryRequests,// TODO start here
+              deliveryItem: deliveryItem,
+              senderItem: senderItem,
+              receiverItem: receiverItem,
             });
           }}
         />
         <BButton
           containerStyle={styles.buttonContainer}
           text="Deny"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
+          onPress={() => navigation.navigate("Home")}
         />
       </View>
     </KeyboardAvoidingView>

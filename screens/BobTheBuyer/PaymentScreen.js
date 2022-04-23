@@ -12,10 +12,10 @@ import { COLORS, LAYOUT, roundTo2 } from "../../constants";
 import { setToReadyToPickup, updateDeliveryStatus } from "../../firebase";
 
 const PaymentScreen = ({ navigation, route }) => {
-  const { deliveryRequests } = route.params;
+  const { deliveryItem, senderItem, receiverItem } = route.params;
 
-  const itemPrice = deliveryRequests[0].data.package.base_price;
-  const deliveryFee = deliveryRequests[0].data.package.delivery_fee;
+  const itemPrice = deliveryItem.data.package.base_price;
+  const deliveryFee = deliveryItem.data.package.delivery_fee;
   const [tip, setTip] = useState("");
 
   const _ItemDetailGroup = (props) => {
@@ -23,13 +23,11 @@ const PaymentScreen = ({ navigation, route }) => {
     return (
       <View style={styles.tipContainer}>
         <Text style={styles.detailTitle}>{title}</Text>
-        <KeyboardAvoidingView style={[styles.inputContainer]}>
+        <KeyboardAvoidingView style={styles.inputContainer}>
           <TextInput
             style={styles.inputText}
             placeholder={placeholder}
-            onEndEditing={(e) => {
-              setState(e.nativeEvent.text);
-            }}
+            onChangeText={setState}
             defaultValue={state}
           />
         </KeyboardAvoidingView>
@@ -95,12 +93,13 @@ const PaymentScreen = ({ navigation, route }) => {
       <BButton
         text="Pay"
         containerStyle={{ width: 150, marginTop: 60 }}
-        onPress={() => {
-          const setPackageToReady = async () => {
-            await setToReadyToPickup(deliveryRequests[0].id, tip);
-            navigation.navigate("MatchingDeliverer", {deliveryRequests: deliveryRequests});
-          };
-          setPackageToReady();
+        onPress={async () => {
+          await setToReadyToPickup(deliveryItem.id, tip);
+          navigation.navigate("MatchingDeliverer", {
+            deliveryItem: deliveryItem,
+            senderItem: senderItem,
+            receiverItem: receiverItem,
+          });
         }}
       />
     </View>

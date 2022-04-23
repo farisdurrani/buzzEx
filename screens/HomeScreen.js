@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
             buttonStyle={styles.requestButton}
             onPress={() => {
               navigation.navigate("BuyerAccept", {
-                firstDeliveryItem: deliveryRequests[0],
+                deliveryItem: deliveryRequests[0],
                 receiverItem: receiverItem,
               });
             }}
