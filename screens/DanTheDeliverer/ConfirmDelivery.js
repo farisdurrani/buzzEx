@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BackCancelButtons, BButton } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
-import { updateDeliveryStatus } from "../../firebase";
+import { getCurrentLocation } from "../../firebase";
 
 const ConfirmDelivery = ({ navigation, route }) => {
   const {
@@ -11,7 +11,15 @@ const ConfirmDelivery = ({ navigation, route }) => {
     delivererItem,
     receiverItem,
     senderItem,
+    init_deliverer_coord = null,
   } = route.params;
+
+  const [deliverer_coord, set_deliverer_coord] = useState();
+
+  useEffect(async() => {
+    const current_location = await getCurrentLocation();
+    set_deliverer_coord(current_location);
+  }, [])
 
   return (
     <View style={styles.mainContainer}>
@@ -30,6 +38,7 @@ const ConfirmDelivery = ({ navigation, route }) => {
               delivererItem: delivererItem,
               receiverItem: receiverItem,
               senderItem: senderItem,
+              init_deliverer_coord: deliverer_coord,
             })
           }
         >
@@ -46,6 +55,7 @@ const ConfirmDelivery = ({ navigation, route }) => {
             delivererItem: delivererItem,
             receiverItem: receiverItem,
             senderItem: senderItem,
+            init_deliverer_coord: deliverer_coord,
           });
         }}
       />

@@ -13,7 +13,11 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../components/MapComponent";
 import { makeFullAddress } from "../constants";
-import { generateGeolocation, getCurrentLocation, updateDeliveryStatus } from "../firebase";
+import {
+  generateGeolocation,
+  getCurrentLocation,
+  updateDeliveryStatus,
+} from "../firebase";
 
 const { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -23,10 +27,11 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 const DeliveryComplete = ({ navigation, route }) => {
   const {
     packageItem,
-    delivererItem = null,
     receiverItem,
     senderItem,
     homeScreen,
+    delivererItem = null,
+    init_deliverer_coord = null,
   } = route.params;
 
   const [mapProps, setMapProps] = useState();
@@ -34,7 +39,9 @@ const DeliveryComplete = ({ navigation, route }) => {
   const full_dropOff_address = makeFullAddress(dropOff_address);
 
   useEffect(async () => {
-    const deliverer_coord = await getCurrentLocation();
+    const deliverer_coord = init_deliverer_coord
+      ? init_deliverer_coord
+      : await getCurrentLocation();
     const [sourceLat, sourceLong] = [
       deliverer_coord.latitude,
       deliverer_coord.longitude,
