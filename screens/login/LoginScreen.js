@@ -14,8 +14,17 @@ const LoginScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
+  const logged_in_user = getCurrentUser();
+  useEffect(() => {
+    if (logged_in_user) {
+      console.log(`Logged in with ${logged_in_user.email}`);
+    } else {
+      console.log("No logged-in user yet");
+    }
+  }, []);
+
   const _loginAndNavigateTo = (screen = "Home") => {
-    if (!email && getCurrentUser()) {
+    if (!email && logged_in_user) {
       navigation.navigate(screen);
       return;
     }
