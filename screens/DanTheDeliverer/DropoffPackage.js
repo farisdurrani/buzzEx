@@ -19,13 +19,24 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const DeliveryComplete = ({ navigation, route }) => {
-  const { receiverItem, packageItem } = route.params;
+  const {
+    mapProps = null,
+    packageItem,
+    delivererItem,
+    receiverItem,
+    senderItem,
+  } = route.params;
+
+  const destination_address = packageItem.data.destination_address;
+  const line2Present = Boolean(destination_address.line2);
+
+  const full_dropOff_address = `${destination_address.line1}, ${
+    destination_address.line2
+  }${line2Present ? ", " : " "}${destination_address.city}, ${
+    destination_address.state
+  }, ${destination_address.zip}`;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  let mapProps = null;
-  if (route.params && route.params.mapProps) {
-    mapProps = route.params.mapProps;
-  }
 
   const hasLocationData =
     mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
@@ -48,7 +59,7 @@ const DeliveryComplete = ({ navigation, route }) => {
       )}
       <View style={styles.bottomContainer}>
         <Text style={styles.linetwo}>
-          Dropping off at 555 Braves Win Dr, Atlanta, GA 30318
+          {`Dropping off at ${full_dropOff_address}`}
         </Text>
         <TextInput
           placeholder="Any delivery notes?"
@@ -65,8 +76,10 @@ const DeliveryComplete = ({ navigation, route }) => {
           onPress={() =>
             navigation.navigate("PictureDropoff", {
               mapProps: mapProps,
-              receiverItem: receiverItem,
               packageItem: packageItem,
+              delivererItem: delivererItem,
+              receiverItem: receiverItem,
+              senderItem: senderItem,
             })
           }
           containerStyle={{

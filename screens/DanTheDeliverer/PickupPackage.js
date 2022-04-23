@@ -19,13 +19,24 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const PickupPackage = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const {
+    mapProps = null,
+    packageItem,
+    delivererItem,
+    receiverItem,
+    senderItem,
+  } = route.params;
+
+  const source_address = packageItem.data.source_address;
+  const line2Present = Boolean(source_address.line2);
+
+  const full_pickUp_address = `${source_address.line1}, ${
+    source_address.line2
+  }${line2Present ? ", " : " "}${source_address.city}, ${
+    source_address.state
+  }, ${source_address.zip}`;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  let mapProps = null;
-  if (route.params && route.params.mapProps) {
-    mapProps = route.params.mapProps;
-  }
 
   const hasLocationData =
     mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
@@ -48,7 +59,7 @@ const PickupPackage = ({ navigation, route }) => {
       )}
       <View style={styles.bottomContainer}>
         <Text style={styles.linetwo}>
-          Picking up at 123 Peachtree Dr NW, Atlanta, GA 30318{" "}
+          {`Picking up at ${full_pickUp_address}`}
         </Text>
         <TextInput
           placeholder="Any delivery notes?"
@@ -66,6 +77,9 @@ const PickupPackage = ({ navigation, route }) => {
             navigation.replace("ConfirmPickup", {
               mapProps: mapProps,
               packageItem: packageItem,
+              delivererItem: delivererItem,
+              receiverItem: receiverItem,
+              senderItem: senderItem,
             })
           }
           containerStyle={{

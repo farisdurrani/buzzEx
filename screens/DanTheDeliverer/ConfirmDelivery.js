@@ -4,13 +4,13 @@ import { BackCancelButtons, BButton } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
 
 const ConfirmDelivery = ({ navigation, route }) => {
-  const { receiverItem, packageItem } = route.params;
-
-  let snapURI = null;
-
-  if (route.params && route.params.snapURI) {
-    snapURI = route.params.snapURI;
-  }
+  const {
+    snapURI = null,
+    packageItem,
+    delivererItem,
+    receiverItem,
+    senderItem,
+  } = route.params;
 
   return (
     <View style={styles.mainContainer}>
@@ -21,16 +21,18 @@ const ConfirmDelivery = ({ navigation, route }) => {
       <View style={[LAYOUT.centerMiddle, { marginBottom: 50 }]}>
         <TouchableOpacity
           style={[styles.pictureContainer, LAYOUT.centerMiddle]}
-          onPress={() => {
+          onPress={() =>
             navigation.navigate("TakePicture", {
               nextScreen: "ConfirmDelivery",
-            });
-          }}
+              snapURI: snapURI,
+              packageItem: packageItem,
+              delivererItem: delivererItem,
+              receiverItem: receiverItem,
+              senderItem: senderItem,
+            })
+          }
         >
-          <Image
-            style={styles.picture}
-            source={{ uri: route.params.snapURI }}
-          />
+          <Image style={styles.picture} source={{ uri: snapURI }} />
         </TouchableOpacity>
       </View>
       <BButton
@@ -40,6 +42,9 @@ const ConfirmDelivery = ({ navigation, route }) => {
             homeScreen: "DeliveriesAvailable",
             receiverItem: receiverItem,
             packageItem: packageItem,
+            delivererItem: delivererItem,
+            receiverItem: receiverItem,
+            senderItem: senderItem,
           })
         }
       />
