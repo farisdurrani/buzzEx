@@ -147,6 +147,11 @@ const SellerConfirmScreen = ({ navigation, route }) => {
             receiverItem: receiverItem,
             deliveryJobID: newDeliveryJobID,
           });
+          // navigation.navigate("SizeSelection", {
+          //   senderItem: senderItem,
+          //   receiverItem: receiverItem,
+          //   deliveryItem: addedDeliveryItem,
+          // });
         }}
       />
     </View>
