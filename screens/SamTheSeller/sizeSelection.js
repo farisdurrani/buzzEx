@@ -1,49 +1,61 @@
 import {StyleSheet, Text, View} from 'react-native'
+import { BackCancelButtons } from '../../components';
 
 import React from 'react'
 
-const sizeSelection = () => {
+const SizeSelection = ({ navigation, route }) => {
   return (
-   <View style = {styles.container}>
+    <View style= {styles.Maincontainer}>
+        <BackCancelButtons style = {styles.backcancel} navigation={navigation} />
+        <View style = {styles.container}>
+            
+            <View style = {styles.box}>
+                <View style = {styles.inner}>
+                </View>
+            </View>
 
-        <View style = {styles.box}>
-             <View style = {styles.inner}>
-             </View>
+            <View style = {styles.box}>
+                <View style = {styles.inner}>
+                </View>
+            </View>
+
+            <View style = {styles.box}>
+                <View style = {styles.inner}>
+                </View>
+            </View>
+
+            <View style = {styles.box}>
+                <View style = {styles.inner}>
+                </View>
+            </View>
+
         </View>
+     </View>
+  );
+};
 
-        <View style = {styles.box}>
-            <View style = {styles.inner}>
-             </View>
-        </View>
-
-        <View style = {styles.box}>
-            <View style = {styles.inner}>
-             </View>
-        </View>
-
-        <View style = {styles.box}>
-            <View style = {styles.inner}>
-             </View>
-        </View>
-
-    </View>
-  )
-}
+export default SizeSelection;
 
 const styles = StyleSheet.create({
+
+    Maincontainer:{
+        paddingTop:30,
+
+    },
     container: {
         width:'100%',
         height:'85%',
         padding:5,
         flexDirection:"row",
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        paddingTop: 100,
     }, 
 
     box: {
         width: "50%",
         height: "50%",
         padding:5,
-        borderRadius: "30px",
+        borderRadius: 30,
         
     },
 
@@ -52,7 +64,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#eee',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    backcancel: {
     }
 })
 
-export default sizeSelection

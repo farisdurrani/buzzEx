@@ -151,7 +151,7 @@ const SellerConfirmScreen = ({ navigation, route }) => {
         text="Confirm"
         onPress={async () => {
           await _saveDeliveryJob();
-          navigation.navigate("SellerAwaiting", {
+          navigation.navigate("SizeSelection", {
             senderItem: senderItem,
             receiverItem: receiverItem,
             deliveryItem: addedDeliveryItem,

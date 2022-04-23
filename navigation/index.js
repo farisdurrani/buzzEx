@@ -24,6 +24,7 @@ import {
   SellerAcceptedScreen,
   SellerAwaitingScreen,
   SellerConfirmScreen,
+  SizeSelection,
   // login
   LoginScreen,
   RegistrationScreen,
@@ -80,6 +81,11 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="SellerConfirm"
           component={SellerConfirmScreen}
+        />
+        <Stack.Screen
+          options={{ headerShown: false }}
+          name="SizeSelection"
+          component={SizeSelection}
         />
         <Stack.Screen
           options={{ headerShown: false }}

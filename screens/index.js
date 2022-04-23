@@ -23,6 +23,7 @@ export { default as ItemPriceScreen } from "./SamTheSeller/ItemPriceScreen";
 export { default as SellerAcceptedScreen } from "./SamTheSeller/SellerAcceptedScreen";
 export { default as SellerAwaitingScreen } from "./SamTheSeller/SellerAwaitingScreen";
 export { default as SellerConfirmScreen } from "./SamTheSeller/SellerConfirmScreen";
+export { default as SizeSelection } from "./SamTheSeller/SizeSelection";
 
 // common
 export { default as CancellationScreen } from "./CancellationScreen";
