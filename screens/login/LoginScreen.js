@@ -24,15 +24,25 @@ const LoginScreen = ({ navigation }) => {
   }, []);
 
   const _loginAndNavigateTo = (screen = "Home") => {
-    if (!email && logged_in_user) {
-      navigation.navigate(screen);
+    // stops login if no credentials entered and no currently logged-in user
+    if ((!email || !password) & !logged_in_user) {
+      alert("No user credentials entered");
       return;
     }
-    login(email, password);
-    if (!getCurrentUser()) {
+    // logs in if both email and password entered
+    if (email && password) {
+      login(email, password);
+      if (getCurrentUser()) {
+        navigation.navigate(screen);
+      }
       return;
     }
-    navigation.navigate(screen);
+    // stops login if only one of the credentials is entered
+    if (!email) {
+      alert("Please enter email");
+    } else {
+      alert("Please enter password");
+    }
   };
 
   return (
