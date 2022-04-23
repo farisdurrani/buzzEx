@@ -27,8 +27,6 @@ const SellerConfirmScreen = ({ navigation, route }) => {
   const TOTAL_PRICE = itemPrice + DELIVERY_FEE;
   const TOTAL_TAX_PERCENTAGE = 8.9;
 
-  const [addedDeliveryItem, setAddedDeliveryItem] = useState();
-
   const _ItemDetailGroup = (props) => {
     const { title, text } = props;
     return (
@@ -41,33 +39,26 @@ const SellerConfirmScreen = ({ navigation, route }) => {
     );
   };
 
-  const _saveDeliveryJob = async () => {
-    const addNewDeliveryJobToDB = async () => {
-      const deliveryJobToAdd = {
-        createdAt: getCurrentTimestamp(),
-        currency: "USD",
-        deliverer_location: null,
-        deliverer_uid: null,
-        status: 0,
-        timestamp: getCurrentTimestamp(),
-        package: {
-          name: itemName,
-          base_price: itemPrice,
-          delivery_fee: DELIVERY_FEE,
-          sender_given_photoURL: null,
-          deliverer_given_photoURL: null,
-          tax: (itemPrice * TOTAL_TAX_PERCENTAGE) / 100,
-          tip: 0,
-        },
-        receiver_uid: receiverItem.data.uid,
-        sender_uid: senderItem.data.uid,
-        source_address: senderItem.data.address,
-        destination_address: receiverItem.data.address,
-      };
-      const newDeliveryJobID = await addNewDeliveryJob(deliveryJobToAdd);
-      setAddedDeliveryItem(await getJob(newDeliveryJobID));
-    };
-    await addNewDeliveryJobToDB();
+  const deliveryJobToAdd = {
+    createdAt: getCurrentTimestamp(),
+    currency: "USD",
+    deliverer_location: null,
+    deliverer_uid: null,
+    status: 0,
+    timestamp: getCurrentTimestamp(),
+    package: {
+      name: itemName,
+      base_price: itemPrice,
+      delivery_fee: DELIVERY_FEE,
+      sender_given_photoURL: null,
+      deliverer_given_photoURL: null,
+      tax: (itemPrice * TOTAL_TAX_PERCENTAGE) / 100,
+      tip: 0,
+    },
+    receiver_uid: receiverItem.data.uid,
+    sender_uid: senderItem.data.uid,
+    source_address: senderItem.data.address,
+    destination_address: receiverItem.data.address,
   };
 
   const _PriceItem = (props) => {
@@ -150,11 +141,11 @@ const SellerConfirmScreen = ({ navigation, route }) => {
       <BButton
         text="Confirm"
         onPress={async () => {
-          await _saveDeliveryJob();
-          navigation.navigate("SizeSelection", {
+          const newDeliveryJobID = await addNewDeliveryJob(deliveryJobToAdd);
+          navigation.navigate("SellerAwaiting", {
             senderItem: senderItem,
             receiverItem: receiverItem,
-            deliveryItem: addedDeliveryItem,
+            deliveryJobID: newDeliveryJobID,
           });
         }}
       />

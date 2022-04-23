@@ -15,8 +15,8 @@ const LoginScreen = ({ navigation }) => {
   const [password, onChangePassword] = useState("");
 
   const _loginAndNavigateTo = (screen = "Home") => {
-    if (!email) {
-      navigation.navigate(screen); // TODO remove and stop access
+    if (!email && getCurrentUser()) {
+      navigation.navigate(screen);
       return;
     }
     login(email, password);

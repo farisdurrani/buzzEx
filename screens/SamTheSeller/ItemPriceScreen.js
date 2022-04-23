@@ -79,15 +79,23 @@ const ItemPriceScreen = ({ navigation, route }) => {
       </View>
       <BButton
         text="Continue"
-        onPress={() =>
+        onPress={() => {
+          if (!(itemPrice && !isNaN(itemPrice))) {
+            alert("Price must be a valid number.");
+            return;
+          }
+          if (!itemName) {
+            alert("Missing item name");
+            return;
+          }
           navigation.navigate("SellerConfirm", {
             senderItem: senderItem,
             receiverItem: receiverItem,
-            itemName: itemName ? itemName : "Bike",
-            itemPrice: itemPrice && !isNaN(itemPrice) ? Number(itemPrice) : 12,
+            itemName: itemName,
+            itemPrice: Number(itemPrice),
             snapURI: snapURI,
-          })
-        }
+          });
+        }}
       />
     </View>
   );
