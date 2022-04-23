@@ -21,7 +21,13 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const PickupPackage = ({ navigation, route }) => {
-  const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
+  const {
+    packageItem,
+    delivererItem,
+    receiverItem,
+    senderItem,
+    init_deliverer_coord = null,
+  } = route.params;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const [mapProps, setMapProps] = useState();
@@ -30,7 +36,9 @@ const PickupPackage = ({ navigation, route }) => {
   const full_pickUp_address = makeFullAddress(pickup_address);
 
   useEffect(async () => {
-    const deliverer_coord = await getCurrentLocation();
+    const deliverer_coord = init_deliverer_coord
+      ? init_deliverer_coord
+      : await getCurrentLocation();
     const [sourceLat, sourceLong] = [
       deliverer_coord.latitude,
       deliverer_coord.longitude,

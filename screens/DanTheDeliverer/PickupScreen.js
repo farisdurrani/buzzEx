@@ -13,6 +13,7 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
 import {
   generateGeolocation,
+  getCurrentLocation,
   getUserDetails,
   updateDeliveryStatus,
 } from "../../firebase";
@@ -22,6 +23,7 @@ const PickupScreen = ({ navigation, route }) => {
 
   const [senderItem, setSenderItem] = useState();
   const [receiverItem, setReceiverItem] = useState();
+  const [deliverer_coord, set_deliverer_coord] = useState();
 
   const source_address = packageItem.data.source_address;
 
@@ -31,9 +33,12 @@ const PickupScreen = ({ navigation, route }) => {
 
     packageItem.data.deliverer_uid = delivererItem.data.uid;
     packageItem.data.status = 2;
-    // await updateDeliveryStatus(packageItem.id, 2, {
-    //   deliverer_uid: delivererItem.data.uid,
-    // }); // TODO rem
+    await updateDeliveryStatus(packageItem.id, 2, {
+      deliverer_uid: delivererItem.data.uid,
+    });
+
+    const current_location = await getCurrentLocation();
+    set_deliverer_coord(current_location);
   }, []);
 
   const _ChoiceRow = (props) => {
@@ -51,6 +56,7 @@ const PickupScreen = ({ navigation, route }) => {
               delivererItem: delivererItem,
               receiverItem: receiverItem,
               senderItem: senderItem,
+              init_deliverer_coord: deliverer_coord,
             });
           }}
         />

@@ -11,10 +11,12 @@ import React, { useState, useEffect } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
-import { getUserDetails, updateDeliveryStatus } from "../../firebase";
+import { getCurrentLocation, getUserDetails, updateDeliveryStatus } from "../../firebase";
 
 const DropoffAt = ({ navigation, route }) => {
   const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
+
+  const [deliverer_coord, set_deliverer_coord] = useState();
 
   const destination_address = packageItem.data.destination_address;
   const receiver_first_name = receiverItem.data.full_name.split(" ")[0];
@@ -22,6 +24,9 @@ const DropoffAt = ({ navigation, route }) => {
   useEffect(async() => {
     await updateDeliveryStatus(packageItem.id, 3);
     packageItem.data.status = 3;
+
+    const current_location = await getCurrentLocation();
+    set_deliverer_coord(current_location);
   }, [])
 
   const _ChoiceRow = (props) => {
@@ -40,6 +45,7 @@ const DropoffAt = ({ navigation, route }) => {
               delivererItem: delivererItem,
               receiverItem: receiverItem,
               senderItem: senderItem,
+              init_deliverer_coord: deliverer_coord,
             });
           }}
         />
