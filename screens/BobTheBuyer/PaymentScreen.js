@@ -9,7 +9,11 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
 import { COLORS, LAYOUT, roundTo2 } from "../../constants";
-import { setToReadyToPickup, updateDeliveryStatus } from "../../firebase";
+import {
+  setToReadyToPickup,
+  unsubscribeDeliveryJob,
+  updateDeliveryStatus,
+} from "../../firebase";
 
 const PaymentScreen = ({ navigation, route }) => {
   const { packageItem, senderItem, receiverItem } = route.params;
@@ -96,7 +100,9 @@ const PaymentScreen = ({ navigation, route }) => {
         text="Pay"
         containerStyle={{ width: 150, marginTop: 60 }}
         onPress={async () => {
-          await setToReadyToPickup(packageItem.id, tip);
+          await updateDeliveryStatus(packageItem.id, 1, {
+            package: { ...packageItem.data.package, tip: Number(tip) },
+          });
           navigation.navigate("MatchingDeliverer", {
             packageItem: packageItem,
             senderItem: senderItem,
