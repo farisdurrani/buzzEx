@@ -17,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
   const logged_in_user = getCurrentUser();
   useEffect(() => {
     if (logged_in_user) {
-      console.log(`Logged in with ${logged_in_user.email}`);
+      console.log(`Logged in with: ${logged_in_user.email}`);
     } else {
       console.log("No logged-in user yet");
     }

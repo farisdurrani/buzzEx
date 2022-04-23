@@ -47,10 +47,7 @@ const PickupPackage = ({ navigation, route }) => {
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
 
-  const hasLocationData =
-    mapProps &&
-    mapProps.source.sourceLat !== null &&
-    mapProps.source.sourceLong !== null;
+  const hasLocationData = destination_address && source_address;
 
   const mapProps = hasLocationData
     ? {

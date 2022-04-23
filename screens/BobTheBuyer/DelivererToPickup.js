@@ -44,6 +44,8 @@ const DelivererToPickup = ({ route, navigation }) => {
 
   const hasLocationData =
     mapProps.source.sourceLat !== null && mapProps.source.sourceLong !== null;
+
+    
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>
