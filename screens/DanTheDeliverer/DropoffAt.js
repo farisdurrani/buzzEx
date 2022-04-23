@@ -11,13 +11,18 @@ import React, { useState, useEffect } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
-import { getUserDetails } from "../../firebase";
+import { getUserDetails, updateDeliveryStatus } from "../../firebase";
 
 const DropoffAt = ({ navigation, route }) => {
   const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
 
   const destination_address = packageItem.data.destination_address;
   const receiver_first_name = receiverItem.data.full_name.split(" ")[0];
+
+  useEffect(async() => {
+    await updateDeliveryStatus(packageItem.id, 3);
+    packageItem.data.status = 3;
+  }, [])
 
   const _ChoiceRow = (props) => {
     const { choice } = props;

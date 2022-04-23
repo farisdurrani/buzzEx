@@ -12,57 +12,46 @@ import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../../components/MapComponent";
+import { getCurrentLocation } from "../../firebase";
+import { makeFullAddress } from "../../constants";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const DeliveryComplete = ({ navigation, route }) => {
-  const {
-    packageItem,
-    delivererItem,
-    receiverItem,
-    senderItem,
-  } = route.params;
-
-  const { destination_address, source_address } = packageItem.data;
-
-  const line2Present = Boolean(destination_address.line2);
-
-  const full_dropOff_address = `${destination_address.line1}, ${
-    destination_address.line2
-  }${line2Present ? ", " : " "}${destination_address.city}, ${
-    destination_address.state
-  }, ${destination_address.zip}`;
+const DropoffPackage = ({ navigation, route }) => {
+  const { packageItem, delivererItem, receiverItem, senderItem } = route.params;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
+  const [mapProps, setMapProps] = useState();
 
-  const [sourceLat, sourceLong] = [
-    source_address.address_coord.latitude,
-    source_address.address_coord.longitude,
-  ];
-  const [destinationLat, destinationLong] = [
-    destination_address.address_coord.latitude,
-    destination_address.address_coord.longitude,
-  ];
+  const dropOff_address = packageItem.data.destination_address;
+  const full_dropOff_address = makeFullAddress(dropOff_address);
 
-  const hasLocationData = source_address && destination_address;
-  const mapProps = hasLocationData
-    ? {
-        source: {
-          sourceLat: sourceLat,
-          sourceLong: sourceLong,
-        },
-        dest: {
-          destLat: destinationLat,
-          destLong: destinationLong,
-        },
-        LATITUDE_DELTA: LATITUDE_DELTA,
-        LONGITUDE_DELTA: LONGITUDE_DELTA,
-        style: styles.map,
-      }
-    : null;
+  useEffect(async () => {
+    const deliverer_coord = await getCurrentLocation();
+    const [sourceLat, sourceLong] = [
+      deliverer_coord.latitude,
+      deliverer_coord.longitude,
+    ];
+    const [destinationLat, destinationLong] = [
+      dropOff_address.address_coord.latitude,
+      dropOff_address.address_coord.longitude,
+    ];
+
+    const hasLocationData = dropOff_address && deliverer_coord;
+    const newMapProps = hasLocationData
+      ? {
+          source: { sourceLat: sourceLat, sourceLong: sourceLong },
+          dest: { destLat: destinationLat, destLong: destinationLong },
+          LATITUDE_DELTA: LATITUDE_DELTA,
+          LONGITUDE_DELTA: LONGITUDE_DELTA,
+          style: styles.map,
+        }
+      : null;
+    setMapProps(newMapProps);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -75,7 +64,7 @@ const DeliveryComplete = ({ navigation, route }) => {
       <View style={styles.headingContainer}>
         <Text style={styles.lineone}>ETA - 2:55</Text>
       </View>
-      {hasLocationData ? (
+      {mapProps ? (
         <MapComponent mapProps={{ ...mapProps, style: styles.map }} />
       ) : (
         <Text style={styles.paragraph}>Loading Map...</Text>
@@ -116,7 +105,7 @@ const DeliveryComplete = ({ navigation, route }) => {
   );
 };
 
-export default DeliveryComplete;
+export default DropoffPackage;
 
 const styles = StyleSheet.create({
   container: {

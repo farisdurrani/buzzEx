@@ -12,6 +12,8 @@ import { BButton, BackCancelButtons } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../components/MapComponent";
+import { makeFullAddress } from "../constants";
+import { generateGeolocation, getCurrentLocation, updateDeliveryStatus } from "../firebase";
 
 const { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -27,43 +29,41 @@ const DeliveryComplete = ({ navigation, route }) => {
     homeScreen,
   } = route.params;
 
-  const [deliveryNotes, onAddDeliveryNotes] = useState("");
+  const [mapProps, setMapProps] = useState();
+  const dropOff_address = packageItem.data.destination_address;
+  const full_dropOff_address = makeFullAddress(dropOff_address);
 
-  const { destination_address, source_address } = packageItem.data;
+  useEffect(async () => {
+    const deliverer_coord = await getCurrentLocation();
+    const [sourceLat, sourceLong] = [
+      deliverer_coord.latitude,
+      deliverer_coord.longitude,
+    ];
+    const [destinationLat, destinationLong] = [
+      dropOff_address.address_coord.latitude,
+      dropOff_address.address_coord.longitude,
+    ];
 
-  const line2Present = Boolean(destination_address.line2);
+    const hasLocationData = dropOff_address && deliverer_coord;
+    const newMapProps = hasLocationData
+      ? {
+          source: { sourceLat: sourceLat, sourceLong: sourceLong },
+          dest: { destLat: destinationLat, destLong: destinationLong },
+          LATITUDE_DELTA: LATITUDE_DELTA,
+          LONGITUDE_DELTA: LONGITUDE_DELTA,
+          style: styles.map,
+        }
+      : null;
+    setMapProps(newMapProps);
 
-  const full_dropOff_address = `${destination_address.line1}, ${
-    destination_address.line2
-  }${line2Present ? ", " : " "}${destination_address.city}, ${
-    destination_address.state
-  }, ${destination_address.zip}`;
-
-  const [sourceLat, sourceLong] = [
-    source_address.address_coord.latitude,
-    source_address.address_coord.longitude,
-  ];
-  const [destinationLat, destinationLong] = [
-    destination_address.address_coord.latitude,
-    destination_address.address_coord.longitude,
-  ];
-
-  const hasLocationData = source_address && destination_address;
-  const mapProps = hasLocationData
-    ? {
-        source: {
-          sourceLat: sourceLat,
-          sourceLong: sourceLong,
-        },
-        dest: {
-          destLat: destinationLat,
-          destLong: destinationLong,
-        },
-        LATITUDE_DELTA: LATITUDE_DELTA,
-        LONGITUDE_DELTA: LONGITUDE_DELTA,
-        style: styles.map,
-      }
-    : null;
+    await updateDeliveryStatus(
+      packageItem.id,
+      4,
+      {},
+      generateGeolocation(deliverer_coord.latitude, deliverer_coord.longitude)
+    );
+    packageItem.data.status = 4;
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -76,7 +76,7 @@ const DeliveryComplete = ({ navigation, route }) => {
       <View style={styles.headingContainer}>
         <Text style={styles.lineone}>Delivery Complete!</Text>
       </View>
-      {hasLocationData ? (
+      {mapProps ? (
         <MapComponent mapProps={{ ...mapProps, style: styles.map }} />
       ) : (
         <Text style={styles.paragraph}>Loading Map...</Text>
@@ -94,11 +94,7 @@ const DeliveryComplete = ({ navigation, route }) => {
         <BButton
           text="Return to Home"
           onPress={() => navigation.replace(homeScreen)}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
+          containerStyle={styles.button}
         />
       </View>
     </View>
@@ -131,7 +127,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    padding: 20,
+    width: 200,
+    marginHorizontal: 50,
+    marginVertical: 5,
   },
   buttonView: {
     position: "absolute",

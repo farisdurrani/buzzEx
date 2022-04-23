@@ -39,8 +39,6 @@ const ConfirmDelivery = ({ navigation, route }) => {
       <BButton
         text="Confirm"
         onPress={async () => {
-          await updateDeliveryStatus(packageItem.id, 4);
-          packageItem.data.status = 4;
           navigation.replace("DeliveryComplete", {
             homeScreen: "DeliveriesAvailable",
             receiverItem: receiverItem,

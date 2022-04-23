@@ -23,6 +23,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import * as Location from "expo-location";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -240,19 +241,34 @@ export async function getJobs(status, add_queries = []) {
  * @param {string} jobID
  * @param {Number} status
  * @param {Object} other_changes A JS object containing all changes to the document fields, e.g., new deliverer_uid and source_destination, if any. If none is defined, no changes to the old package will be made.
+ * @param {Object} new_geoLocation new location to be updated in deliverer_location
  */
 export async function updateDeliveryStatus(
   jobID,
   status,
-  other_changes = null
+  other_changes = {},
+  new_geoPoint = null
 ) {
-  if (other_changes) {
-    other_changes.status = status;
-    await _updateDeliveryJob(jobID, other_changes);
+  if (!new_geoPoint) {
+    const foreground = await Location.requestForegroundPermissionsAsync();
+    if (!foreground.granted) {
+      alert("Permissions not given");
+      return;
+    }
+
+    await getCurrentLocation().then(async (loc) => {
+      await _updateDeliveryJob(jobID, {
+        ...other_changes,
+        status: status,
+        deliverer_location: loc,
+      });
+    });
     return;
   }
   await _updateDeliveryJob(jobID, {
+    ...other_changes,
     status: status,
+    deliverer_location: new_geoPoint,
   });
 }
 
@@ -290,3 +306,30 @@ export function getRandomCoord() {
   const long = Math.random() * (max - min) + min;
   return generateGeolocation(lat, long);
 }
+
+/**
+ * Full location Object {
+  "coords": Object {
+    "accuracy": 6.6973393244065,
+    "altitude": 278.69948411826044,
+    "altitudeAccuracy": 1.9028470109609013,
+    "heading": -1,
+    "latitude": 33.78632529004801,
+    "longitude": -84.40599885580073,
+    "speed": 0,
+  },
+  "timestamp": 1650731077001.6946,
+}
+ * @returns current location of user in a GeoPoint format
+ */
+export const getCurrentLocation = async () => {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== "granted") {
+    alert("Permission to access location was denied");
+    return;
+  }
+  const location = await Location.getCurrentPositionAsync({}).then((e) => {
+    return generateGeolocation(e.coords.latitude, e.coords.longitude);
+  });
+  return location;
+};
