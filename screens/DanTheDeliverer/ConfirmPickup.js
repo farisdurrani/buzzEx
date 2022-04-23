@@ -21,9 +21,7 @@ const ConfirmPickup = ({ navigation, route }) => {
       <BButton
         containerStyle={styles.buttonContainer}
         text="Yes"
-        onPress={async() => {
-          await updateDeliveryStatus(packageItem.id, 3);
-          packageItem.data.status = 3;
+        onPress={async () => {
           navigation.navigate("DropoffAt", {
             packageItem: packageItem,
             delivererItem: delivererItem,

@@ -11,18 +11,29 @@ import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT } from "../../constants";
-import { getUserDetails, getCurrentLocation } from "../../firebase";
+import {
+  generateGeolocation,
+  getUserDetails,
+  updateDeliveryStatus,
+} from "../../firebase";
 
 const PickupScreen = ({ navigation, route }) => {
   const { packageItem, delivererItem } = route.params;
 
   const [senderItem, setSenderItem] = useState();
   const [receiverItem, setReceiverItem] = useState();
+
   const source_address = packageItem.data.source_address;
 
   useEffect(async () => {
     setSenderItem(await getUserDetails(packageItem.data.sender_uid));
     setReceiverItem(await getUserDetails(packageItem.data.receiver_uid));
+
+    packageItem.data.deliverer_uid = delivererItem.data.uid;
+    packageItem.data.status = 2;
+    // await updateDeliveryStatus(packageItem.id, 2, {
+    //   deliverer_uid: delivererItem.data.uid,
+    // }); // TODO rem
   }, []);
 
   const _ChoiceRow = (props) => {

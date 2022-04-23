@@ -241,19 +241,34 @@ export async function getJobs(status, add_queries = []) {
  * @param {string} jobID
  * @param {Number} status
  * @param {Object} other_changes A JS object containing all changes to the document fields, e.g., new deliverer_uid and source_destination, if any. If none is defined, no changes to the old package will be made.
+ * @param {Object} new_geoLocation new location to be updated in deliverer_location
  */
 export async function updateDeliveryStatus(
   jobID,
   status,
-  other_changes = null
+  other_changes = {},
+  new_geoPoint = null
 ) {
-  if (other_changes) {
-    other_changes.status = status;
-    await _updateDeliveryJob(jobID, other_changes);
+  if (!new_geoPoint) {
+    const foreground = await Location.requestForegroundPermissionsAsync();
+    if (!foreground.granted) {
+      alert("Permissions not given");
+      return;
+    }
+
+    await getCurrentLocation().then(async (loc) => {
+      await _updateDeliveryJob(jobID, {
+        ...other_changes,
+        status: status,
+        deliverer_location: loc,
+      });
+    });
     return;
   }
   await _updateDeliveryJob(jobID, {
+    ...other_changes,
     status: status,
+    deliverer_location: new_geoPoint,
   });
 }
 

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
-import RadioForm from "react-native-simple-radio-button";
 import { KeyboardAvoidingView } from "react-native";
 import { initialWindowMetrics } from "react-native-safe-area-context";
-import { COLORS, LAYOUT } from "../../constants";
+import { COLORS, LAYOUT, start_live_location_tracking } from "../../constants";
 import { TextInput } from "react-native";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { InputTextField } from "../../components";
@@ -14,6 +13,7 @@ import {
   updateDeliveryStatus,
   getCurrentLocation,
 } from "../../firebase";
+import * as Location from "expo-location";
 
 const DeliveriesAvailable = ({ navigation }) => {
   const [delivererItem, setDelivererItem] = useState();
@@ -39,15 +39,7 @@ const DeliveriesAvailable = ({ navigation }) => {
         </View>
         <BButton
           text="Accept"
-          onPress={async () => {
-            await getCurrentLocation().then(async (loc) => {
-              await updateDeliveryStatus(packageItem.id, 2, {
-                deliverer_uid: delivererItem.data.uid,
-                deliverer_location: loc,
-              });
-            });
-            packageItem.data.deliverer_uid = delivererItem.data.uid;
-            packageItem.data.status = 2;
+          onPress={() => {
             navigation.navigate("PickupScreen", {
               packageItem: packageItem,
               delivererItem: delivererItem,

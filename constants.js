@@ -1,3 +1,5 @@
+import * as Location from "expo-location";
+
 export const COLORS = {
   white: "#fff",
   black: "#000",
@@ -27,3 +29,14 @@ export const LAYOUT = {
 export const roundTo2 = (num) => {
   return Number.parseFloat(num).toFixed(2);
 };
+
+export const makeFullAddress = (address) => {
+  if (!address) {
+    return "";
+  }
+  const line2Present = Boolean(address.line2);
+  return `${address.line1}, ${address.line2}${line2Present ? ", " : " "}${
+    address.city
+  }, ${address.state} ${address.zip}`;
+};
+
