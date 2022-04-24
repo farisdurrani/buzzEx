@@ -8,16 +8,16 @@ import {
   Dimensions,
 } from "react-native";
 import { Input, Button, Text, useTheme } from "react-native-elements";
-import { BButton, BackCancelButtons } from "../components/index";
+import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
-import MapComponent from "../components/MapComponent";
-import { COLORS, makeFullAddress } from "../constants";
+import MapComponent from "../../components/MapComponent";
+import { COLORS, makeFullAddress } from "../../constants";
 import {
   generateGeolocation,
   getCurrentLocation,
   updateDeliveryStatus,
-} from "../firebase";
+} from "../../firebase";
 
 const { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;

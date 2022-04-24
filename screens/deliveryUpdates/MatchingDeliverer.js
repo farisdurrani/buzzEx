@@ -10,10 +10,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../../constants";
 import MapComponent from "../../components/MapComponent";
-import * as Location from "expo-location";
-import { onDeliveryUpdate } from "../../firebase";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -21,52 +18,54 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const MatchingDeliverer = ({ navigation, route }) => {
-  const { packageItem, senderItem, receiverItem } = route.params;
+  const { initPackageItem, senderItem, receiverItem } = route.params;
 
-  const [currentDelivery, setCurrentDelivery] = useState(packageItem.data);
+  const [unsubscribe, setUnSubscribe] = useState();
+  const [packageItem, setPackageItem] = useState(initPackageItem);
+  const [mapProps, setMapProps] = useState();
 
-  useEffect(() => {
-    onDeliveryUpdate(packageItem.id, setCurrentDelivery);
-  }, []);
+  const deliverer_coord = initPackageItem.deliverer_coord;
+  const pickup_address = packageItem.data.source_address;
 
-  const { destination_address, source_address } = packageItem.data;
+  useEffect(async () => {
+    if (!mapProps) {
+      const [sourceLat, sourceLong] = [
+        deliverer_coord.latitude,
+        deliverer_coord.longitude,
+      ];
+      const [destinationLat, destinationLong] = [
+        pickup_address.address_coord.latitude,
+        pickup_address.address_coord.longitude,
+      ];
 
-  const [sourceLat, sourceLong] = [
-    source_address.address_coord.latitude,
-    source_address.address_coord.longitude,
-  ];
-  const [destinationLat, destinationLong] = [
-    destination_address.address_coord.latitude,
-    destination_address.address_coord.longitude,
-  ];
+      const hasLocationData = pickup_address && deliverer_coord;
+      const newMapProps = hasLocationData
+        ? {
+            source: { sourceLat: sourceLat, sourceLong: sourceLong },
+            dest: { destLat: destinationLat, destLong: destinationLong },
+            LATITUDE_DELTA: LATITUDE_DELTA,
+            LONGITUDE_DELTA: LONGITUDE_DELTA,
+            style: styles.map,
+          }
+        : null;
+      setMapProps(newMapProps);
+    }
 
-  const hasLocationData = source_address && destination_address;
-  const mapProps = hasLocationData
-    ? {
-        source: {
-          sourceLat: sourceLat,
-          sourceLong: sourceLong,
-        },
-        dest: {
-          destLat: destinationLat,
-          destLong: destinationLong,
-        },
-        LATITUDE_DELTA: LATITUDE_DELTA,
-        LONGITUDE_DELTA: LONGITUDE_DELTA,
-        style: styles.map,
-      }
-    : null;
+    if (!unsubscribe) {
+      const unsub = unsubscribeDeliveryJob(initPackageItem.id, setPackageItem);
+      setUnSubscribe(unsub);
+    }
 
-  useEffect(() => {
-    if (currentDelivery.status == "2") {
-      navigation.navigate("Matched", {
-        mapProps: mapProps,
-        currentDelivery: currentDelivery,
-        deliveryID: packageItem.id,
+    if (packageItem.data.status >= 2) {
+      unsubscribe();
+      navigation.navigate("Accepted", {
+        senderItem: senderItem,
+        receiverItem: receiverItem,
+        packageItem: packageItem,
       });
     }
-  }, [currentDelivery]);
-  
+  }, [packageItem]);
+
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>
@@ -93,17 +92,13 @@ const MatchingDeliverer = ({ navigation, route }) => {
         <BButton
           text="Go to deliverer pickup screen"
           onPress={() =>
-            navigation.navigate("Matched", {
-              mapProps: mapProps,
-              currentDelivery: currentDelivery,
-              deliveryID: packageItem.id,
+            navigation.navigate("Accepted", {
+              packageItem: packageItem,
+              senderItem: senderItem,
+              receiverItem: receiverItem,
             })
           }
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 20,
-          }}
+          containerStyle={styles.button}
         />
       </View>
     </View>
@@ -124,7 +119,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    padding: 20,
+    width: 200,
+    marginHorizontal: 50,
+    marginVertical: 20,
   },
   buttonContainer: {},
   buttonOutline: {},

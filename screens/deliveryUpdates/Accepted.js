@@ -14,7 +14,7 @@ import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { COLORS, LAYOUT, roundTo2 } from "../../constants";
 import { getUserDetails } from "../../firebase";
 
-const SellerAcceptedScreen = ({ navigation, route }) => {
+const Accepted = ({ navigation, route }) => {
   const { senderItem, receiverItem, packageItem } = route.params;
 
   const [delivererItem, setDelivererItem] = useState({
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SellerAcceptedScreen;
+export default Accepted;

@@ -104,7 +104,7 @@ const PaymentScreen = ({ navigation, route }) => {
             package: { ...packageItem.data.package, tip: Number(tip) },
           });
           navigation.navigate("MatchingDeliverer", {
-            packageItem: packageItem,
+            initPackageItem: packageItem,
             senderItem: senderItem,
             receiverItem: receiverItem,
           });

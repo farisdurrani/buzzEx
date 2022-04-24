@@ -27,14 +27,12 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
       setUnSubscribe(unsub);
     }
 
-    if (packageItem.status === 1) {
-      setMessage(`Request accepted.\nFinding a deliverer...`);
-    } else if (packageItem.status >= 2) {
+    if (packageItem && packageItem.data.status >= 1) {
       unsubscribe();
-      navigation.navigate("SellerAccepted", {
+      navigation.navigate("MatchingDeliverer", {
         senderItem: senderItem,
         receiverItem: receiverItem,
-        packageItem: packageItem,
+        initPackageItem: packageItem,
       });
     }
   }, [packageItem]);
@@ -45,10 +43,10 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("SellerAccepted", {
+          navigation.navigate("Accepted", {
             senderItem: senderItem,
             receiverItem: receiverItem,
-            packageItem: packageItem, // TODO remove all of this
+            packageItem: packageItem,
           });
         }}
       >
