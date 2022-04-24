@@ -24,42 +24,34 @@ const DelivererToDropoff = ({ navigation, route }) => {
     route.params;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  const [unsubscribe, setUnSubscribe] = useState();
   const [packageItem, setPackageItem] = useState(initPackageItem);
-  const [mapProps, setMapProps] = useState();
 
   const deliverer_coord = initPackageItem.deliverer_coord;
   const dropOff_address = packageItem.data.destination_address;
+  const [sourceLat, sourceLong] = [
+    deliverer_coord.latitude,
+    deliverer_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    dropOff_address.address_coord.latitude,
+    dropOff_address.address_coord.longitude,
+  ];
+  const hasLocationData = dropOff_address && deliverer_coord;
+  const mapProps = hasLocationData
+    ? {
+        source: { sourceLat: sourceLat, sourceLong: sourceLong },
+        dest: { destLat: destinationLat, destLong: destinationLong },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
+  const unsubscribe = unsubscribeDeliveryJob(
+    initPackageItem.id,
+    setPackageItem
+  );
 
   useEffect(async () => {
-    if (!mapProps) {
-      const [sourceLat, sourceLong] = [
-        deliverer_coord.latitude,
-        deliverer_coord.longitude,
-      ];
-      const [destinationLat, destinationLong] = [
-        dropOff_address.address_coord.latitude,
-        dropOff_address.address_coord.longitude,
-      ];
-
-      const hasLocationData = dropOff_address && deliverer_coord;
-      const newMapProps = hasLocationData
-        ? {
-            source: { sourceLat: sourceLat, sourceLong: sourceLong },
-            dest: { destLat: destinationLat, destLong: destinationLong },
-            LATITUDE_DELTA: LATITUDE_DELTA,
-            LONGITUDE_DELTA: LONGITUDE_DELTA,
-            style: styles.map,
-          }
-        : null;
-      setMapProps(newMapProps);
-    }
-
-    if (!unsubscribe) {
-      const unsub = unsubscribeDeliveryJob(initPackageItem.id, setPackageItem);
-      setUnSubscribe(unsub);
-    }
-
     if (packageItem.data.status >= 4) {
       unsubscribe();
       navigation.navigate("DeliveryComplete", {

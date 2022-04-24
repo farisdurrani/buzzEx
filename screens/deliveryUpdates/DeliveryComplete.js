@@ -34,43 +34,42 @@ const DeliveryComplete = ({ navigation, route }) => {
     init_deliverer_coord = null,
   } = route.params;
 
-  const [mapProps, setMapProps] = useState();
+  const [deliverer_coord, set_deliverer_coord] = useState(init_deliverer_coord);
+
   const dropOff_address = packageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
+  const [sourceLat, sourceLong] = [
+    deliverer_coord.latitude,
+    deliverer_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    dropOff_address.address_coord.latitude,
+    dropOff_address.address_coord.longitude,
+  ];
+  const hasLocationData = dropOff_address && deliverer_coord;
+  const mapProps = hasLocationData
+    ? {
+        source: { sourceLat: sourceLat, sourceLong: sourceLong },
+        dest: { destLat: destinationLat, destLong: destinationLong },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
 
   useEffect(async () => {
-    let deliverer_coord = init_deliverer_coord;
     if (delivererItem.data.user_type === "Deliverer") {
-      deliverer_coord = await getCurrentLocation();
-      await updateDeliveryStatus(
-        packageItem.id,
-        4,
-        {},
-        generateGeolocation(deliverer_coord.latitude, deliverer_coord.longitude)
-      );
-      packageItem.data.status = 4;
+      await getCurrentLocation().then(async (loc) => {
+        set_deliverer_coord(loc);
+        await updateDeliveryStatus(
+          packageItem.id,
+          4,
+          {},
+          generateGeolocation(loc.latitude, loc.longitude)
+        );
+        packageItem.data.status = 4;
+      });
     }
-
-    const [sourceLat, sourceLong] = [
-      deliverer_coord.latitude,
-      deliverer_coord.longitude,
-    ];
-    const [destinationLat, destinationLong] = [
-      dropOff_address.address_coord.latitude,
-      dropOff_address.address_coord.longitude,
-    ];
-
-    const hasLocationData = dropOff_address && deliverer_coord;
-    const newMapProps = hasLocationData
-      ? {
-          source: { sourceLat: sourceLat, sourceLong: sourceLong },
-          dest: { destLat: destinationLat, destLong: destinationLong },
-          LATITUDE_DELTA: LATITUDE_DELTA,
-          LONGITUDE_DELTA: LONGITUDE_DELTA,
-          style: styles.map,
-        }
-      : null;
-    setMapProps(newMapProps);
   }, []);
 
   return (

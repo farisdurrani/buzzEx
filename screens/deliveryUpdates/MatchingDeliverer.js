@@ -11,6 +11,7 @@ import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import MapComponent from "../../components/MapComponent";
+import { unsubscribeDeliveryJob } from "../../firebase";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -20,42 +21,34 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 const MatchingDeliverer = ({ navigation, route }) => {
   const { initPackageItem, senderItem, receiverItem } = route.params;
 
-  const [unsubscribe, setUnSubscribe] = useState();
   const [packageItem, setPackageItem] = useState(initPackageItem);
-  const [mapProps, setMapProps] = useState();
 
   const deliverer_coord = initPackageItem.deliverer_coord;
   const pickup_address = packageItem.data.source_address;
+  const [sourceLat, sourceLong] = [
+    deliverer_coord.latitude,
+    deliverer_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    pickup_address.address_coord.latitude,
+    pickup_address.address_coord.longitude,
+  ];
+  const hasLocationData = pickup_address && deliverer_coord;
+  const mapProps = hasLocationData
+    ? {
+        source: { sourceLat: sourceLat, sourceLong: sourceLong },
+        dest: { destLat: destinationLat, destLong: destinationLong },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
+  const unsubscribe = unsubscribeDeliveryJob(
+    initPackageItem.id,
+    setPackageItem
+  );
 
-  useEffect(async () => {
-    if (!mapProps) {
-      const [sourceLat, sourceLong] = [
-        deliverer_coord.latitude,
-        deliverer_coord.longitude,
-      ];
-      const [destinationLat, destinationLong] = [
-        pickup_address.address_coord.latitude,
-        pickup_address.address_coord.longitude,
-      ];
-
-      const hasLocationData = pickup_address && deliverer_coord;
-      const newMapProps = hasLocationData
-        ? {
-            source: { sourceLat: sourceLat, sourceLong: sourceLong },
-            dest: { destLat: destinationLat, destLong: destinationLong },
-            LATITUDE_DELTA: LATITUDE_DELTA,
-            LONGITUDE_DELTA: LONGITUDE_DELTA,
-            style: styles.map,
-          }
-        : null;
-      setMapProps(newMapProps);
-    }
-
-    if (!unsubscribe) {
-      const unsub = unsubscribeDeliveryJob(initPackageItem.id, setPackageItem);
-      setUnSubscribe(unsub);
-    }
-
+  useEffect(() => {
     if (packageItem.data.status >= 2) {
       unsubscribe();
       navigation.navigate("Accepted", {

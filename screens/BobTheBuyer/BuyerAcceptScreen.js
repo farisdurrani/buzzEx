@@ -29,7 +29,8 @@ const BuyerAcceptScreen = ({ navigation, route }) => {
           Hi {receiverItem.data.full_name.split(" ")[0]}!
         </Text>
         <Text style={styles.query1}>
-          {senderItem.data.full_name} would like to send you a package!
+          {senderItem.data.full_name} would like to send you one{" "}
+          {packageItem.data.package.name}!
         </Text>
         <Text style={styles.query2}>Would you like to accept the package?</Text>
         <BButton

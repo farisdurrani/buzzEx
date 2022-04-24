@@ -14,10 +14,9 @@ import { getJob, unsubscribeDeliveryJob } from "../../firebase";
 const SellerAwaitingScreen = ({ navigation, route }) => {
   const { senderItem, receiverItem, deliveryJobID } = route.params;
   const [packageItem, setPackageItem] = useState();
-  const [message, setMessage] = useState(
-    `Awaiting for ${receiverItem.data.full_name} to accept...`
-  );
   const [unsubscribe, setUnSubscribe] = useState();
+
+  const message = `Awaiting for ${receiverItem.data.full_name} to accept...`;
 
   useEffect(async () => {
     if (!packageItem) {
