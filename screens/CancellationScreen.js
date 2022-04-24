@@ -19,12 +19,7 @@ const CancellationScreen = ({ navigation }) => {
       <Text style={styles.mainText}>Are you sure you want to cancel?</Text>
 
       <View style={{ width: "50%", marginBottom: 20 }}>
-        <BButton
-          text="Yes"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
-        />
+        <BButton text="Yes" onPress={() => navigation.replace("Home")} />
       </View>
       <View style={{ width: "50%" }}>
         <BButton

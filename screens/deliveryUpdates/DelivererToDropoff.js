@@ -60,7 +60,7 @@ const DelivererToDropoff = ({ navigation, route }) => {
         senderItem: senderItem,
         homeScreen: "Home",
         delivererItem: delivererItem,
-        init_deliverer_coord: deliverer_coord,
+        user_type: "Buyer/Seller",
       });
     }
   }, [packageItem]);

@@ -23,17 +23,17 @@ const MatchingDeliverer = ({ navigation, route }) => {
 
   const [packageItem, setPackageItem] = useState(initPackageItem);
 
-  const deliverer_coord = initPackageItem.deliverer_coord;
-  const pickup_address = packageItem.data.source_address;
+  const source_address = packageItem.data.source_address;
+  const destination_address = packageItem.data.destination_address;
   const [sourceLat, sourceLong] = [
-    deliverer_coord.latitude,
-    deliverer_coord.longitude,
+    source_address.address_coord.latitude,
+    source_address.address_coord.longitude,
   ];
   const [destinationLat, destinationLong] = [
-    pickup_address.address_coord.latitude,
-    pickup_address.address_coord.longitude,
+    destination_address.address_coord.latitude,
+    destination_address.address_coord.longitude,
   ];
-  const hasLocationData = pickup_address && deliverer_coord;
+  const hasLocationData = destination_address && source_address;
   const mapProps = hasLocationData
     ? {
         source: { sourceLat: sourceLat, sourceLong: sourceLong },

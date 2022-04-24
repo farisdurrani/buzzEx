@@ -31,16 +31,20 @@ const DeliveryComplete = ({ navigation, route }) => {
     receiverItem,
     senderItem,
     delivererItem,
-    init_deliverer_coord = null,
+    user_type,
+    init_deliverer_coord = null, // only has a value if this is a deliverer
   } = route.params;
 
   const [deliverer_coord, set_deliverer_coord] = useState(init_deliverer_coord);
+  if (!deliverer_coord && user_type === "Buyer/Seller") {
+    set_deliverer_coord(packageItem.data.deliverer_coord);
+  }
 
   const dropOff_address = packageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
   const [sourceLat, sourceLong] = [
-    deliverer_coord.latitude,
-    deliverer_coord.longitude,
+    deliverer_coord?.latitude,
+    deliverer_coord?.longitude,
   ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
@@ -58,28 +62,24 @@ const DeliveryComplete = ({ navigation, route }) => {
     : null;
 
   useEffect(async () => {
-    if (delivererItem.data.user_type === "Deliverer") {
-      await getCurrentLocation().then(async (loc) => {
-        set_deliverer_coord(loc);
-        await updateDeliveryStatus(
-          packageItem.id,
-          4,
-          {},
-          generateGeolocation(loc.latitude, loc.longitude)
-        );
-        packageItem.data.status = 4;
-      });
+    if (user_type === "Buyer/Seller") {
+      return;
     }
+
+    await getCurrentLocation().then(async (loc) => {
+      set_deliverer_coord(loc);
+      await updateDeliveryStatus(
+        packageItem.id,
+        4,
+        {},
+        generateGeolocation(loc.latitude, loc.longitude)
+      );
+      packageItem.data.status = 4;
+    });
   }, []);
 
   return (
     <View style={styles.container}>
-      <View style={styles.topleftbutton}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
       <View style={styles.headingContainer}>
         <Text style={styles.lineone}>Delivery Complete!</Text>
       </View>
