@@ -11,7 +11,6 @@ const ConfirmDelivery = ({ navigation, route }) => {
     delivererItem,
     receiverItem,
     senderItem,
-    init_deliverer_coord = null,
   } = route.params;
 
   const [deliverer_coord, set_deliverer_coord] = useState();
@@ -38,6 +37,7 @@ const ConfirmDelivery = ({ navigation, route }) => {
               delivererItem: delivererItem,
               receiverItem: receiverItem,
               senderItem: senderItem,
+              user_type: "Deliverer",
               init_deliverer_coord: deliverer_coord,
             })
           }

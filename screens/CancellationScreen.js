@@ -16,21 +16,10 @@ import { getCurrentUser } from "../firebase";
 const CancellationScreen = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("SellerAccepted");
-        }}
-      >
-        <Text style={styles.mainText}>Are you sure you want to cancel?</Text>
-      </TouchableOpacity>
+      <Text style={styles.mainText}>Are you sure you want to cancel?</Text>
 
       <View style={{ width: "50%", marginBottom: 20 }}>
-        <BButton
-          text="Yes"
-          onPress={() => {
-            navigation.navigate("Home");
-          }}
-        />
+        <BButton text="Yes" onPress={() => navigation.replace("Home")} />
       </View>
       <View style={{ width: "50%" }}>
         <BButton

@@ -12,54 +12,57 @@ import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../../components/MapComponent";
-import { getCurrentLocation } from "../../firebase";
-import { makeFullAddress } from "../../constants";
+import { onDeliveryUpdate, unsubscribeDeliveryJob } from "../../firebase";
+import { COLORS } from "../../constants";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const PickupPackage = ({ navigation, route }) => {
-  const {
-    packageItem,
-    delivererItem,
-    receiverItem,
-    senderItem,
-    init_deliverer_coord = null,
-  } = route.params;
+const DelivererToPickup = ({ navigation, route }) => {
+  const { senderItem, receiverItem, initPackageItem, delivererItem } =
+    route.params;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  const [mapProps, setMapProps] = useState();
+  const [packageItem, setPackageItem] = useState(initPackageItem);
 
+  const deliverer_coord = initPackageItem.deliverer_coord;
   const pickup_address = packageItem.data.source_address;
-  const full_pickUp_address = makeFullAddress(pickup_address);
+  const [sourceLat, sourceLong] = [
+    deliverer_coord.latitude,
+    deliverer_coord.longitude,
+  ];
+  const [destinationLat, destinationLong] = [
+    pickup_address.address_coord.latitude,
+    pickup_address.address_coord.longitude,
+  ];
+  const hasLocationData = pickup_address && deliverer_coord;
+  const mapProps = hasLocationData
+    ? {
+        source: { sourceLat: sourceLat, sourceLong: sourceLong },
+        dest: { destLat: destinationLat, destLong: destinationLong },
+        LATITUDE_DELTA: LATITUDE_DELTA,
+        LONGITUDE_DELTA: LONGITUDE_DELTA,
+        style: styles.map,
+      }
+    : null;
+  const unsubscribe = unsubscribeDeliveryJob(
+    initPackageItem.id,
+    setPackageItem
+  );
 
-  useEffect(async () => {
-    const deliverer_coord = init_deliverer_coord
-      ? init_deliverer_coord
-      : await getCurrentLocation();
-    const [sourceLat, sourceLong] = [
-      deliverer_coord.latitude,
-      deliverer_coord.longitude,
-    ];
-    const [destinationLat, destinationLong] = [
-      pickup_address.address_coord.latitude,
-      pickup_address.address_coord.longitude,
-    ];
-
-    const hasLocationData = pickup_address && deliverer_coord;
-    const newMapProps = hasLocationData
-      ? {
-          source: { sourceLat: sourceLat, sourceLong: sourceLong },
-          dest: { destLat: destinationLat, destLong: destinationLong },
-          LATITUDE_DELTA: LATITUDE_DELTA,
-          LONGITUDE_DELTA: LONGITUDE_DELTA,
-          style: styles.map,
-        }
-      : null;
-    setMapProps(newMapProps);
-  }, []);
+  useEffect(() => {
+    if (packageItem.data.status >= 3) {
+      unsubscribe();
+      navigation.replace("DelivererToDropoff", {
+        senderItem: senderItem,
+        receiverItem: receiverItem,
+        initPackageItem: packageItem,
+        delivererItem: delivererItem,
+      });
+    }
+  }, [packageItem]);
 
   return (
     <View style={styles.container}>
@@ -79,29 +82,32 @@ const PickupPackage = ({ navigation, route }) => {
       )}
       <View style={styles.bottomContainer}>
         <Text style={styles.linetwo}>
-          {`Picking up at ${full_pickUp_address}`}
+          {`${
+            delivererItem.data.full_name.split(" ")[0]
+          } is on the way to pickup the delivery!`}
         </Text>
         <TextInput
+          style={styles.linetwo}
           placeholder="Any delivery notes?"
           value={deliveryNotes}
           onChangeText={onAddDeliveryNotes}
         ></TextInput>
         <Icon.Button
           name="phone"
-          backgroundColor="#000000"
-          onPress={() => {}}
+          backgroundColor={COLORS.white}
+          onPress={() => navigation.navigate("DelivererToDropoff")}
         ></Icon.Button>
         <BButton
-          text="Pickup Package"
-          onPress={() =>
-            navigation.replace("ConfirmPickup", {
-              mapProps: mapProps,
-              packageItem: packageItem,
-              delivererItem: delivererItem,
-              receiverItem: receiverItem,
+          text="Go to deliverer dropoff screen"
+          onPress={() => {
+            unsubscribe();
+            navigation.navigate("DelivererToDropoff", {
               senderItem: senderItem,
-            })
-          }
+              receiverItem: receiverItem,
+              initPackageItem: packageItem,
+              delivererItem: delivererItem,
+            });
+          }}
           containerStyle={styles.button}
         />
       </View>
@@ -109,7 +115,7 @@ const PickupPackage = ({ navigation, route }) => {
   );
 };
 
-export default PickupPackage;
+export default DelivererToPickup;
 
 const styles = StyleSheet.create({
   container: {
@@ -124,7 +130,7 @@ const styles = StyleSheet.create({
   },
   linetwo: {
     paddingBottom: 25,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -136,8 +142,8 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 200,
-    marginHorizontal: 50,
-    marginVertical: 5,
+    marginHorizontal: 100,
+    marginVertical: 20,
   },
   buttonView: {
     position: "absolute",

@@ -6,44 +6,59 @@ import {
   KeyboardAvoidingView,
   Image,
   TextInput,
+  Dimensions,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../../constants";
+import { COLORS, LAYOUT, roundTo2 } from "../../constants";
+import { getUserDetails } from "../../firebase";
 
-const MatchedScreen = ({ route, navigation }) => {
-  const { mapProps, currentDelivery, deliveryID } = route.params;
+const Accepted = ({ navigation, route }) => {
+  const { senderItem, receiverItem, packageItem } = route.params;
+
+  const [delivererItem, setDelivererItem] = useState({
+    data: { full_name: "Loading...", email: "Loading..." },
+  });
+
+  useEffect(async () => {
+    const newDelivererItem = await getUserDetails(packageItem.deliverer_uid);
+    setDelivererItem(newDelivererItem);
+  }, []);
+
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
-      <Text style={styles.mainText}>
-        Dan will be delivering you the package!
-      </Text>
+      <Text style={styles.mainText}>{`${
+        delivererItem.data.full_name.split(" ")[0]
+      } will be delivering your package!`}</Text>
 
       <Image
         source={require("../../assets/earth_face.png")}
         style={styles.profilePic}
       />
-      <View style={[LAYOUT.centerMiddle]}>
-        <Text style={styles.name}>Dan Deliverer</Text>
-        <Text style={styles.username}>@danTheDeliverer</Text>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.name}>{`${delivererItem.data.full_name}`}</Text>
+        <Text style={styles.username}>{`${delivererItem.data.email}`}</Text>
       </View>
 
       <View style={[LAYOUT.row, { marginTop: 10 }]}>
         <AntDesign name="star" size={20} color={COLORS.primary_red} />
-        <Text> 4.41</Text>
+        <Text>{`${roundTo2(
+          delivererItem.data.rating ? delivererItem.data.rating : 5.0
+        )}`}</Text>
       </View>
 
       <View style={{ marginTop: 60 }}>
         <BButton
           text="Continue"
           onPress={() => {
-            navigation.navigate("DelivererToPickup", {
-              mapProps: mapProps,
-              currentDelivery: currentDelivery,
-              deliveryID: deliveryID
+            navigation.replace("DelivererToPickup", {
+              senderItem: senderItem,
+              receiverItem: receiverItem,
+              initPackageItem: packageItem,
+              delivererItem: delivererItem,
             });
           }}
         />
@@ -87,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MatchedScreen;
+export default Accepted;

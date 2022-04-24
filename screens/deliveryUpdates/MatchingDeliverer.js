@@ -10,10 +10,8 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../../constants";
 import MapComponent from "../../components/MapComponent";
-import * as Location from "expo-location";
-import { onDeliveryUpdate } from "../../firebase";
+import { unsubscribeDeliveryJob } from "../../firebase";
 
 let { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -21,16 +19,12 @@ const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller mean
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
 const MatchingDeliverer = ({ navigation, route }) => {
-  const { packageItem, senderItem, receiverItem } = route.params;
+  const { initPackageItem, senderItem, receiverItem } = route.params;
 
-  const [currentDelivery, setCurrentDelivery] = useState(packageItem.data);
+  const [packageItem, setPackageItem] = useState(initPackageItem);
 
-  useEffect(() => {
-    onDeliveryUpdate(packageItem.id, setCurrentDelivery);
-  }, []);
-
-  const { destination_address, source_address } = packageItem.data;
-
+  const source_address = packageItem.data.source_address;
+  const destination_address = packageItem.data.destination_address;
   const [sourceLat, sourceLong] = [
     source_address.address_coord.latitude,
     source_address.address_coord.longitude,
@@ -39,34 +33,32 @@ const MatchingDeliverer = ({ navigation, route }) => {
     destination_address.address_coord.latitude,
     destination_address.address_coord.longitude,
   ];
-
-  const hasLocationData = source_address && destination_address;
+  const hasLocationData = destination_address && source_address;
   const mapProps = hasLocationData
     ? {
-        source: {
-          sourceLat: sourceLat,
-          sourceLong: sourceLong,
-        },
-        dest: {
-          destLat: destinationLat,
-          destLong: destinationLong,
-        },
+        source: { sourceLat: sourceLat, sourceLong: sourceLong },
+        dest: { destLat: destinationLat, destLong: destinationLong },
         LATITUDE_DELTA: LATITUDE_DELTA,
         LONGITUDE_DELTA: LONGITUDE_DELTA,
         style: styles.map,
       }
     : null;
+  const unsubscribe = unsubscribeDeliveryJob(
+    initPackageItem.id,
+    setPackageItem
+  );
 
   useEffect(() => {
-    if (currentDelivery.status == "2") {
-      navigation.navigate("Matched", {
-        mapProps: mapProps,
-        currentDelivery: currentDelivery,
-        deliveryID: packageItem.id,
+    if (packageItem.data.status >= 2) {
+      unsubscribe();
+      navigation.navigate("Accepted", {
+        senderItem: senderItem,
+        receiverItem: receiverItem,
+        packageItem: packageItem,
       });
     }
-  }, [currentDelivery]);
-  
+  }, [packageItem]);
+
   return (
     <View style={styles.container}>
       <View style={styles.topleftbutton}>
@@ -93,17 +85,13 @@ const MatchingDeliverer = ({ navigation, route }) => {
         <BButton
           text="Go to deliverer pickup screen"
           onPress={() =>
-            navigation.navigate("Matched", {
-              mapProps: mapProps,
-              currentDelivery: currentDelivery,
-              deliveryID: packageItem.id,
+            navigation.navigate("Accepted", {
+              packageItem: packageItem,
+              senderItem: senderItem,
+              receiverItem: receiverItem,
             })
           }
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 20,
-          }}
+          containerStyle={styles.button}
         />
       </View>
     </View>
@@ -124,7 +112,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    padding: 20,
+    width: 200,
+    marginHorizontal: 50,
+    marginVertical: 20,
   },
   buttonContainer: {},
   buttonOutline: {},

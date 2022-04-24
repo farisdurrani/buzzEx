@@ -66,15 +66,6 @@ async function _getCollectionDocument(collection, docID) {
   }
 }
 
-export function onDeliveryUpdate(delivery_id, callback) {
-  const docRef = doc(db, delivery_jobs, delivery_id);
-  const unsub = onSnapshot(docRef, (doc) => {
-    const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-    callback(doc.data());
-  });
-  return unsub;
-}
-
 // Login and Registration
 
 /**
@@ -249,7 +240,7 @@ export async function updateDeliveryStatus(
   other_changes = {},
   new_geoPoint = null
 ) {
-  if (!new_geoPoint) {
+  if (status >= 2 && !new_geoPoint) {
     const foreground = await Location.requestForegroundPermissionsAsync();
     if (!foreground.granted) {
       alert("Permissions not given");
@@ -270,17 +261,6 @@ export async function updateDeliveryStatus(
     status: status,
     deliverer_location: new_geoPoint,
   });
-}
-
-/**
- * Adds a tip amount to the package and sets it to be ready to be picked up
- * @param {string} jobID
- * @param {string | Number} tip tip to add to the delivery job
- */
-export async function setToReadyToPickup(jobID, tip) {
-  const new_package = (await getJob(jobID)).data.package;
-  new_package.tip = Number(tip);
-  updateDeliveryStatus(jobID, 1, new_package);
 }
 
 /**
@@ -333,3 +313,26 @@ export const getCurrentLocation = async () => {
   });
   return location;
 };
+
+/**
+ * Creates a listener for real-time changes to the doc in the collection, updating the passed in react state in every change
+ * @param {string} collec collection
+ * @param {string} jobID ID of collection document
+ * @param {function} setItemState setState for a react state
+ * @returns an unsubscribe function to call when wanting to detach the listener
+ */
+function _unsub(collec, jobID, setItemState) {
+  return onSnapshot(doc(db, collec, jobID), (doc) => {
+    setItemState({ id: doc.id, data: doc.data() });
+  });
+}
+
+/**
+ * Creates a listener for real-time changes to the packageItem, updating the passed in react state in every change
+ * @param {string} jobID ID of the packageItem
+ * @param {function} setPackageItemState react state to set the packageItem state
+ * @returns an ubsubscribe function to call when wanting to detach the listener
+ */
+export function unsubscribeDeliveryJob(jobID, setPackageItemState) {
+  return _unsub(delivery_jobs, jobID, setPackageItemState);
+}

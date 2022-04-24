@@ -3,16 +3,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   // BobBuyer
   BuyerAcceptScreen,
-  DelivererToDropoff,
-  DelivererToPickup,
-  MatchedScreen,
   MatchingDeliverer,
   PaymentScreen,
   // DanTheDeliverer
   ConfirmDelivery,
   ConfirmPickup,
   DeliveriesAvailable,
-  DeliveryComplete,
   DropoffAt,
   DropoffPackage,
   PickupPackage,
@@ -21,13 +17,17 @@ import {
   // SamTheSeller
   Contacts,
   ItemPriceScreen,
-  SellerAcceptedScreen,
   SellerAwaitingScreen,
   SellerConfirmScreen,
   SizeSelection,
   // login
   LoginScreen,
   RegistrationScreen,
+  // deliveryMaps
+  DelivererToDropoff,
+  DelivererToPickup,
+  DeliveryComplete,
+  Accepted,
   // common
   CancellationScreen,
   HomeScreen,
@@ -94,8 +94,8 @@ const Navigation = () => {
         />
         <Stack.Screen
           options={{ headerShown: false }}
-          name="SellerAccepted"
-          component={SellerAcceptedScreen}
+          name="Accepted"
+          component={Accepted}
         />
         <Stack.Screen
           options={{ headerShown: false }}
@@ -116,11 +116,6 @@ const Navigation = () => {
           options={{ headerShown: false }}
           name="BuyerAccept"
           component={BuyerAcceptScreen}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Matched"
-          component={MatchedScreen}
         />
         <Stack.Screen
           options={{ headerShown: false }}
