@@ -1,8 +1,6 @@
-import * as Location from "expo-location";
-
 export const COLORS = {
-  white: "#fff",
-  black: "#000",
+  white: "#ffffff",
+  black: "#000000",
   primary_blue: "#2C2C54",
   primary_red: "#A40E4C",
   transparent_gray: "#A40E4C0D",
@@ -26,11 +24,21 @@ export const LAYOUT = {
   },
 };
 
-export const roundTo2 = (num) => {
+/**
+ * Rounds down a given number to fix to 2 decimal places
+ * @param {Number} num number to round down to
+ * @returns a string equal to the input number rounded down to the nearest 2 decimal places
+ */
+export function roundTo2(num) {
   return Number.parseFloat(num).toFixed(2);
-};
+}
 
-export const makeFullAddress = (address) => {
+/**
+ * Returns a one-line full address format
+ * @param {Object} address full address object as originally uploaded to Firebase
+ * @returns a one-line full address format in the form "575 18th St NW, Apt 1592, Atlanta, GA 30332"
+ */
+export function makeFullAddress(address) {
   if (!address) {
     return "";
   }
@@ -38,5 +46,4 @@ export const makeFullAddress = (address) => {
   return `${address.line1}, ${address.line2}${line2Present ? ", " : " "}${
     address.city
   }, ${address.state} ${address.zip}`;
-};
-
+}

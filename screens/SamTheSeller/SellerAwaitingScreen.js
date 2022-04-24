@@ -29,12 +29,12 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
 
     if (packageItem.status === 1) {
       setMessage(`Request accepted.\nFinding a deliverer...`);
-    } else if (packageItem.status === 2) {
+    } else if (packageItem.status >= 2) {
+      unsubscribe();
       navigation.navigate("SellerAccepted", {
         senderItem: senderItem,
         receiverItem: receiverItem,
         packageItem: packageItem,
-        unsubscribe: unsubscribe, // TODO add this field
       });
     }
   }, [packageItem]);

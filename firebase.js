@@ -319,7 +319,7 @@ export const getCurrentLocation = async () => {
  * @param {string} collec collection
  * @param {string} jobID ID of collection document
  * @param {function} setItemState setState for a react state
- * @returns an ubsubscribe function to call when wanting to detach the listener
+ * @returns an unsubscribe function to call when wanting to detach the listener
  */
 function _unsub(collec, jobID, setItemState) {
   return onSnapshot(doc(db, collec, jobID), (doc) => {

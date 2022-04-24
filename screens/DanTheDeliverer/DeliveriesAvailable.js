@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
-import { initialWindowMetrics } from "react-native-safe-area-context";
 import { COLORS, LAYOUT, start_live_location_tracking } from "../../constants";
 import { TextInput } from "react-native";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { InputTextField } from "../../components";
-import {
-  getJobs,
-  getUserDetails,
-  getCurrentUser,
-  updateDeliveryStatus,
-  getCurrentLocation,
-} from "../../firebase";
-import * as Location from "expo-location";
+import { getJobs, getUserDetails, getCurrentUser } from "../../firebase";
 
 const DeliveriesAvailable = ({ navigation }) => {
   const [delivererItem, setDelivererItem] = useState();

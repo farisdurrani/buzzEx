@@ -19,33 +19,59 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
 
-const DelivererToDropoff = ({ route, navigation }) => {
-  const { deliveryID, mapProps } = route.params;
+const DelivererToDropoff = ({ navigation, route }) => {
+  const { senderItem, receiverItem, initPackageItem, delivererItem } =
+    route.params;
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
-  const [currentDelivery, setCurrentDelivery] = useState(
-    route.params.currentDelivery
-  );
+  const [unsubscribe, setUnSubscribe] = useState();
+  const [packageItem, setPackageItem] = useState(initPackageItem);
+  const [mapProps, setMapProps] = useState();
 
-  useEffect(() => {
-    onDeliveryUpdate(deliveryID, setCurrentDelivery);
-  }, []);
+  const deliverer_coord = initPackageItem.deliverer_coord;
+  const dropOff_address = packageItem.data.destination_address;
 
-  useEffect(() => {
-    if (currentDelivery.status == "4") {
+  useEffect(async () => {
+    if (!mapProps) {
+      const [sourceLat, sourceLong] = [
+        deliverer_coord.latitude,
+        deliverer_coord.longitude,
+      ];
+      const [destinationLat, destinationLong] = [
+        dropOff_address.address_coord.latitude,
+        dropOff_address.address_coord.longitude,
+      ];
+
+      const hasLocationData = dropOff_address && deliverer_coord;
+      const newMapProps = hasLocationData
+        ? {
+            source: { sourceLat: sourceLat, sourceLong: sourceLong },
+            dest: { destLat: destinationLat, destLong: destinationLong },
+            LATITUDE_DELTA: LATITUDE_DELTA,
+            LONGITUDE_DELTA: LONGITUDE_DELTA,
+            style: styles.map,
+          }
+        : null;
+      setMapProps(newMapProps);
+    }
+
+    if (!unsubscribe) {
+      const unsub = unsubscribeDeliveryJob(initPackageItem.id, setPackageItem);
+      setUnSubscribe(unsub);
+    }
+
+    if (packageItem.data.status >= 4) {
+      unsubscribe();
       navigation.navigate("DeliveryComplete", {
-        mapProps: mapProps,
-        currentDelivery: currentDelivery,
-        deliveryID: deliveryID,
+        packageItem: packageItem,
+        receiverItem: receiverItem,
+        senderItem: senderItem,
         homeScreen: "Home",
+        delivererItem: delivererItem,
+        init_deliverer_coord: deliverer_coord,
       });
     }
-  }, [currentDelivery]);
-
-  const hasLocationData =
-    mapProps &&
-    mapProps.source.sourceLat !== null &&
-    mapProps.source.sourceLong !== null;
+  }, [packageItem]);
 
   return (
     <View style={styles.container}>

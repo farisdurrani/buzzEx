@@ -11,91 +11,57 @@ import {
 import React, { useEffect, useState } from "react";
 import { BButton, BackCancelButtons } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { COLORS, LAYOUT } from "../../constants";
-import * as Location from "expo-location";
-
-let { width, height } = Dimensions.get("window"); //Screen dimensions
-const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.04; // Controls the zoom level of the map. Smaller means more zoomed in
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_DELTA
+import { COLORS, LAYOUT, roundTo2 } from "../../constants";
+import { getUserDetails } from "../../firebase";
 
 const SellerAcceptedScreen = ({ navigation, route }) => {
-  const { packageItem } = route.params;
+  const { senderItem, receiverItem, packageItem } = route.params;
 
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-
-  const { destination_address, source_address } = packageItem.data;
-
-  const [sourceLat, sourceLong] = [
-    source_address.address_coord.latitude,
-    source_address.address_coord.longitude,
-  ];
-  const [destinationLat, destinationLong] = [
-    destination_address.address_coord.latitude,
-    destination_address.address_coord.longitude,
-  ];
+  const [delivererItem, setDelivererItem] = useState({
+    data: { full_name: "Loading...", email: "Loading..." },
+  });
 
   useEffect(async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-      return;
-    }
-    let location = await Location.getLastKnownPositionAsync({});
-    setLocation(location);
+    const newDelivererItem = await getUserDetails(packageItem.deliverer_uid);
+    setDelivererItem(newDelivererItem);
   }, []);
-
-  let text = "Getting Current Location..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-  const mapProps = location
-    ? {
-        source: { sourceLat: sourceLat, sourceLong: sourceLong },
-        dest: { destLat: destinationLat, destLong: destinationLong },
-        LATITUDE_DELTA: LATITUDE_DELTA,
-        LONGITUDE_DELTA: LONGITUDE_DELTA,
-        style: styles.map,
-      }
-    : null;
-  console.log(mapProps);
 
   return (
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
-      <Text style={styles.mainText}>Dan will be delivering your package!</Text>
+      <Text style={styles.mainText}>{`${
+        delivererItem.data.full_name.split(" ")[0]
+      } will be delivering your package!`}</Text>
 
       <Image
         source={require("../../assets/earth_face.png")}
         style={styles.profilePic}
       />
-      <View style={[LAYOUT.centerMiddle]}>
-        <Text style={styles.name}>Dan Deliverer</Text>
-        <Text style={styles.username}>@danTheDeliverer</Text>
+      <View style={LAYOUT.centerMiddle}>
+        <Text style={styles.name}>{`${delivererItem.data.full_name}`}</Text>
+        <Text style={styles.username}>{`${delivererItem.data.email}`}</Text>
       </View>
 
       <View style={[LAYOUT.row, { marginTop: 10 }]}>
         <AntDesign name="star" size={20} color={COLORS.primary_red} />
-        <Text> 4.41</Text>
+        <Text>{`${roundTo2(
+          delivererItem.data.rating ? delivererItem.data.rating : 5.0
+        )}`}</Text>
       </View>
 
       <View style={{ marginTop: 60 }}>
-        {location ? (
-          <BButton
-            text="Continue"
-            onPress={() => {
-              navigation.navigate("DelivererToPickup", {
-                mapProps: mapProps,
-              });
-            }}
-          />
-        ) : (
-          <Text> Loading location data...</Text>
-        )}
+        <BButton
+          text="Continue"
+          onPress={() => {
+            navigation.replace("DelivererToPickup", {
+              senderItem: senderItem,
+              receiverItem: receiverItem,
+              initPackageItem: packageItem,
+              delivererItem: delivererItem,
+            });
+          }}
+        />
       </View>
     </View>
   );

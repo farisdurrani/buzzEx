@@ -44,6 +44,7 @@ const RegistrationScreen = ({ navigation }) => {
         address_coord: generateGeolocation(coords.latitude, coords.longitude),
       },
       user_type: userType,
+      rating: 5.00,
     };
     register_new_user(email, password, user_data);
     navigation.navigate("Login");

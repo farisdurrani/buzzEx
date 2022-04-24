@@ -12,7 +12,7 @@ import { BButton, BackCancelButtons } from "../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../components/MapComponent";
-import { makeFullAddress } from "../constants";
+import { COLORS, makeFullAddress } from "../constants";
 import {
   generateGeolocation,
   getCurrentLocation,
@@ -27,10 +27,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO; // Dependent on LATITUDE_
 const DeliveryComplete = ({ navigation, route }) => {
   const {
     packageItem,
+    homeScreen,
     receiverItem,
     senderItem,
-    homeScreen,
-    delivererItem = null,
+    delivererItem,
     init_deliverer_coord = null,
   } = route.params;
 
@@ -39,9 +39,18 @@ const DeliveryComplete = ({ navigation, route }) => {
   const full_dropOff_address = makeFullAddress(dropOff_address);
 
   useEffect(async () => {
-    const deliverer_coord = init_deliverer_coord
-      ? init_deliverer_coord
-      : await getCurrentLocation();
+    let deliverer_coord = init_deliverer_coord;
+    if (delivererItem.data.user_type === "Deliverer") {
+      deliverer_coord = await getCurrentLocation();
+      await updateDeliveryStatus(
+        packageItem.id,
+        4,
+        {},
+        generateGeolocation(deliverer_coord.latitude, deliverer_coord.longitude)
+      );
+      packageItem.data.status = 4;
+    }
+
     const [sourceLat, sourceLong] = [
       deliverer_coord.latitude,
       deliverer_coord.longitude,
@@ -62,14 +71,6 @@ const DeliveryComplete = ({ navigation, route }) => {
         }
       : null;
     setMapProps(newMapProps);
-
-    await updateDeliveryStatus(
-      packageItem.id,
-      4,
-      {},
-      generateGeolocation(deliverer_coord.latitude, deliverer_coord.longitude)
-    );
-    packageItem.data.status = 4;
   }, []);
 
   return (
@@ -95,7 +96,7 @@ const DeliveryComplete = ({ navigation, route }) => {
 
         <Icon.Button
           name="phone"
-          backgroundColor="#000000"
+          backgroundColor={COLORS.white}
           onPress={() => {}}
         ></Icon.Button>
         <BButton

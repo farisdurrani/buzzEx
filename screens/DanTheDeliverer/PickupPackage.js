@@ -102,11 +102,7 @@ const PickupPackage = ({ navigation, route }) => {
               senderItem: senderItem,
             })
           }
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 5,
-          }}
+          containerStyle={styles.button}
         />
       </View>
     </View>
@@ -139,7 +135,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    padding: 20,
+    width: 200,
+    marginHorizontal: 50,
+    marginVertical: 5,
   },
   buttonView: {
     position: "absolute",
