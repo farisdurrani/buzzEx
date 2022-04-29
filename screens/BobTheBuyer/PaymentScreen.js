@@ -99,6 +99,8 @@ const PaymentScreen = ({ navigation, route }) => {
           await updateDeliveryStatus(packageItem.id, 1, {
             package: { ...packageItem.data.package, tip: Number(tip) },
           });
+          console.log("Pay")
+          console.log(packageItem)
           navigation.navigate("MatchingDeliverer", {
             initPackageItem: packageItem,
             senderItem: senderItem,

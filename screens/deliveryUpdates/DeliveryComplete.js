@@ -34,11 +34,7 @@ const DeliveryComplete = ({ navigation, route }) => {
     user_type,
     init_deliverer_coord = null, // only has a value if this is a deliverer
   } = route.params;
-
   const [deliverer_coord, set_deliverer_coord] = useState(init_deliverer_coord);
-  if (!deliverer_coord && user_type === "Buyer/Seller") {
-    set_deliverer_coord(packageItem.data.deliverer_coord);
-  }
 
   const dropOff_address = packageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
@@ -63,6 +59,7 @@ const DeliveryComplete = ({ navigation, route }) => {
 
   useEffect(async () => {
     if (user_type === "Buyer/Seller") {
+      set_deliverer_coord(packageItem.data.deliverer_location);
       return;
     }
 

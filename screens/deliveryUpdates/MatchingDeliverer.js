@@ -22,6 +22,7 @@ const MatchingDeliverer = ({ navigation, route }) => {
   const { initPackageItem, senderItem, receiverItem } = route.params;
 
   const [packageItem, setPackageItem] = useState(initPackageItem);
+  const [unsubscribe, setUnsubscribe] = useState(() => () => {});
 
   const source_address = packageItem.data.source_address;
   const destination_address = packageItem.data.destination_address;
@@ -43,10 +44,14 @@ const MatchingDeliverer = ({ navigation, route }) => {
         style: styles.map,
       }
     : null;
-  const unsubscribe = unsubscribeDeliveryJob(
-    initPackageItem.id,
-    setPackageItem
-  );
+
+  useEffect(async () => {
+    const unsubscribe = unsubscribeDeliveryJob(
+      initPackageItem.id,
+      setPackageItem
+    );
+    setUnsubscribe(() => unsubscribe);
+  }, [])
 
   useEffect(() => {
     if (packageItem.data.status >= 2) {

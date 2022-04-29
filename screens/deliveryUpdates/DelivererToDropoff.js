@@ -12,7 +12,7 @@ import { BButton } from "../../components/index";
 import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/Feather";
 import MapComponent from "../../components/MapComponent";
-import { onDeliveryUpdate } from "../../firebase";
+import { onDeliveryUpdate, unsubscribeDeliveryJob } from "../../firebase";
 
 const { width, height } = Dimensions.get("window"); //Screen dimensions
 const ASPECT_RATIO = width / height;
@@ -25,8 +25,9 @@ const DelivererToDropoff = ({ navigation, route }) => {
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const [packageItem, setPackageItem] = useState(initPackageItem);
+  const [unsubscribe, setUnsubscribe] = useState(() => () => {});
 
-  const deliverer_coord = initPackageItem.deliverer_coord;
+  const deliverer_coord = packageItem.data.deliverer_location;
   const dropOff_address = packageItem.data.destination_address;
   const [sourceLat, sourceLong] = [
     deliverer_coord.latitude,
@@ -46,10 +47,14 @@ const DelivererToDropoff = ({ navigation, route }) => {
         style: styles.map,
       }
     : null;
-  const unsubscribe = unsubscribeDeliveryJob(
-    initPackageItem.id,
-    setPackageItem
-  );
+
+  useEffect(async () => {
+    const unsubscribe = unsubscribeDeliveryJob(
+      initPackageItem.id,
+      setPackageItem
+    );
+    setUnsubscribe(() => unsubscribe);
+  }, [])
 
   useEffect(async () => {
     if (packageItem.data.status >= 4) {

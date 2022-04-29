@@ -23,7 +23,8 @@ const Accepted = ({ navigation, route }) => {
 
   useEffect(async () => {
     console.log("Retrieving deliverer details...");
-    setDelivererItem(await getUserDetails(packageItem.data.deliverer_uid));
+    const delivererData = await getUserDetails(packageItem.data.deliverer_uid);
+    setDelivererItem(delivererData);
     console.log("Deliverer details fetched");
 
   }, []);
