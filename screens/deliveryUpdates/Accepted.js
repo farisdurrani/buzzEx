@@ -23,15 +23,15 @@ const Accepted = ({ navigation, route }) => {
 
   useEffect(async () => {
     await getUserDetails(packageItem.data.deliverer_uid).then(
-      (delivererData) => {
-        setDelivererItem(delivererData);
+      (newDelivererItem) => {
+        setDelivererItem(newDelivererItem);
         setTimeout(
           () =>
             navigation.replace("DelivererToPickup", {
               senderItem: senderItem,
               receiverItem: receiverItem,
               initPackageItem: packageItem,
-              delivererItem: delivererItem,
+              delivererItem: newDelivererItem,
             }),
           2000
         );

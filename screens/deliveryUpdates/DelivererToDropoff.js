@@ -125,20 +125,6 @@ const DelivererToDropoff = ({ navigation, route }) => {
           backgroundColor="#000000"
           onPress={() => navigation.navigate("DelivererToDropoff")}
         ></Icon.Button>
-        <BButton
-          text="Go to Delivery Complete Screen"
-          onPress={() =>
-            navigation.navigate("DeliveryComplete", {
-              mapProps: mapProps,
-              homeScreen: "Home",
-            })
-          }
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 20,
-          }}
-        />
       </View>
     </View>
   );

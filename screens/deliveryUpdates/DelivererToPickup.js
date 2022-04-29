@@ -100,19 +100,6 @@ const DelivererToPickup = ({ navigation, route }) => {
           backgroundColor={COLORS.white}
           onPress={() => navigation.navigate("DelivererToDropoff")}
         ></Icon.Button>
-        <BButton
-          text="Go to deliverer dropoff screen"
-          onPress={() => {
-            unsubscribe();
-            navigation.navigate("DelivererToDropoff", {
-              senderItem: senderItem,
-              receiverItem: receiverItem,
-              initPackageItem: packageItem,
-              delivererItem: delivererItem,
-            });
-          }}
-          containerStyle={styles.button}
-        />
       </View>
     </View>
   );

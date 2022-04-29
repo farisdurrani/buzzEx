@@ -86,19 +86,6 @@ const MatchingDeliverer = ({ navigation, route }) => {
       ) : (
         <Text style={styles.paragraph}>Loading Map...</Text>
       )}
-      <View style={styles.buttonView}>
-        <BButton
-          text="Go to deliverer pickup screen"
-          onPress={() =>
-            navigation.navigate("Accepted", {
-              packageItem: packageItem,
-              senderItem: senderItem,
-              receiverItem: receiverItem,
-            })
-          }
-          containerStyle={styles.button}
-        />
-      </View>
     </View>
   );
 };
