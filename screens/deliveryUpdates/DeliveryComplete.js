@@ -16,6 +16,7 @@ import { COLORS, makeFullAddress } from "../../constants";
 import {
   generateGeolocation,
   getCurrentLocation,
+  getJob,
   updateDeliveryStatus,
 } from "../../firebase";
 
@@ -32,15 +33,17 @@ const DeliveryComplete = ({ navigation, route }) => {
     senderItem,
     delivererItem,
     user_type,
-    init_deliverer_coord = null, // only has a value if this is a deliverer
+    init_deliverer_coord = null, // only has a possible value if this is a deliverer
   } = route.params;
-  const [deliverer_coord, set_deliverer_coord] = useState(init_deliverer_coord);
+  const [updatedPackageItem, setUpdatedPackageItem] = useState(packageItem);
 
-  const dropOff_address = packageItem.data.destination_address;
+  const dropOff_address = updatedPackageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
   const [sourceLat, sourceLong] = [
-    packageItem.data.deliverer_location.latitude,
-    packageItem.data.deliverer_location.longitude,
+    init_deliverer_coord?.latitude ||
+      updatedPackageItem.data.deliverer_location?.latitude,
+    init_deliverer_coord?.longitude ||
+      updatedPackageItem.data.deliverer_location?.longitude,
   ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
@@ -58,13 +61,16 @@ const DeliveryComplete = ({ navigation, route }) => {
     : null;
 
   useEffect(async () => {
+    // if this is a buyer/seller, retrieve the latest deliverer location
     if (user_type === "Buyer/Seller") {
-      set_deliverer_coord(packageItem.data.deliverer_location);
+      await getJob(packageItem.id).then((newPackageItem) =>
+        setUpdatedPackageItem(newPackageItem)
+      );
       return;
     }
 
+    // if this is a deliverer, retrieve this user's current location and update the delivery status and location
     await getCurrentLocation().then(async (loc) => {
-      set_deliverer_coord(loc);
       await updateDeliveryStatus(
         packageItem.id,
         4,
