@@ -26,7 +26,7 @@ const DelivererToPickup = ({ navigation, route }) => {
 
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const [packageItem, setPackageItem] = useState(initPackageItem);
-
+  const [unsubscribe, setUnsubscribe] = useState(() => () => {});
   const pickup_address = packageItem.data.source_address;
   const [sourceLat, sourceLong] = [
     packageItem.data.deliverer_location.latitude,
@@ -46,15 +46,19 @@ const DelivererToPickup = ({ navigation, route }) => {
         style: styles.map,
       }
     : null;
-  const unsubscribe = unsubscribeDeliveryJob(
-    initPackageItem.id,
-    setPackageItem
-  );
+
+  useEffect(async () => {
+    const unsubscribe = unsubscribeDeliveryJob(
+      initPackageItem.id,
+      setPackageItem
+    );
+    setUnsubscribe(() => unsubscribe);
+  }, [])
 
   useEffect(() => {
     if (packageItem.data.status >= 3) {
       unsubscribe();
-      navigation.replace("DelivererToDropoff", {
+      navigation.navigate("DelivererToDropoff", {
         senderItem: senderItem,
         receiverItem: receiverItem,
         initPackageItem: packageItem,

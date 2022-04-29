@@ -25,7 +25,9 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
       const unsub = unsubscribeDeliveryJob(deliveryJobID, setPackageItem);
       setUnsubscribe(() => unsub);
     }
+  }, [])
 
+  useEffect(async () => {
     if (packageItem?.data.status >= 1) {
       unsubscribe();
       navigation.navigate("MatchingDeliverer", {
