@@ -27,17 +27,16 @@ const DelivererToPickup = ({ navigation, route }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const [packageItem, setPackageItem] = useState(initPackageItem);
 
-  const deliverer_coord = initPackageItem.deliverer_coord;
   const pickup_address = packageItem.data.source_address;
   const [sourceLat, sourceLong] = [
-    deliverer_coord.latitude,
-    deliverer_coord.longitude,
+    packageItem.data.deliverer_location.latitude,
+    packageItem.data.deliverer_location.longitude,
   ];
   const [destinationLat, destinationLong] = [
     pickup_address.address_coord.latitude,
     pickup_address.address_coord.longitude,
   ];
-  const hasLocationData = pickup_address && deliverer_coord;
+  const hasLocationData = destinationLat && sourceLat;
   const mapProps = hasLocationData
     ? {
         source: { sourceLat: sourceLat, sourceLong: sourceLong },

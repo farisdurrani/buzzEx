@@ -22,8 +22,10 @@ const Accepted = ({ navigation, route }) => {
   });
 
   useEffect(async () => {
-    const newDelivererItem = await getUserDetails(packageItem.deliverer_uid);
-    setDelivererItem(newDelivererItem);
+    console.log("Retrieving deliverer details...");
+    setDelivererItem(await getUserDetails(packageItem.data.deliverer_uid));
+    console.log("Deliverer details fetched");
+
   }, []);
 
   return (
@@ -54,6 +56,10 @@ const Accepted = ({ navigation, route }) => {
         <BButton
           text="Continue"
           onPress={() => {
+            if (!delivererItem.id) {
+              alert("Wait until deliverer has been verfied");
+              return;
+            }
             navigation.replace("DelivererToPickup", {
               senderItem: senderItem,
               receiverItem: receiverItem,

@@ -9,11 +9,7 @@ import {
 import { Input, Button, Text, useTheme } from "react-native-elements";
 import { BButton, BackCancelButtons } from "../../components";
 import { COLORS, LAYOUT, roundTo2 } from "../../constants";
-import {
-  setToReadyToPickup,
-  unsubscribeDeliveryJob,
-  updateDeliveryStatus,
-} from "../../firebase";
+import { updateDeliveryStatus } from "../../firebase";
 
 const PaymentScreen = ({ navigation, route }) => {
   const { packageItem, senderItem, receiverItem } = route.params;
