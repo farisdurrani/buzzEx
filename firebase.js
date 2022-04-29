@@ -331,7 +331,7 @@ function _unsub(collec, jobID, setItemState) {
  * Creates a listener for real-time changes to the packageItem, updating the passed in react state in every change
  * @param {string} jobID ID of the packageItem
  * @param {function} setPackageItemState react state to set the packageItem state
- * @returns an ubsubscribe function to call when wanting to detach the listener
+ * @returns an unsubscribe function to call when wanting to detach the listener
  */
 export function unsubscribeDeliveryJob(jobID, setPackageItemState) {
   return _unsub(delivery_jobs, jobID, setPackageItemState);

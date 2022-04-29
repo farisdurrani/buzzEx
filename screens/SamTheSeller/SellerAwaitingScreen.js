@@ -14,7 +14,7 @@ import { getJob, unsubscribeDeliveryJob } from "../../firebase";
 const SellerAwaitingScreen = ({ navigation, route }) => {
   const { senderItem, receiverItem, deliveryJobID } = route.params;
   const [packageItem, setPackageItem] = useState();
-  const [unsubscribe, setUnSubscribe] = useState();
+  const [unsubscribe, setUnsubscribe] = useState(() => () => {});
 
   const message = `Awaiting for ${receiverItem.data.full_name} to accept...`;
 
@@ -23,10 +23,10 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
       const delivItem = await getJob(deliveryJobID);
       setPackageItem(delivItem);
       const unsub = unsubscribeDeliveryJob(deliveryJobID, setPackageItem);
-      setUnSubscribe(unsub);
+      setUnsubscribe(() => unsub);
     }
 
-    if (packageItem && packageItem.data.status >= 1) {
+    if (packageItem?.data.status >= 1) {
       unsubscribe();
       navigation.navigate("MatchingDeliverer", {
         senderItem: senderItem,
