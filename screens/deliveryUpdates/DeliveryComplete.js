@@ -43,14 +43,14 @@ const DeliveryComplete = ({ navigation, route }) => {
   const dropOff_address = packageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
   const [sourceLat, sourceLong] = [
-    deliverer_coord?.latitude,
-    deliverer_coord?.longitude,
+    packageItem.data.deliverer_location.latitude,
+    packageItem.data.deliverer_location.longitude,
   ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
     dropOff_address.address_coord.longitude,
   ];
-  const hasLocationData = dropOff_address && deliverer_coord;
+  const hasLocationData = destinationLat && sourceLat;
   const mapProps = hasLocationData
     ? {
         source: { sourceLat: sourceLat, sourceLong: sourceLong },
