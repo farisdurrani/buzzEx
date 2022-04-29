@@ -11,6 +11,7 @@ const DeliveriesAvailable = ({ navigation }) => {
   const [delivererItem, setDelivererItem] = useState();
   const [zipcode, setZipcode] = useState("30332");
   const [allAvailableJobs, setAllAvailableJobs] = useState([]);
+  const [refreshStep, setRefreshStep] = useState(false);
 
   useEffect(async () => {
     const delivererItem = await getUserDetails(getCurrentUser().uid);
@@ -18,7 +19,7 @@ const DeliveriesAvailable = ({ navigation }) => {
 
     const available_jobs = await getJobs(1);
     setAllAvailableJobs(available_jobs);
-  }, []);
+  }, [refreshStep]);
 
   const _DeliveryRow = (props) => {
     const { packageItem } = props;
@@ -66,6 +67,7 @@ const DeliveriesAvailable = ({ navigation }) => {
           }!`}
         </Text>
       </Text>
+      <BButton text="Refresh" onPress={() => setRefreshStep(!refreshStep)} />
       <Text style={styles.label}> Showing available deliveries for...</Text>
       <KeyboardAvoidingView>
         <InputTextField
@@ -103,9 +105,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   label: {
-    paddingTop: 40,
     fontSize: 18,
-    padding: 15,
   },
   inputContainer: {},
 });
