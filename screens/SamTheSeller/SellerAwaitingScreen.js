@@ -42,7 +42,7 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
 
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Accepted", {
+          navigation.navigate("MatchingDeliverer", {
             senderItem: senderItem,
             receiverItem: receiverItem,
             packageItem: packageItem,
