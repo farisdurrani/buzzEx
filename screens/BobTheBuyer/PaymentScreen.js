@@ -97,10 +97,9 @@ const PaymentScreen = ({ navigation, route }) => {
         containerStyle={{ width: 150, marginTop: 60 }}
         onPress={async () => {
           await updateDeliveryStatus(packageItem.id, 1, {
-
             package: { ...packageItem.data.package, tip: Number(tip) },
           });
-          navigation.navigate("MatchingDeliverer", {
+          navigation.replace("MatchingDeliverer", {
             initPackageItem: packageItem,
             senderItem: senderItem,
             receiverItem: receiverItem,

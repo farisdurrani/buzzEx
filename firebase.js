@@ -240,13 +240,18 @@ export async function updateDeliveryStatus(
   other_changes = {},
   new_geoPoint = null
 ) {
-  if (status >= 2 && !new_geoPoint) {
-    const foreground = await Location.requestForegroundPermissionsAsync();
-    if (!foreground.granted) {
-      alert("Permissions not given");
+  if (status >= 2) {
+    // if requester is a deliverer
+    if (new_geoPoint) {
+      // if a current location is given, use this location
+      await _updateDeliveryJob(jobID, {
+        ...other_changes,
+        status: status,
+        deliverer_location: new_geoPoint,
+      });
       return;
     }
-
+    // else, find out the deliverer's current location
     await getCurrentLocation().then(async (loc) => {
       await _updateDeliveryJob(jobID, {
         ...other_changes,
@@ -256,11 +261,9 @@ export async function updateDeliveryStatus(
     });
     return;
   }
-  await _updateDeliveryJob(jobID, {
-    ...other_changes,
-    status: status,
-    deliverer_location: new_geoPoint,
-  });
+  // else if requester is buyer
+  await _updateDeliveryJob(jobID, { ...other_changes, status: status });
+  return;
 }
 
 /**

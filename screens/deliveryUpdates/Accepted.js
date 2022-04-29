@@ -17,16 +17,16 @@ import { getUserDetails } from "../../firebase";
 const Accepted = ({ navigation, route }) => {
   const { senderItem, receiverItem, packageItem } = route.params;
 
+  
   const [delivererItem, setDelivererItem] = useState({
     data: { full_name: "Loading...", email: "Loading..." },
   });
-
+  
   useEffect(async () => {
     console.log("Retrieving deliverer details...");
     const delivererData = await getUserDetails(packageItem.data.deliverer_uid);
     setDelivererItem(delivererData);
     console.log("Deliverer details fetched");
-
   }, []);
 
   return (

@@ -56,7 +56,7 @@ const MatchingDeliverer = ({ navigation, route }) => {
   useEffect(() => {
     if (packageItem.data.status >= 2) {
       unsubscribe();
-      navigation.navigate("Accepted", {
+      navigation.replace("Accepted", {
         senderItem: senderItem,
         receiverItem: receiverItem,
         packageItem: packageItem,
