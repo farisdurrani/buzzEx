@@ -35,16 +35,19 @@ const DeliveryComplete = ({ navigation, route }) => {
     user_type,
     init_deliverer_coord = null, // only has a possible value if this is a deliverer
   } = route.params;
+
   const [updatedPackageItem, setUpdatedPackageItem] = useState(packageItem);
+  const [sourceLat, setSourceLat] = useState(
+    init_deliverer_coord?.latitude ||
+      updatedPackageItem.data.deliverer_location?.latitude
+  );
+  const [sourceLong, setSourceLong] = useState(
+    init_deliverer_coord?.longitude ||
+      updatedPackageItem.data.deliverer_location?.longitude
+  );
 
   const dropOff_address = updatedPackageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
-  const [sourceLat, sourceLong] = [
-    init_deliverer_coord?.latitude ||
-      updatedPackageItem.data.deliverer_location?.latitude,
-    init_deliverer_coord?.longitude ||
-      updatedPackageItem.data.deliverer_location?.longitude,
-  ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
     dropOff_address.address_coord.longitude,
@@ -63,14 +66,18 @@ const DeliveryComplete = ({ navigation, route }) => {
   useEffect(async () => {
     // if this is a buyer/seller, retrieve the latest deliverer location
     if (user_type === "Buyer/Seller") {
-      await getJob(packageItem.id).then((newPackageItem) =>
-        setUpdatedPackageItem(newPackageItem)
-      );
+      await getJob(packageItem.id).then((newPackageItem) => {
+        setUpdatedPackageItem(newPackageItem);
+        setSourceLat(newPackageItem.data.deliverer_location.latitude);
+        setSourceLong(newPackageItem.data.deliverer_location.longitude);
+      });
       return;
     }
 
     // if this is a deliverer, retrieve this user's current location and update the delivery status and location
     await getCurrentLocation().then(async (loc) => {
+      setSourceLat(loc.latitude);
+      setSourceLong(loc.longitude);
       await updateDeliveryStatus(
         packageItem.id,
         4,
