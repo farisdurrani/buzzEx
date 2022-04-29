@@ -26,17 +26,16 @@ const DelivererToDropoff = ({ navigation, route }) => {
   const [deliveryNotes, onAddDeliveryNotes] = useState("");
   const [packageItem, setPackageItem] = useState(initPackageItem);
 
-  const deliverer_coord = initPackageItem.deliverer_coord;
   const dropOff_address = packageItem.data.destination_address;
   const [sourceLat, sourceLong] = [
-    deliverer_coord.latitude,
-    deliverer_coord.longitude,
+    packageItem.data.deliverer_location.latitude,
+    packageItem.data.deliverer_location.longitude,
   ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
     dropOff_address.address_coord.longitude,
   ];
-  const hasLocationData = dropOff_address && deliverer_coord;
+  const hasLocationData = sourceLat && destinationLat;
   const mapProps = hasLocationData
     ? {
         source: { sourceLat: sourceLat, sourceLong: sourceLong },
