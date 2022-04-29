@@ -62,24 +62,6 @@ const Accepted = ({ navigation, route }) => {
           delivererItem.data.rating ? delivererItem.data.rating : 5.0
         )}`}</Text>
       </View>
-
-      <View style={{ marginTop: 60 }}>
-        <BButton
-          text="Continue"
-          onPress={() => {
-            if (!delivererItem.id) {
-              alert("Wait until deliverer has been verfied");
-              return;
-            }
-            navigation.replace("DelivererToPickup", {
-              senderItem: senderItem,
-              receiverItem: receiverItem,
-              initPackageItem: packageItem,
-              delivererItem: delivererItem,
-            });
-          }}
-        />
-      </View>
     </View>
   );
 };
