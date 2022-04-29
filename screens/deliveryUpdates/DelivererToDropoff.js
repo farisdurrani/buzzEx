@@ -30,14 +30,14 @@ const DelivererToDropoff = ({ navigation, route }) => {
   const deliverer_coord = packageItem.data.deliverer_location;
   const dropOff_address = packageItem.data.destination_address;
   const [sourceLat, sourceLong] = [
-    deliverer_coord.latitude,
-    deliverer_coord.longitude,
+    packageItem.data.deliverer_location.latitude,
+    packageItem.data.deliverer_location.longitude,
   ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
     dropOff_address.address_coord.longitude,
   ];
-  const hasLocationData = dropOff_address && deliverer_coord;
+  const hasLocationData = sourceLat && destinationLat;
   const mapProps = hasLocationData
     ? {
         source: { sourceLat: sourceLat, sourceLong: sourceLong },
@@ -125,20 +125,6 @@ const DelivererToDropoff = ({ navigation, route }) => {
           backgroundColor="#000000"
           onPress={() => navigation.navigate("DelivererToDropoff")}
         ></Icon.Button>
-        <BButton
-          text="Go to Delivery Complete Screen"
-          onPress={() =>
-            navigation.navigate("DeliveryComplete", {
-              mapProps: mapProps,
-              homeScreen: "Home",
-            })
-          }
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 50,
-            marginVertical: 20,
-          }}
-        />
       </View>
     </View>
   );

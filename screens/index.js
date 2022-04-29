@@ -17,7 +17,7 @@ export { default as Contacts } from "./SamTheSeller/Contacts";
 export { default as ItemPriceScreen } from "./SamTheSeller/ItemPriceScreen";
 export { default as SellerAwaitingScreen } from "./SamTheSeller/SellerAwaitingScreen";
 export { default as SellerConfirmScreen } from "./SamTheSeller/SellerConfirmScreen";
-export { default as SizeSelection } from "./SamTheSeller/sizeSelection";
+export { default as SizeSelection } from "./SamTheSeller/SizeSelection";
 
 // deliveryUpdates
 export { default as DelivererToPickup } from "./deliveryUpdates/DelivererToPickup";

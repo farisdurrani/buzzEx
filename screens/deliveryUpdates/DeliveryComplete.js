@@ -16,6 +16,7 @@ import { COLORS, makeFullAddress } from "../../constants";
 import {
   generateGeolocation,
   getCurrentLocation,
+  getJob,
   updateDeliveryStatus,
 } from "../../firebase";
 
@@ -32,21 +33,26 @@ const DeliveryComplete = ({ navigation, route }) => {
     senderItem,
     delivererItem,
     user_type,
-    init_deliverer_coord = null, // only has a value if this is a deliverer
+    init_deliverer_coord = null, // only has a possible value if this is a deliverer
   } = route.params;
-  const [deliverer_coord, set_deliverer_coord] = useState(init_deliverer_coord);
 
-  const dropOff_address = packageItem.data.destination_address;
+  const [updatedPackageItem, setUpdatedPackageItem] = useState(packageItem);
+  const [sourceLat, setSourceLat] = useState(
+    init_deliverer_coord?.latitude ||
+      updatedPackageItem.data.deliverer_location?.latitude
+  );
+  const [sourceLong, setSourceLong] = useState(
+    init_deliverer_coord?.longitude ||
+      updatedPackageItem.data.deliverer_location?.longitude
+  );
+
+  const dropOff_address = updatedPackageItem.data.destination_address;
   const full_dropOff_address = makeFullAddress(dropOff_address);
-  const [sourceLat, sourceLong] = [
-    deliverer_coord?.latitude,
-    deliverer_coord?.longitude,
-  ];
   const [destinationLat, destinationLong] = [
     dropOff_address.address_coord.latitude,
     dropOff_address.address_coord.longitude,
   ];
-  const hasLocationData = dropOff_address && deliverer_coord;
+  const hasLocationData = destinationLat && sourceLat;
   const mapProps = hasLocationData
     ? {
         source: { sourceLat: sourceLat, sourceLong: sourceLong },
@@ -58,13 +64,20 @@ const DeliveryComplete = ({ navigation, route }) => {
     : null;
 
   useEffect(async () => {
+    // if this is a buyer/seller, retrieve the latest deliverer location
     if (user_type === "Buyer/Seller") {
-      set_deliverer_coord(packageItem.data.deliverer_location);
+      await getJob(packageItem.id).then((newPackageItem) => {
+        setUpdatedPackageItem(newPackageItem);
+        setSourceLat(newPackageItem.data.deliverer_location.latitude);
+        setSourceLong(newPackageItem.data.deliverer_location.longitude);
+      });
       return;
     }
 
+    // if this is a deliverer, retrieve this user's current location and update the delivery status and location
     await getCurrentLocation().then(async (loc) => {
-      set_deliverer_coord(loc);
+      setSourceLat(loc.latitude);
+      setSourceLong(loc.longitude);
       await updateDeliveryStatus(
         packageItem.id,
         4,

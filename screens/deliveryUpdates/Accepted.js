@@ -22,11 +22,21 @@ const Accepted = ({ navigation, route }) => {
   });
 
   useEffect(async () => {
-    console.log("Retrieving deliverer details...");
-    const delivererData = await getUserDetails(packageItem.data.deliverer_uid);
-    setDelivererItem(delivererData);
-    console.log("Deliverer details fetched");
-
+    await getUserDetails(packageItem.data.deliverer_uid).then(
+      (newDelivererItem) => {
+        setDelivererItem(newDelivererItem);
+        setTimeout(
+          () =>
+            navigation.replace("DelivererToPickup", {
+              senderItem: senderItem,
+              receiverItem: receiverItem,
+              initPackageItem: packageItem,
+              delivererItem: newDelivererItem,
+            }),
+          2000
+        );
+      }
+    );
   }, []);
 
   return (
@@ -51,24 +61,6 @@ const Accepted = ({ navigation, route }) => {
         <Text>{`${roundTo2(
           delivererItem.data.rating ? delivererItem.data.rating : 5.0
         )}`}</Text>
-      </View>
-
-      <View style={{ marginTop: 60 }}>
-        <BButton
-          text="Continue"
-          onPress={() => {
-            if (!delivererItem.id) {
-              alert("Wait until deliverer has been verfied");
-              return;
-            }
-            navigation.replace("DelivererToPickup", {
-              senderItem: senderItem,
-              receiverItem: receiverItem,
-              initPackageItem: packageItem,
-              delivererItem: delivererItem,
-            });
-          }}
-        />
       </View>
     </View>
   );

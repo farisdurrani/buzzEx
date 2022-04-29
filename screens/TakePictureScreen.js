@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   retakeButtonsContainer: {
     width: "100%",
     paddingHorizontal: 80,
-    marginTop: 750,
+    marginTop: Dimensions.get("window").height * 0.7,
     flexDirection: "row",
     justifyContent: "space-between",
   },

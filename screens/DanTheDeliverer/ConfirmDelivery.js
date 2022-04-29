@@ -1,8 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import { BackCancelButtons, BButton } from "../../components";
 import { COLORS, LAYOUT } from "../../constants";
-import { getCurrentLocation } from "../../firebase";
+import { getCurrentLocation, getJob } from "../../firebase";
 
 const ConfirmDelivery = ({ navigation, route }) => {
   const {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   pictureContainer: {
     marginTop: 10,
-    height: 450,
+    height: Dimensions.get("window").height * 0.45,
     width: 300,
     backgroundColor: COLORS.transparent_gray,
   },

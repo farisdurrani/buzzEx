@@ -25,7 +25,7 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
       const unsub = unsubscribeDeliveryJob(deliveryJobID, setPackageItem);
       setUnsubscribe(() => unsub);
     }
-  }, [])
+  }, []);
 
   useEffect(async () => {
     if (packageItem?.data.status >= 1) {
@@ -42,17 +42,7 @@ const SellerAwaitingScreen = ({ navigation, route }) => {
     <View style={styles.mainContainer}>
       <BackCancelButtons navigation={navigation} />
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Accepted", {
-            senderItem: senderItem,
-            receiverItem: receiverItem,
-            packageItem: packageItem,
-          });
-        }}
-      >
-        <Text style={styles.awaitingText}>{message}</Text>
-      </TouchableOpacity>
+      <Text style={styles.awaitingText}>{message}</Text>
     </View>
   );
 };
