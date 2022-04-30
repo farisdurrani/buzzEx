@@ -30,7 +30,7 @@ npm start
 2. Sprint 2: https://youtu.be/sz7zKJkoOMA
 3. Sprint 3: https://youtu.be/JiqDnamGbwc
 4. Sprint 4: https://youtu.be/sbW_oEgLwnk
-5. Sprint 5:
+5. Sprint 5: https://youtu.be/bAAWD3mCmRQ
 
 ## License
 
